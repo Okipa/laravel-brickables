@@ -8,6 +8,8 @@
 [![Coverage Status](https://coveralls.io/repos/github/Okipa/laravel-brickable/badge.svg?branch=master)](https://coveralls.io/github/Okipa/laravel-brickable?branch=master)
 [![Quality Score](https://img.shields.io/scrutinizer/g/Okipa/laravel-brickable.svg?style=flat-square)](https://scrutinizer-ci.com/g/Okipa/laravel-brickable/?branch=master)
 
+:warning: PACKAGE IN DEVELOPMENT :warning:
+
 This package allows you to associate bricks of content with Eloquent models and gives ability to easily manage pages content from an admin panel.
 
 This package is shipped with `Bootstrap 4.*` and `FontAwesome 5` pre-built content bricks. However, customizing them or create new ones has been designed to be simple as hell ! :fire:

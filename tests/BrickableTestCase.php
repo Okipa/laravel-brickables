@@ -45,6 +45,9 @@ abstract class BrickableTestCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->withFactories(__DIR__ . '/database/factories');
+        include_once __DIR__ . '/../src/database/migrations/create_bricks_table.php.stub';
+        (new \CreateBricksTable())->up();
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
     }
 }

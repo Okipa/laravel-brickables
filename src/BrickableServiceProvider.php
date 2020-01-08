@@ -11,10 +11,15 @@ class BrickableServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if ($this->app->runningInConsole()) {
+        $this->publishes([
+            __DIR__ . '/config/brickable.php' => config_path('brickable.php'),
+        ], 'laravel-brickable:config');
+        if (! class_exists('CreateBricksTable')) {
             $this->publishes([
-                __DIR__.'/../config/brickable.php' => config_path('brickable.php'),
-            ], 'laravel-brickable:config');
+                __DIR__ . '/../database/migrations/create_media_table.php.stub' => database_path(
+                    'migrations/' . date('Y_m_d_His', time()) . '_create_bricks_table.php'
+                ),
+            ], 'laravel-brickable:migrations');
         }
     }
 
@@ -23,6 +28,6 @@ class BrickableServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/brickable.php', 'brickable');
+        $this->mergeConfigFrom(__DIR__ . '/config/brickable.php', 'model');
     }
 }
