@@ -12,6 +12,16 @@ class Brick extends Model implements Htmlable, Sortable
     use SortableTrait;
 
     /**
+     * The spatie/eloquent-sortable trait configuration.
+     *
+     * @var array
+     */
+    public $sortable = [
+        'order_column_name' => 'position',
+        'sort_when_creating' => true,
+    ];
+
+    /**
      * The database table used by the model.
      *
      * @var string
@@ -35,14 +45,18 @@ class Brick extends Model implements Htmlable, Sortable
     ];
 
     /**
-     * The spatie/eloquent-sortable trait configuration.
+     * Get available brick types.
      *
-     * @var array
+     * @return array
      */
-    public $sortable = [
-        'order_column_name' => 'position',
-        'sort_when_creating' => true,
-    ];
+    public static function getTypes(): array
+    {
+        return array_map(function ($type) {
+            $type['label'] = __($type['label']);
+
+            return $type;
+        }, config('brickable.types'));
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
@@ -67,6 +81,6 @@ class Brick extends Model implements Htmlable, Sortable
      */
     public function getViewPath(): string
     {
-        return app($this->getAttribute('brick_type'))->getViewPath();
+        return config('brickable.types.' . $this->getAttribute('brick_type') . '.view');
     }
 }

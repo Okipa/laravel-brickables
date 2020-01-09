@@ -28,12 +28,12 @@ Associate content bricks to an Eloquent model :
 $page = Page::find(1);
 
 // associate one brick
-$page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+$page->addBrick('oneTextColumn', ['content' => 'Text content']);
 
 // or associate several bricks at once
 $page->addBricks([
-    [OneTextColumn::class, ['content' => 'Text']],
-    [TwoTextColumns::class, ['left_content' => 'Left text', 'right_content' => 'Right text']]
+    ['oneTextColumn', ['content' => 'Text']],
+    ['twoTextColumns', ['left_content' => 'Left text', 'right_content' => 'Right text']]
 ]);
 ```
 
@@ -46,9 +46,9 @@ And display them in your view :
 {{-- or manually --}}
 <h3>Title<h3>
 <p>Paragraph</p>
-{{ $page->getFirstBrick(OneTextColumn::class) }}
+{{ $page->getFirstBrick('oneTextColumn') }}
 <p>Other paragraph</p>
-{{ $page->getFirstBrick(TwoTextColumns::class) }}
+{{ $page->getFirstBrick('twoTextColumns') }}
 ```
 
 ## Table of contents
@@ -115,7 +115,7 @@ Associate a single content brick to an Eloquent model :
 
 ```php
 $page = Page::find(1);
-$brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text']);
+$brick = $page->addBrick('oneTextColumn', ['content' => 'Text']);
 ```
 
 You also can associate several content bricks at once :
@@ -123,8 +123,8 @@ You also can associate several content bricks at once :
 ```php
 $page = Page::find(1);
 $bricks = $page->addBricks([
-    [OneTextColumn::class, ['content' => 'Text']],
-    [TwoTextColumns::class, ['left_content' => 'Left text', 'right_content' => 'Right text']]
+    ['oneTextColumn', ['content' => 'Text']],
+    ['twoTextColumns', ['left_content' => 'Left text', 'right_content' => 'Right text']]
 ]);
 ```
 
@@ -169,7 +169,7 @@ You also can find the first typed brick associated to the model :
 
 ```php
 $page = Page::find(1);
-$brick = $page->getFirstBrick(OneTextColumn::class);
+$brick = $page->getFirstBrick('oneTextColumn');
 ```
 
 ### Query bricks
@@ -177,7 +177,7 @@ $brick = $page->getFirstBrick(OneTextColumn::class);
 You can query content bricks as for any Eloquent model :
 
 ```php
-Brick::where('brick_type', OneTextColumn::class)->first();
+Brick::where('brick_type', 'oneTextColumn')->first();
 ```
 
 ### Display bricks in you views
@@ -185,7 +185,7 @@ Brick::where('brick_type', OneTextColumn::class)->first();
 Display a single content brick in your view :
 
 ```blade
-{{ $page->getFirstBrick(OneTextColumn::class) }}
+{{ $page->getFirstBrick('oneTextColumn') }}
 ```
 
 Or display all the model related content bricks :
@@ -197,29 +197,26 @@ Or display all the model related content bricks :
 
 Create your own content brick by following these steps :
 
-#### 1. Create a new brick type
+### Retrieve available content brick types
 
-Create a new brick type in the `app/vendor/LaravelBrickable/Brickables` directory (this location is optional).
-
-You new brick type have to extends the `Okipa\LaravelBrickable\Abstracts\BrickableAbstract` class and should look like this : 
+Getting the available content brick type allows you to provide a type selection on a view, for example :
 
 ```php
-<?php
+$availableBrickTypes = Brick::getTypes();
+```
 
-namespace App\Vendor\LaravelBrickable\Brickables;
+#### 1. Create a new content brick type
 
-use Okipa\LaravelBrickable\Abstracts\BrickableAbstract;
+* Add a new brick type in your `config/brickable` config file : 
 
-class MyBrickType extends BrickableAbstract
-{
-    /**
-     * @inheritDoc
-     */
-    protected function setViewPath(): string
-    {
-        return 'laravel-brickable::my-brick-type';
-    }
-}
+```php
+'types' => [
+    // other brick type declarations ...
+    'myBrickType' => [
+        'label' => 'My brick type',
+        'viewPath' => 'laravel-brickable::my-brick-type',
+    ],
+],
 ```
 
 #### 2. Create your brick type view
@@ -229,6 +226,21 @@ Create a view that will host your brick type HTML.
 If you published the package views, you can create it in the `ressources/views/vendor/laravel-brickable` directory.
 
 If not, put them wherever you wan (without forgetting to change the path return by the `setViewPath()` method from you brick type class).
+
+#### 3. Use your brick type
+
+Your brick type is now available in the `Brick::getBrickTypes()` and you can associate it to Eloquent models :
+
+```php
+$page = Page::find(1);
+$page->addBrick('myBrickType', $data);
+```
+
+And render it in your view :
+
+```blade
+{{ $page->getFirstBrick('myBrickType') }}
+```
 
 ## Testing
 

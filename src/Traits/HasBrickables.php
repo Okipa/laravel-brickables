@@ -3,8 +3,6 @@
 namespace Okipa\LaravelBrickable\Traits;
 
 use Illuminate\Support\Collection;
-use Okipa\LaravelBrickable\Abstracts\BrickableAbstract;
-use Okipa\LaravelBrickable\Exceptions\InvalidBrickTypeException;
 use Okipa\LaravelBrickable\Exceptions\NonExistentBrickTypeException;
 use Okipa\LaravelBrickable\Models\Brick;
 
@@ -16,7 +14,6 @@ trait HasBrickables
      * @param array $bricks
      *
      * @return \Illuminate\Support\Collection
-     * @throws \Okipa\LaravelBrickable\Exceptions\InvalidBrickTypeException
      * @throws \Okipa\LaravelBrickable\Exceptions\NonExistentBrickTypeException
      */
     public function addBricks(array $bricks): Collection
@@ -37,12 +34,10 @@ trait HasBrickables
      *
      * @return \Okipa\LaravelBrickable\Models\Brick
      * @throws \Okipa\LaravelBrickable\Exceptions\NonExistentBrickTypeException
-     * @throws \Okipa\LaravelBrickable\Exceptions\InvalidBrickTypeException
      */
     public function addBrick(string $brickType, array $data): Brick
     {
         $this->checkBrickTypeDoesExist($brickType);
-        $this->checkBrickTypeIsCorrect($brickType);
 
         return $this->bricks()->create(['brick_type' => $brickType, 'data' => $data]);
     }
@@ -54,20 +49,9 @@ trait HasBrickables
      */
     protected function checkBrickTypeDoesExist(string $brickType): void
     {
-        if (! class_exists($brickType)) {
-            throw new NonExistentBrickTypeException($brickType . ' class does not exist.');
-        }
-    }
-
-    /**
-     * @param string $brickType
-     *
-     * @throws \Okipa\LaravelBrickable\Exceptions\InvalidBrickTypeException
-     */
-    protected function checkBrickTypeIsCorrect(string $brickType): void
-    {
-        if (! app($brickType) instanceof BrickableAbstract) {
-            throw new InvalidBrickTypeException('Brick type should extends ' . BrickableAbstract::class);
+        if (! config('brickable.types.' . $brickType)) {
+            throw new NonExistentBrickTypeException('The « ' . $brickType
+                . ' » brick type configuration does not exist.');
         }
     }
 
@@ -76,7 +60,7 @@ trait HasBrickables
      */
     public function bricks()
     {
-        return $this->morphMany(app(config('brickable.brick_model')), 'model');
+        return $this->morphMany(app(config('brickable.model')), 'model');
     }
 
     /**
@@ -85,13 +69,11 @@ trait HasBrickables
      * @param string $brickType
      *
      * @return \Okipa\LaravelBrickable\Models\Brick|null
-     * @throws \Okipa\LaravelBrickable\Exceptions\InvalidBrickTypeException
      * @throws \Okipa\LaravelBrickable\Exceptions\NonExistentBrickTypeException
      */
     public function getFirstBrick(string $brickType): ?Brick
     {
         $this->checkBrickTypeDoesExist($brickType);
-        $this->checkBrickTypeIsCorrect($brickType);
 
         return $this->getBricks()->where('brick_type', $brickType)->first();
     }
