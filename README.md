@@ -64,6 +64,7 @@ And display them in your view :
   * [Retrieve content bricks](#retrieve-content-bricks)
   * [Query bricks](#query-bricks)
   * [Display bricks in you views](#display-bricks-in-you-views)
+  * [Retrieve available content brick types](#retrieve-available-content-brick-types)
   * [Create your own content brick](#create-your-own-content-brick)
 * [Testing](#testing)
 * [Changelog](#changelog)
@@ -193,10 +194,6 @@ Or display all the model related content bricks :
 {{ $page->displayBricks() }}
 ```
 
-### Create your own content brick
-
-Create your own content brick by following these steps :
-
 ### Retrieve available content brick types
 
 Getting the available content brick type allows you to provide a type selection on a view, for example :
@@ -204,6 +201,10 @@ Getting the available content brick type allows you to provide a type selection 
 ```php
 $availableBrickTypes = Brick::getTypes();
 ```
+
+### Create your own content brick
+
+Create your own content brick by following these steps :
 
 #### 1. Create a new content brick type
 
