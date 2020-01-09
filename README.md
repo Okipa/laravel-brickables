@@ -196,7 +196,7 @@ Or display all the model related content bricks :
 
 ### Retrieve available content brick types
 
-Getting the available content brick type allows you to provide a type selection on a view, for example :
+Getting the available content brick types allows you to provide a type selection on a view, for example :
 
 ```php
 $availableBrickTypes = Brick::getTypes();
