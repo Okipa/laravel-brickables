@@ -228,7 +228,7 @@ If you published the package views, you can create it in the `ressources/views/v
 
 If not, put them wherever you wan (without forgetting to change the path return by the `setViewPath()` method from you brick type class).
 
-#### 3. Use your brick type
+#### 3. Use your new brick type
 
 Your brick type is now available in the `Brick::getBrickTypes()` and you can associate it to Eloquent models :
 
