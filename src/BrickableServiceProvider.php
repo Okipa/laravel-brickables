@@ -11,8 +11,12 @@ class BrickableServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->loadViewsFrom(__DIR__ . '/../ressources/views', 'laravel-brickable');
         $this->publishes([
-            __DIR__ . '/config/brickable.php' => config_path('brickable.php'),
+            __DIR__ . '/../ressources/views' => resource_path('views/vendor/laravel-brickable'),
+        ], 'laravel-brickable:views');
+        $this->publishes([
+            __DIR__ . '/../config/brickable.php' => config_path('brickable.php'),
         ], 'laravel-brickable:config');
         if (! class_exists('CreateBricksTable')) {
             $this->publishes([
@@ -28,6 +32,6 @@ class BrickableServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__ . '/config/brickable.php', 'model');
+        $this->mergeConfigFrom(__DIR__ . '/../config/brickable.php', 'model');
     }
 }

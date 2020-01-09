@@ -12,7 +12,7 @@
 
 This package allows you to associate bricks of content with Eloquent models and gives ability to easily manage pages content from an admin panel.
 
-This package is shipped with `Bootstrap 4.*` and `FontAwesome 5` pre-built content bricks. However, customizing them or create new ones has been designed to be simple as hell ! :fire:
+This package is shipped with a few `Bootstrap 4.*` pre-built content bricks. You should consider them as examples : customizing them or create new ones has been designed to be simple as hell ! :fire:
 
 ## Compatibility
 
@@ -22,65 +22,96 @@ This package is shipped with `Bootstrap 4.*` and `FontAwesome 5` pre-built conte
 
 ## Usage
 
-Associate a content bricks to an Eloquent model :
+Associate content bricks to an Eloquent model :
 
 ``` php
 $page = Page::find(1);
-$page->addBrick($brickId);
-// or
-$page->addBricks([$brickId, $anotherBrickId]);
+
+// associate one brick
+$page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+
+// or associate several bricks at once
+$page->addBricks([
+    [OneTextColumn::class, ['content' => 'Text content']],
+    [TwoTextColumns::class, ['left_content' => 'Left text content', 'right_content' => 'Right text content'])]
+]);
 ```
 
-And render the content bricks in your view :
+And display them in your view :
 
 ```blade
 {{-- automatically --}}
-@foreach ($page->bricks as $brick)
-    {{ $brick }}
-@endforeach
+{{ $page->displayBricks() }}
 
 {{-- or manually --}}
 <h3>Static title<h3>
 <p>Static content</p>
-{{ $page->bricks->find($brickId)->first() }}
+{{ $page->getFirstBrick(OneTextColumn::class) }}
+<p>Static content</p>
+{{ $page->getFirstBrick(TwoTextColumns::class) }}
 ```
 
 ## Table of contents
 
 * [Installation](#installation)
 * [Configuration](#configuration)
+* [Views](#views)
 * [API documentation](#api-documentation)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
+* [Security](#security)
 * [Credits](#credits)
 * [Licence](#license)
 
 ## Installation
 
-You can install the package via composer:
+You can install the package via composer :
 
 ```bash
 composer require okipa/laravel-brickable
 ```
 
+Then, add the `Okipa\LaravelBrickable\Traits\HasBrickables` trait to any Eloquent model that you want to be able to manage content bricks to.
+
+```php
+class Page extends Model
+{
+	use HasBrickables;
+
+	// ...
+}
+```
+
 ## Configuration
 
-Publish the package configuration and override the available config values :
+Publish the package configuration file to customize it if necessary : 
 
 ```bash
 php artisan vendor:publish --tag=laravel-brickable:config
 ```
 
+## Views
+
+Publish the package views to customize them if necessary : 
+
+```bash
+php artisan vendor:publish --tag=laravel-brickable:views
+```
+
 ## API documentation
 
-### Testing
+### Has
+
+### Create your own brickables
+
+## Testing
 
 ``` bash
 composer test
 ```
 
-### Changelog
+## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
@@ -88,7 +119,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
 
-### Security
+## Security
 
 If you discover any security related issues, please email arthur.lorent@gmail.com instead of using the issue tracker.
 
