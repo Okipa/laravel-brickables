@@ -101,13 +101,15 @@ php artisan vendor:publish --tag=laravel-brickable:views
 
 ## API documentation
 
-### HasBrickables trait methods
+### Add content bricks
 
+### Update a content brick
 
+### Remove content bricks
 
-### How to create your own content brick
+### Display bricks in you views
 
-
+### Create your own content brick
 
 ## Testing
 
