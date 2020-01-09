@@ -12,7 +12,7 @@
 
 This package allows you to associate bricks of content with Eloquent models and gives ability to easily manage pages content from an admin panel.
 
-This package is shipped with a few `Bootstrap 4.*` pre-built content bricks. You should consider them as examples : customizing them or create new ones has been designed to be simple as hell ! :fire:
+This package is shipped with a few `Bootstrap 4.*` pre-built content bricks. You can use them as is, but you definitely should consider them as examples : customizing them or create new ones has been designed to be simple as hell ! :fire:
 
 ## Compatibility
 
@@ -101,9 +101,13 @@ php artisan vendor:publish --tag=laravel-brickable:views
 
 ## API documentation
 
-### Has
+### HasBrickables trait methods
 
-### Create your own brickables
+
+
+### How to create your own content brick
+
+
 
 ## Testing
 
