@@ -32,7 +32,7 @@ class HasBrickableTest extends BrickableTestCase
         $page = factory(Page::class)->create();
         $bricks = $page->addBricks([
             [OneTextColumn::class, ['content' => 'Text content']],
-            [TwoTextColumns::class, ['left_content' => 'Left text content', 'right_content' => 'Right text content']],
+            [TwoTextColumns::class, ['left_content' => 'Left text', 'right_content' => 'Right text']],
         ]);
         $this->assertCount(2, $bricks);
         $this->assertEmpty($page->bricks->diff($bricks));
@@ -44,7 +44,7 @@ class HasBrickableTest extends BrickableTestCase
         $page = factory(Page::class)->create();
         $page->addBricks([
             [OneTextColumn::class, ['content' => 'Text content']],
-            [TwoTextColumns::class, ['left_content' => 'Left text content', 'right_content' => 'Right text content']],
+            [TwoTextColumns::class, ['left_content' => 'Left text', 'right_content' => 'Right text']],
         ]);
         $this->assertCount(2, $page->getBricks());
         $this->assertEmpty($page->bricks->diff($page->getBricks()));
@@ -55,7 +55,7 @@ class HasBrickableTest extends BrickableTestCase
     {
         $page = factory(Page::class)->create();
         $page->addBricks([
-            [TwoTextColumns::class, ['left_content' => 'Left text content', 'right_content' => 'Right text content']],
+            [TwoTextColumns::class, ['left_content' => 'Left text', 'right_content' => 'Right text']],
             [OneTextColumn::class, ['content' => 'Text content #1']],
             [OneTextColumn::class, ['content' => 'Text content #2']],
         ]);
@@ -79,7 +79,7 @@ class HasBrickableTest extends BrickableTestCase
         $html .= $page->addBrick(OneTextColumn::class, ['content' => 'Text content'])->toHtml();
         $html .= $page->addBrick(
             TwoTextColumns::class,
-            ['left_content' => 'Left text content', 'right_content' => 'Right text content']
+            ['left_content' => 'Left text', 'right_content' => 'Right text']
         )->toHtml();
         $this->assertEquals($html, $page->displayBricks());
     }

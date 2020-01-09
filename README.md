@@ -10,7 +10,7 @@
 
 :warning: PACKAGE IN DEVELOPMENT :warning:
 
-This package allows you to associate bricks of content with Eloquent models and gives ability to easily manage pages content from an admin panel.
+This package allows you to associate content bricks to Eloquent models and gives ability to easily manage them from an admin panel.
 
 This package is shipped with a few `Bootstrap 4.*` pre-built content bricks. You can use them as is, but you definitely should consider them as examples : customizing them or create new ones has been designed to be simple as hell ! :fire:
 
@@ -32,8 +32,8 @@ $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
 
 // or associate several bricks at once
 $page->addBricks([
-    [OneTextColumn::class, ['content' => 'Text content']],
-    [TwoTextColumns::class, ['left_content' => 'Left text content', 'right_content' => 'Right text content'])]
+    [OneTextColumn::class, ['content' => 'Text']],
+    [TwoTextColumns::class, ['left_content' => 'Left text', 'right_content' => 'Right text'])]
 ]);
 ```
 
