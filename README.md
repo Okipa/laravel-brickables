@@ -195,7 +195,40 @@ Or display all the model related content bricks :
 
 ### Create your own content brick
 
+Create your own content brick by following these steps :
 
+#### 1. Create a new brick type
+
+Create a new brick type in the `app/vendor/LaravelBrickable/Brickables` directory (this location is optional).
+
+You new brick type have to extends the `Okipa\LaravelBrickable\Abstracts\BrickableAbstract` class and should look like this : 
+
+```php
+<?php
+
+namespace App\Vendor\LaravelBrickable\Brickables;
+
+use Okipa\LaravelBrickable\Abstracts\BrickableAbstract;
+
+class MyBrickType extends BrickableAbstract
+{
+    /**
+     * @inheritDoc
+     */
+    protected function setViewPath(): string
+    {
+        return 'laravel-brickable::my-brick-type';
+    }
+}
+```
+
+#### 2. Create your brick type view
+
+Create a view that will host your brick type HTML.
+
+If you published the package views, you can create it in the `ressources/views/vendor/laravel-brickable` directory.
+
+If not, put them wherever you wan (without forgetting to change the path return by the `setViewPath()` method from you brick type class).
 
 ## Testing
 
