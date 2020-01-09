@@ -4,9 +4,13 @@ namespace Okipa\LaravelBrickable\Models;
 
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\EloquentSortable\Sortable;
+use Spatie\EloquentSortable\SortableTrait;
 
-class Brick extends Model implements Htmlable
+class Brick extends Model implements Htmlable, Sortable
 {
+    use SortableTrait;
+
     /**
      * The database table used by the model.
      *
@@ -28,6 +32,16 @@ class Brick extends Model implements Htmlable
      */
     protected $casts = [
         'data' => 'json',
+    ];
+
+    /**
+     * The spatie/eloquent-sortable trait configuration.
+     *
+     * @var array
+     */
+    public $sortable = [
+        'order_column_name' => 'position',
+        'sort_when_creating' => true,
     ];
 
     /**

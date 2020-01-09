@@ -27,6 +27,16 @@ class HasBrickableTest extends BrickableTestCase
     }
 
     /** @test */
+    public function it_can_add_brick_with_a_custom_brick_model()
+    {
+        config()->set('brickable.brick_model', \Okipa\LaravelBrickable\Tests\Models\Brick::class);
+        $page = factory(Page::class)->create();
+        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+        $this->assertTrue($brick->is($page->bricks->first()));
+        $this->assertEquals('fake-view-path', $brick->getViewPath());
+    }
+
+    /** @test */
     public function it_can_add_bricks()
     {
         $page = factory(Page::class)->create();

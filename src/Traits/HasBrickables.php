@@ -76,7 +76,7 @@ trait HasBrickables
      */
     public function bricks()
     {
-        return $this->morphMany(Brick::class, 'model');
+        return $this->morphMany(app(config('brickable.brick_model')), 'model');
     }
 
     /**
@@ -103,7 +103,7 @@ trait HasBrickables
      */
     public function getBricks(): Collection
     {
-        return $this->bricks;
+        return $this->bricks()->ordered()->get();
     }
 
     /**

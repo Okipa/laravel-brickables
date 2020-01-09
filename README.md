@@ -24,7 +24,7 @@ This package is shipped with a few `Bootstrap 4.*` pre-built content bricks. You
 
 Associate content bricks to an Eloquent model :
 
-``` php
+```php
 $page = Page::find(1);
 
 // associate one brick
@@ -33,7 +33,7 @@ $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
 // or associate several bricks at once
 $page->addBricks([
     [OneTextColumn::class, ['content' => 'Text']],
-    [TwoTextColumns::class, ['left_content' => 'Left text', 'right_content' => 'Right text'])]
+    [TwoTextColumns::class, ['left_content' => 'Left text', 'right_content' => 'Right text']]
 ]);
 ```
 
@@ -44,10 +44,10 @@ And display them in your view :
 {{ $page->displayBricks() }}
 
 {{-- or manually --}}
-<h3>Static title<h3>
-<p>Static content</p>
+<h3>Title<h3>
+<p>Paragraph</p>
 {{ $page->getFirstBrick(OneTextColumn::class) }}
-<p>Static content</p>
+<p>Other paragraph</p>
 {{ $page->getFirstBrick(TwoTextColumns::class) }}
 ```
 
@@ -103,13 +103,91 @@ php artisan vendor:publish --tag=laravel-brickable:views
 
 ### Add content bricks
 
+Associate a single content brick to an Eloquent model :
+
+```php
+$page = Page::find(1);
+$brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text']);
+```
+
+You also can associate several content bricks at once :
+
+```php
+$page = Page::find(1);
+$bricks = $page->addBricks([
+    [OneTextColumn::class, ['content' => 'Text']],
+    [TwoTextColumns::class, ['left_content' => 'Left text', 'right_content' => 'Right text']]
+]);
+```
+
 ### Update a content brick
 
-### Remove content bricks
+Just update your content brick as you would fo for any other Eloquent model instance :
+
+```php
+$brick->update(['content', 'Another text']);
+
+// or
+$brick->content = 'Another text';
+$brick->save();
+```
+
+### Delete a content brick
+
+Just delete your content brick as you would fo for any other Eloquent model instance :
+
+```php
+$brick->delete();
+```
+
+### Set content bricks order
+
+By default all inserted media items are ordered by their creation order (from the oldest to the newest).
+
+The `Brick` model uses the `spatie/eloquent-sortable` package to handle the content bricks positioning.
+
+This third party package documentation is available here : https://github.com/spatie/eloquent-sortable.
+
+### Retrieve content bricks
+
+Retrieve the content bricks associated to an Eloquent model :
+
+```php
+$page = Page::find(1);
+$bricks = $page->getBricks();
+```
+
+You also can find the first typed brick associated to the model :
+
+```php
+$page = Page::find(1);
+$brick = $page->getFirstBrick(OneTextColumn::class);
+```
+
+### Query bricks
+
+You can query content bricks as for any Eloquent model :
+
+```php
+Brick::where('brick_type', OneTextColumn::class)->first();
+```
 
 ### Display bricks in you views
 
+Display a single content brick in your view :
+
+```blade
+{{ $page->getFirstBrick(OneTextColumn::class) }}
+```
+
+Or display all the model related content bricks :
+```blade
+{{ $page->displayBricks() }}
+```
+
 ### Create your own content brick
+
+
 
 ## Testing
 

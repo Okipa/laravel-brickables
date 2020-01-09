@@ -23,7 +23,8 @@
     ],
     "require": {
         "php": "^7.1",
-        "illuminate/support": "~5.5.0||~5.6.0||~5.7.0||~5.8.0||^6.0"
+        "illuminate/support": "~5.5.0||~5.6.0||~5.7.0||~5.8.0||^6.0",
+        "spatie/eloquent-sortable": "^3.7"
     },
     "require-dev": {
         "nunomaduro/larastan": "^0.4.3||^0.5",
