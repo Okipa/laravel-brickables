@@ -1,4 +1,4 @@
-<div class="card mt-3">
+<div class="card">
     <div class="card-header">
         <h2 class="m-0">
             @lang('Content bricks')
