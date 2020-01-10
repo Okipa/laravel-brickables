@@ -28,7 +28,9 @@ class BrickableTest extends BrickableTestCase
     /** @test */
     public function it_returns_brickable_edit_route()
     {
-        Route::get('brick/edit/{brick}', function(){ return; })->name('brick.edit');
+        Route::get('brick/edit/{brick}', function () {
+            return;
+        })->name('brick.edit');
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
         $this->assertEquals((new OneTextColumn)->getEditRoute($brick), $brick->brickable->getEditRoute($brick));
@@ -37,7 +39,9 @@ class BrickableTest extends BrickableTestCase
     /** @test */
     public function it_returns_brickable_destroy_route()
     {
-        Route::delete('brick/destroy/{brick}', function(){ return; })->name('brick.destroy');
+        Route::delete('brick/destroy/{brick}', function () {
+            return;
+        })->name('brick.destroy');
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
         $this->assertEquals((new OneTextColumn)->getDestroyRoute($brick), $brick->brickable->getDestroyRoute($brick));
