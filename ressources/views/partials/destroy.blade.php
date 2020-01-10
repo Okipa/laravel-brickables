@@ -1,4 +1,4 @@
-<form class="ml-1" role="form" method="POST" action="{{ $brick->brickable->route('destroy', $brick) }}">
+<form class="ml-1" role="form" method="POST" action="{{ $brick->brickable->getDestroyRoute($brick) }}">
     @csrf
     @method('DELETE')
     <button class="btn btn-link p-0 text-danger" type="submit" title="@lang('Destroy')">

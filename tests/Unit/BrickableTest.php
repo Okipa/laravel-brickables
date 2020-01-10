@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelBrickables\Tests\Unit;
 
+use Illuminate\Support\Facades\Route;
 use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
 use Okipa\LaravelBrickables\Tests\Models\Page;
@@ -24,7 +25,21 @@ class BrickableTest extends BrickableTestCase
         $this->assertEquals((new OneTextColumn)->getViewPath(), $brick->brickable->getViewPath());
     }
 
-    // wrong routes
+    /** @test */
+    public function it_returns_brickable_edit_route()
+    {
+        Route::get('brick/edit/{brick}', function(){ return; })->name('brick.edit');
+        $page = factory(Page::class)->create();
+        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+        $this->assertEquals((new OneTextColumn)->getEditRoute($brick), $brick->brickable->getEditRoute($brick));
+    }
 
-    // get route
+    /** @test */
+    public function it_returns_brickable_destroy_route()
+    {
+        Route::delete('brick/destroy/{brick}', function(){ return; })->name('brick.destroy');
+        $page = factory(Page::class)->create();
+        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+        $this->assertEquals((new OneTextColumn)->getDestroyRoute($brick), $brick->brickable->getDestroyRoute($brick));
+    }
 }

@@ -36,8 +36,8 @@ class BrickablesTest extends BrickableTestCase
     /** @test */
     public function it_displays_model_bricks_admin_panel_html()
     {
-        Route::get('brickable/edit', function(){ return; })->name('brickable.edit');
-        Route::delete('brickable/destroy', function(){ return; })->name('brickable.destroy');
+        Route::get('brick/edit/{brick}', function(){ return; })->name('brick.edit');
+        Route::delete('brick/destroy/{brick}', function(){ return; })->name('brick.destroy');
         $page = factory(Page::class)->create();
         $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
         $this->assertEquals(

@@ -34,7 +34,7 @@ abstract class Brickable
      */
     public function setEditRouteName(): string
     {
-        return 'brickable.edit';
+        return 'brick.edit';
     }
 
     /**
@@ -44,7 +44,7 @@ abstract class Brickable
      */
     public function setDestroyRouteName(): string
     {
-        return 'brickable.destroy';
+        return 'brick.destroy';
     }
 
     /**
@@ -82,14 +82,26 @@ abstract class Brickable
     abstract public function setLabel(): string;
 
     /**
-     * Get the brickable action route.
+     * Get the brickable edit route.
      *
-     * @param string $action
+     * @param mixed $parameters
      *
      * @return string
      */
-    public function route(string $action): string
+    public function getEditRoute($parameters): string
     {
-        return route($this->{$action . 'RouteName'});
+        return route($this->editRouteName, $parameters);
+    }
+
+    /**
+     * Get the brickable destroy route.
+     *
+     * @param mixed $parameters
+     *
+     * @return string
+     */
+    public function getDestroyRoute($parameters = []): string
+    {
+        return route($this->destroyRouteName, $parameters);
     }
 }
