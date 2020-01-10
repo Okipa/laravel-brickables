@@ -1,10 +1,10 @@
 <?php
 
-namespace Okipa\LaravelBrickable\Traits;
+namespace Okipa\LaravelBrickables\Traits;
 
 use Illuminate\Support\Collection;
-use Okipa\LaravelBrickable\Exceptions\NonExistentBrickTypeException;
-use Okipa\LaravelBrickable\Models\Brick;
+use Okipa\LaravelBrickables\Exceptions\NonExistentBrickTypeException;
+use Okipa\LaravelBrickables\Models\Brick;
 
 trait HasBrickablesTrait
 {
@@ -28,13 +28,13 @@ trait HasBrickablesTrait
     {
         $this->checkBrickTypeDoesExist($brickType);
 
-        return $this->bricks()->create(['brick_type' => $brickType, 'data' => $data]);
+        return $this->bricks()->create(['brickable_type' => $brickType, 'data' => $data]);
     }
 
     /**
      * @param string $brickType
      *
-     * @throws \Okipa\LaravelBrickable\Exceptions\NonExistentBrickTypeException
+     * @throws \Okipa\LaravelBrickables\Exceptions\NonExistentBrickTypeException
      */
     protected function checkBrickTypeDoesExist(string $brickType): void
     {
@@ -59,7 +59,7 @@ trait HasBrickablesTrait
     {
         $this->checkBrickTypeDoesExist($brickType);
 
-        return $this->getBricks()->where('brick_type', $brickType)->first();
+        return $this->getBricks()->where('brickable_type', $brickType)->first();
     }
 
     /**

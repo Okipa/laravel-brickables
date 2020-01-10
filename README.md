@@ -1,12 +1,12 @@
 # Page content bricks management made easy
 
-[![Source Code](https://img.shields.io/badge/source-okipa/laravel--brickable-blue.svg)](https://github.com/Okipa/laravel-brickable)
-[![Latest Version](https://img.shields.io/github/release/okipa/laravel-brickable.svg?style=flat-square)](https://github.com/Okipa/laravel-brickable/releases)
-[![Total Downloads](https://img.shields.io/packagist/dt/okipa/laravel-brickable.svg?style=flat-square)](https://packagist.org/packages/okipa/laravel-brickable)
+[![Source Code](https://img.shields.io/badge/source-okipa/laravel--brickables-blue.svg)](https://github.com/Okipa/laravel-brickables)
+[![Latest Version](https://img.shields.io/github/release/okipa/laravel-brickables.svg?style=flat-square)](https://github.com/Okipa/laravel-brickables/releases)
+[![Total Downloads](https://img.shields.io/packagist/dt/okipa/laravel-brickables.svg?style=flat-square)](https://packagist.org/packages/okipa/laravel-brickables)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://travis-ci.org/Okipa/laravel-brickable.svg?branch=master)](https://travis-ci.org/Okipa/laravel-brickable)
-[![Coverage Status](https://coveralls.io/repos/github/Okipa/laravel-brickable/badge.svg?branch=master)](https://coveralls.io/github/Okipa/laravel-brickable?branch=master)
-[![Quality Score](https://img.shields.io/scrutinizer/g/Okipa/laravel-brickable.svg?style=flat-square)](https://scrutinizer-ci.com/g/Okipa/laravel-brickable/?branch=master)
+[![Build Status](https://travis-ci.org/Okipa/laravel-brickables.svg?branch=master)](https://travis-ci.org/Okipa/laravel-brickables)
+[![Coverage Status](https://coveralls.io/repos/github/Okipa/laravel-brickables/badge.svg?branch=master)](https://coveralls.io/github/Okipa/laravel-brickables?branch=master)
+[![Quality Score](https://img.shields.io/scrutinizer/g/Okipa/laravel-brickables.svg?style=flat-square)](https://scrutinizer-ci.com/g/Okipa/laravel-brickables/?branch=master)
 
 :warning: PACKAGE IN DEVELOPMENT :warning:
 
@@ -79,13 +79,13 @@ And display them in your view:
 Install the package via composer:
 
 ```bash
-composer require okipa/laravel-brickable
+composer require okipa/laravel-brickables
 ```
 
 Then, publish the package migrations: 
 
 ```bash
-php artisan vendor:publish --tag=laravel-brickable:migrations
+php artisan vendor:publish --tag=laravel-brickables:migrations
 ```
 
 And run your database migrations:
@@ -94,13 +94,13 @@ And run your database migrations:
 php artisan migrate
 ```
 
-Finally, add the `Okipa\LaravelBrickable\Traits\HasBrickables` trait to any Eloquent model that you want to be able to manage content bricks to.
+Finally, add the `Okipa\LaravelBrickables\Traits\HasBrickables` trait to any Eloquent model that you want to be able to manage content bricks to.
 
 ```php
 
 use Illuminate\Database\Eloquent\Model;
-use Okipa\LaravelBrickable\Contracts\HasBrickables;
-use Okipa\LaravelBrickable\Traits\HasBrickablesTrait;
+use Okipa\LaravelBrickables\Contracts\HasBrickables;
+use Okipa\LaravelBrickables\Traits\HasBrickablesTrait;
 
 class Page extends Model implements HasBrickables
 {
@@ -115,7 +115,7 @@ class Page extends Model implements HasBrickables
 Publish the package configuration file to customize it if necessary: 
 
 ```bash
-php artisan vendor:publish --tag=laravel-brickable:config
+php artisan vendor:publish --tag=laravel-brickables:config
 ```
 
 ## Views
@@ -123,7 +123,7 @@ php artisan vendor:publish --tag=laravel-brickable:config
 Publish the package views to customize them if necessary: 
 
 ```bash
-php artisan vendor:publish --tag=laravel-brickable:views
+php artisan vendor:publish --tag=laravel-brickables:views
 ```
 
 ## API documentation
@@ -196,7 +196,7 @@ $brick = $page->getFirstBrick('oneTextColumn');
 You can query content bricks as for any Eloquent model:
 
 ```php
-Brick::where('brick_type', 'oneTextColumn')->first();
+Brick::where('brickable_type', 'oneTextColumn')->first();
 ```
 
 ### Display content bricks in you views
@@ -227,14 +227,14 @@ Create your own content brick by following these steps:
 
 #### 1. Create a new content brick type
 
-* Add a new content brick type in your `config/brickable` config file: 
+* Add a new content brick type in your `config/brickables` config file: 
 
 ```php
 'types' => [
     // other brick type declarations ...
     'myBrickType' => [
         'label' => 'My brick type',
-        'viewPath' => 'laravel-brickable::my-brick-type',
+        'viewPath' => 'laravel-brickables::my-brick-type',
     ],
 ],
 ```
@@ -243,7 +243,7 @@ Create your own content brick by following these steps:
 
 Create a view that will host your content brick type HTML.
 
-If you published the package views, you should place it in the `ressources/views/vendor/laravel-brickable` directory.
+If you published the package views, you should place it in the `ressources/views/vendor/laravel-brickables` directory.
 
 #### 3. Use your new content brick type
 

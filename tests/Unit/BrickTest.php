@@ -1,9 +1,9 @@
 <?php
 
-namespace Okipa\LaravelBrickable\Tests\Unit;
+namespace Okipa\LaravelBrickables\Tests\Unit;
 
-use Okipa\LaravelBrickable\Tests\BrickableTestCase;
-use Okipa\LaravelBrickable\Tests\Models\Page;
+use Okipa\LaravelBrickables\Tests\BrickableTestCase;
+use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class BrickTest extends BrickableTestCase
 {

@@ -1,17 +1,23 @@
 {
-    "name": "okipa/laravel-brickable",
+    "name": "okipa/laravel-brickables",
     "description": "Page content bricks management made easy.",
     "keywords": [
         "okipa",
-        "laravel-brickable",
+        "laravel-brickables",
+        "brickables",
+        "brickable",
         "bricks",
         "brick",
+        "blocks",
+        "block",
         "content",
         "management",
+        "manage",
         "admin",
+        "display",
         "html"
     ],
-    "homepage": "https://github.com/okipa/laravel-brickable",
+    "homepage": "https://github.com/okipa/laravel-brickables",
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -35,12 +41,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Okipa\\LaravelBrickable\\": "src"
+            "Okipa\\LaravelBrickables\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Okipa\\LaravelBrickable\\Tests\\": "tests"
+            "Okipa\\LaravelBrickables\\Tests\\": "tests"
         }
     },
     "scripts": {
@@ -55,10 +61,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Okipa\\LaravelBrickable\\BrickableServiceProvider"
+                "Okipa\\LaravelBrickables\\BrickablesServiceProvider"
             ],
             "aliases": {
-                "Brickables": "Okipa\\LaravelBrickable\\Facades\\Brickables"
+                "Brickables": "Okipa\\LaravelBrickables\\Facades\\Brickables"
             }
         }
     },

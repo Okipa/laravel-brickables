@@ -1,8 +1,8 @@
 <?php
 
-namespace Okipa\LaravelBrickable\Tests;
+namespace Okipa\LaravelBrickables\Tests;
 
-use Okipa\LaravelBrickable\BrickableServiceProvider;
+use Okipa\LaravelBrickables\BrickablesServiceProvider;
 use Orchestra\Testbench\TestCase;
 
 abstract class BrickableTestCase extends TestCase
@@ -34,7 +34,7 @@ abstract class BrickableTestCase extends TestCase
      */
     protected function getPackageProviders($app)
     {
-        return [BrickableServiceProvider::class];
+        return [BrickablesServiceProvider::class];
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Okipa\LaravelBrickable\Facades;
+namespace Okipa\LaravelBrickables\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

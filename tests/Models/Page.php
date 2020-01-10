@@ -1,10 +1,10 @@
 <?php
 
-namespace Okipa\LaravelBrickable\Tests\Models;
+namespace Okipa\LaravelBrickables\Tests\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Okipa\LaravelBrickable\Contracts\HasBrickables;
-use Okipa\LaravelBrickable\Traits\HasBrickablesTrait;
+use Okipa\LaravelBrickables\Contracts\HasBrickables;
+use Okipa\LaravelBrickables\Traits\HasBrickablesTrait;
 
 class Page extends Model implements HasBrickables
 {

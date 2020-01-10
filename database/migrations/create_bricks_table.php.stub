@@ -14,7 +14,7 @@ class CreateBricksTable extends Migration
         Schema::create('bricks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->morphs('model');
-            $table->string('brick_type');
+            $table->string('brickable_type');
             $table->json('data');
             $table->unsignedInteger('position')->nullable();
             $table->timestamps();

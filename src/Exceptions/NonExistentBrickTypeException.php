@@ -1,6 +1,6 @@
 <?php
 
-namespace Okipa\LaravelBrickable\Exceptions;
+namespace Okipa\LaravelBrickables\Exceptions;
 
 use Exception;
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace Okipa\LaravelBrickable\Contracts;
+namespace Okipa\LaravelBrickables\Contracts;
 
 use Illuminate\Support\Collection;
-use Okipa\LaravelBrickable\Models\Brick;
+use Okipa\LaravelBrickables\Models\Brick;
 
 interface HasBrickables
 {
@@ -13,7 +13,7 @@ interface HasBrickables
      * @param array $bricks
      *
      * @return \Illuminate\Support\Collection
-     * @throws \Okipa\LaravelBrickable\Exceptions\NonExistentBrickTypeException
+     * @throws \Okipa\LaravelBrickables\Exceptions\NonExistentBrickTypeException
      */
     public function addBricks(array $bricks): Collection;
 
@@ -23,8 +23,8 @@ interface HasBrickables
      * @param string $brickType
      * @param array $data
      *
-     * @return \Okipa\LaravelBrickable\Models\Brick
-     * @throws \Okipa\LaravelBrickable\Exceptions\NonExistentBrickTypeException
+     * @return \Okipa\LaravelBrickables\Models\Brick
+     * @throws \Okipa\LaravelBrickables\Exceptions\NonExistentBrickTypeException
      */
     public function addBrick(string $brickType, array $data): Brick;
 
@@ -33,8 +33,8 @@ interface HasBrickables
      *
      * @param string $brickType
      *
-     * @return \Okipa\LaravelBrickable\Models\Brick|null
-     * @throws \Okipa\LaravelBrickable\Exceptions\NonExistentBrickTypeException
+     * @return \Okipa\LaravelBrickables\Models\Brick|null
+     * @throws \Okipa\LaravelBrickables\Exceptions\NonExistentBrickTypeException
      */
     public function getFirstBrick(string $brickType): ?Brick;
 

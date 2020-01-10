@@ -1,10 +1,10 @@
 <?php
 
-namespace Okipa\LaravelBrickable\Models;
+namespace Okipa\LaravelBrickables\Models;
 
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
-use Okipa\LaravelBrickable\Facades\Brickables;
+use Okipa\LaravelBrickables\Facades\Brickables;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
@@ -34,7 +34,7 @@ class Brick extends Model implements Htmlable, Sortable
      *
      * @var array
      */
-    protected $fillable = ['brick_type', 'data'];
+    protected $fillable = ['brickable_type', 'data'];
 
     /**
      * The attributes that should be cast to native types.
@@ -68,7 +68,7 @@ class Brick extends Model implements Htmlable, Sortable
      */
     public function getViewPath(): string
     {
-        return Brickables::getType($this->getAttribute('brick_type'))['view'];
+        return Brickables::getType($this->getAttribute('brickable_type'))['view'];
     }
 
     /**
@@ -78,6 +78,6 @@ class Brick extends Model implements Htmlable, Sortable
      */
     public function getLabel(): string
     {
-        return Brickables::getType($this->getAttribute('brick_type'))['label'];
+        return Brickables::getType($this->getAttribute('brickable_type'))['label'];
     }
 }

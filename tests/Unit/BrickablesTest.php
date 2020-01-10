@@ -1,10 +1,10 @@
 <?php
 
-namespace Okipa\LaravelBrickable\Tests\Unit;
+namespace Okipa\LaravelBrickables\Tests\Unit;
 
-use Okipa\LaravelBrickable\Facades\Brickables;
-use Okipa\LaravelBrickable\Tests\BrickableTestCase;
-use Okipa\LaravelBrickable\Tests\Models\Page;
+use Okipa\LaravelBrickables\Facades\Brickables;
+use Okipa\LaravelBrickables\Tests\BrickableTestCase;
+use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class BrickablesTest extends BrickableTestCase
 {
@@ -38,7 +38,7 @@ class BrickablesTest extends BrickableTestCase
     {
         $page = factory(Page::class)->create();
         $this->assertEquals(
-            view('laravel-brickable::admin-panel', ['model' => $page]),
+            view('laravel-brickables::admin-panel', ['model' => $page]),
             Brickables::adminPanel($page)->toHtml()
         );
     }

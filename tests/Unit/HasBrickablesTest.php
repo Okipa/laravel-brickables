@@ -1,11 +1,11 @@
 <?php
 
-namespace Okipa\LaravelBrickable\Tests\Unit;
+namespace Okipa\LaravelBrickables\Tests\Unit;
 
-use Okipa\LaravelBrickable\Exceptions\NonExistentBrickTypeException;
-use Okipa\LaravelBrickable\Tests\BrickableTestCase;
-use Okipa\LaravelBrickable\Tests\Models\Brick;
-use Okipa\LaravelBrickable\Tests\Models\Page;
+use Okipa\LaravelBrickables\Exceptions\NonExistentBrickTypeException;
+use Okipa\LaravelBrickables\Tests\BrickableTestCase;
+use Okipa\LaravelBrickables\Tests\Models\Brick;
+use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class HasBrickablesTest extends BrickableTestCase
 {

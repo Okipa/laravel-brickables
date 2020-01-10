@@ -1,7 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
-use Okipa\LaravelBrickable\Tests\Models\Page;
+use Okipa\LaravelBrickables\Tests\Models\Page;
 
 /*
 |--------------------------------------------------------------------------
