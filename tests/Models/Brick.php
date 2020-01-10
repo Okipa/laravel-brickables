@@ -11,7 +11,7 @@ class Brick extends \Okipa\LaravelBrickables\Models\Brick
     /**
      * @inheritDoc
      */
-    public function getViewPath(): string
+    public function getBrickableViewPath(): string
     {
         return 'fake-view-path';
     }

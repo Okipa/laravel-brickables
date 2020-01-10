@@ -8,7 +8,7 @@
         @foreach($model->getBricks() as $brick)
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
-                    <span>@lang($brick->getLabel())</span>
+                    <span>@lang($brick->getBrickableLabel())</span>
                     <div class="d-flex">
                         @include('laravel-brickables::partials.edit')
                         @include('laravel-brickables::partials.destroy')

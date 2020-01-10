@@ -32,7 +32,7 @@ class HasBrickablesTest extends BrickableTestCase
         $page = factory(Page::class)->create();
         $brick = $page->addBrick('oneTextColumn', ['content' => 'Text content']);
         $this->assertTrue($brick->is($page->bricks->first()));
-        $this->assertEquals('fake-view-path', $brick->getViewPath());
+        $this->assertEquals('fake-view-path', $brick->getBrickableViewPath());
     }
 
     /** @test */
@@ -77,6 +77,6 @@ class HasBrickablesTest extends BrickableTestCase
     {
         $page = factory(Page::class)->create();
         $brick = $page->addBrick('oneTextColumn', ['content' => 'Text content']);
-        $this->assertEquals(view($brick->getViewPath(), $brick->data), $brick->toHtml());
+        $this->assertEquals(view($brick->getBrickableViewPath(), $brick->data), $brick->toHtml());
     }
 }

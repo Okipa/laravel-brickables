@@ -58,7 +58,7 @@ class Brick extends Model implements Htmlable, Sortable
      */
     public function toHtml(): string
     {
-        return (string) view($this->getViewPath(), $this->getAttribute('data'));
+        return (string) view($this->getBrickableViewPath(), $this->getAttribute('data'));
     }
 
     /**
@@ -66,7 +66,7 @@ class Brick extends Model implements Htmlable, Sortable
      *
      * @return string
      */
-    public function getViewPath(): string
+    public function getBrickableViewPath(): string
     {
         return Brickables::getType($this->getAttribute('brickable_type'))['view'];
     }
@@ -76,7 +76,7 @@ class Brick extends Model implements Htmlable, Sortable
      *
      * @return string
      */
-    public function getLabel(): string
+    public function getBrickableLabel(): string
     {
         return Brickables::getType($this->getAttribute('brickable_type'))['label'];
     }
