@@ -12,7 +12,7 @@
 
 This package allows you to associate content bricks to Eloquent models and gives ability to easily manage them from an admin panel.
 
-This package is shipped with a few `Bootstrap 4.*` pre-built content bricks. You can use them as is, but you definitely should consider them as examples: customizing them or create new ones has been designed to be simple as hell ! :fire:
+This package is shipped with a pre-built content bricks. You can use them as is, but you definitely should consider use them as examples: customizing them or create new ones has been designed to be simple as hell ! :fire:
 
 ## Compatibility
 
@@ -94,7 +94,7 @@ And run your database migrations:
 php artisan migrate
 ```
 
-Finally, add the `Okipa\LaravelBrickables\Traits\HasBrickables` trait to any Eloquent model that you want to be able to manage content bricks to.
+Finally, implement the `HasBrickables` interface and use the `HasBrickablesTrait` trait to any Eloquent model that you want to be able to be associate to content bricks to.
 
 ```php
 
