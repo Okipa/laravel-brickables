@@ -90,6 +90,6 @@ abstract class Brickable
      */
     public function route(string $action): string
     {
-        return route($this->routes[$action]);
+        return route($this->{$action . 'RouteName'});
     }
 }
