@@ -3,8 +3,8 @@
         <div class="card-header d-flex justify-content-between">
             <span>@lang($brick->getLabel())</span>
             <div class="d-flex">
-                @include('laravel-brickable::display.partials.edit')
-                @include('laravel-brickable::display.partials.destroy')
+                @include('laravel-brickable::partials.edit')
+                @include('laravel-brickable::partials.destroy')
             </div>
         </div>
         <div class="card-body">

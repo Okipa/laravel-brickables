@@ -30,7 +30,7 @@ class BrickablesTest extends BrickableTestCase
             'left_content' => 'Left text',
             'right_content' => 'Right text',
         ])->toHtml();
-        $this->assertEquals($html, Brickables::display($page));
+        $this->assertEquals($html, Brickables::display($page)->toHtml());
     }
 
     /** @test */
@@ -38,8 +38,8 @@ class BrickablesTest extends BrickableTestCase
     {
         $page = factory(Page::class)->create();
         $this->assertEquals(
-            view('laravel-brickable::display.admin-panel', ['model' => $page]),
-            Brickables::adminPanel($page)
+            view('laravel-brickable::admin-panel', ['model' => $page]),
+            Brickables::adminPanel($page)->toHtml()
         );
     }
 }

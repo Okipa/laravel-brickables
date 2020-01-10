@@ -2,10 +2,13 @@
 
 namespace Okipa\LaravelBrickable;
 
+use Illuminate\Contracts\Support\Htmlable;
 use Okipa\LaravelBrickable\Contracts\HasBrickables;
 
-class Brickables
+class Brickables implements Htmlable
 {
+    protected string $html;
+
     /**
      * Get available brick types.
      *
@@ -35,9 +38,11 @@ class Brickables
      *
      * @return string
      */
-    public function display(HasBrickables $model): string
+    public function display(HasBrickables $model): self
     {
-        return view('laravel-brickable::display.bricks', ['model' => $model]);
+        $this->html = view('laravel-brickable::bricks', ['model' => $model])->toHtml();
+
+        return $this;
     }
 
     /**
@@ -47,8 +52,18 @@ class Brickables
      *
      * @return string
      */
-    public function adminPanel(HasBrickables $model): string
+    public function adminPanel(HasBrickables $model): self
     {
-        return view('laravel-brickable::display.admin-panel', ['model' => $model]);
+        $this->html = view('laravel-brickable::admin-panel', ['model' => $model]);
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function toHtml()
+    {
+        return (string) $this->html;
     }
 }

@@ -21,5 +21,4 @@ return [
         ],
         // add your content brick type configurations here ...
     ],
-
 ];
