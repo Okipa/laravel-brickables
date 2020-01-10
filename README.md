@@ -75,13 +75,25 @@ And display them in your view :
 
 ## Installation
 
-You can install the package via composer :
+Install the package via composer :
 
 ```bash
 composer require okipa/laravel-brickable
 ```
 
-Then, add the `Okipa\LaravelBrickable\Traits\HasBrickables` trait to any Eloquent model that you want to be able to manage content bricks to.
+Then, publish the package migrations : 
+
+```bash
+php artisan vendor:publish --tag=laravel-brickable:migrations
+```
+
+And run your database migrations:
+
+```bash
+php artisan migrate
+```
+
+Finally, add the `Okipa\LaravelBrickable\Traits\HasBrickables` trait to any Eloquent model that you want to be able to manage content bricks to.
 
 ```php
 class Page extends Model
@@ -90,20 +102,6 @@ class Page extends Model
 
 	// ...
 }
-```
-
-## Migrations
-
-First, publish the package migrations : 
-
-```bash
-php artisan vendor:publish --tag=laravel-brickable:migrations
-```
-
-Then, you should run your database migrations:
-
-```bash
-php artisan migrate
 ```
 
 ## Configuration
