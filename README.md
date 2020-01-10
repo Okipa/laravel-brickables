@@ -210,52 +210,82 @@ Or display all the model related content bricks html:
 {{ Brickables::display($page) }}
 ```
 
-### Retrieve available content brick types
+### Retrieve brickables
 
-Getting the available content brick types allows you to provide a type selection on a view, for example:
-
-```php
-$availableBrickTypes = Brickables::getAll();
-```
-
-### Create your own content brick
-
-Create your own content brick by following these steps:
-
-#### 1. Create a new content brick type
-
-* Add a new content brick type in your `config/brickables` config file: 
+Get all the registered brickables that can be associated to Eloquent models:
 
 ```php
-'types' => [
-    // other brick type declarations ...
-    'myBrickType' => [
-        'label' => 'My brick type',
-        'viewPath' => 'laravel-brickables::my-brick-type',
-    ],
-],
+$registeredBrickables = Brickables::getAll();
 ```
 
-#### 2. Create your content brick type view
-
-Create a view that will host your content brick type HTML.
-
-If you published the package views, you should place it in the `ressources/views/vendor/laravel-brickables` directory.
-
-#### 3. Use your new content brick type
-
-Your content brick type is now available in the `Brickables::getAll()` and you can associate it to Eloquent models:
+Retrieve a brickable from a brick instance:
 
 ```php
 $page = Page::find(1);
-$page->addBrick('myBrickType', $data);
+$brick = $page->getFirstBrick(OneTextColumn::class);
+$brickable = $brick->brickable;
 ```
 
-And render it in your view:
+### Create your own brickable
 
-```blade
-{{ $page->getFirstBrick('myBrickType') }}
+Create a new class that extends the `Brickable` abstract class in your `app/vendor/Brickables` directory:
+
+```php
+<?php
+
+namespace App\Vendor\LaravelBrickables\Brickables;
+
+use Okipa\LaravelBrickables\Abstracts\Brickable;
+
+class MyBrickable extends Brickable
+{
+    /**
+     * @inheritDoc
+     */
+    public function setLabel(): string
+    {
+        return __('My brickable');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setViewPath(): string
+    {
+        return 'laravel-brickables::brickables.my-brickable';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setRoutes(): array
+    {
+        return [
+            'edit' => 'brickable.edit',
+            'destroy' => 'brickable.destroy',
+        ];
+    }
+}
 ```
+
+Then, register it in your `config('brickables.registered')` array:
+
+```php
+<?php
+
+return [
+
+    'registered' => [
+        // other brickables declarations ...
+        App\Vendor\LaravelBrickables\Brickables\MyBrickable::class,
+    ],
+];
+
+```
+
+Finally, create a view that will host your brickable HTML. If you published the package views, you should place it in the `ressources/views/vendor/laravel-brickables` directory.
+
+Your brickable is now ready to associate to Eloquent models.
 
 ### Manage model content bricks
 

@@ -6,7 +6,6 @@ use Okipa\LaravelBrickables\Abstracts\Brickable;
 
 class OneTextColumn extends Brickable
 {
-
     /**
      * @inheritDoc
      */
