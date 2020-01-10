@@ -113,7 +113,7 @@ class Page extends Model implements HasBrickables
 }
 ```
 
-Then, declare the package default `web` routes that will be used to redirect by the generated admin panel to the create and edit bricks, and for bricks deletion:
+Then, declare the package default `web` routes that will be used by the package:
 
 ```php
 Route::get('brick/create/{brick}', [BrickController::class, 'edit'])->name('brick.create');
