@@ -27,10 +27,10 @@ Associate content bricks to an Eloquent model :
 ```php
 $page = Page::find(1);
 
-// associate one brick
+// associate one content brick
 $page->addBrick('oneTextColumn', ['content' => 'Text content']);
 
-// or associate several bricks at once
+// or associate several content bricks at once
 $page->addBricks([
     ['oneTextColumn', ['content' => 'Text']],
     ['twoTextColumns', ['left_content' => 'Left text', 'right_content' => 'Right text']]
@@ -62,8 +62,8 @@ And display them in your view :
   * [Delete a content brick](#delete-a-content-brick)
   * [Set content bricks order](#set-content-bricks-order)
   * [Retrieve content bricks](#retrieve-content-bricks)
-  * [Query bricks](#query-bricks)
-  * [Display bricks in you views](#display-bricks-in-you-views)
+  * [Query content bricks](#query-content-bricks)
+  * [Display content bricks in you views](#display-content-bricks-in-you-views)
   * [Retrieve available content brick types](#retrieve-available-content-brick-types)
   * [Create your own content brick](#create-your-own-content-brick)
 * [Testing](#testing)
@@ -90,6 +90,20 @@ class Page extends Model
 
 	// ...
 }
+```
+
+## Migrations
+
+First, publish the package migrations : 
+
+```bash
+php artisan vendor:publish --tag=laravel-brickable:migrations
+```
+
+Then, you should run your database migrations:
+
+```bash
+php artisan migrate
 ```
 
 ## Configuration
@@ -166,7 +180,7 @@ $page = Page::find(1);
 $bricks = $page->getBricks();
 ```
 
-You also can find the first typed brick associated to the model :
+You also can find the first typed content brick associated to the model :
 
 ```php
 $page = Page::find(1);
@@ -181,7 +195,7 @@ You can query content bricks as for any Eloquent model :
 Brick::where('brick_type', 'oneTextColumn')->first();
 ```
 
-### Display bricks in you views
+### Display content bricks in you views
 
 Display a single content brick in your view :
 
@@ -199,7 +213,7 @@ Or display all the model related content bricks :
 Getting the available content brick types allows you to provide a type selection on a view, for example :
 
 ```php
-$availableBrickTypes = Brick::getTypes();
+$availableBrickTypes = Brickables::getTypes();
 ```
 
 ### Create your own content brick
@@ -208,7 +222,7 @@ Create your own content brick by following these steps :
 
 #### 1. Create a new content brick type
 
-* Add a new brick type in your `config/brickable` config file : 
+* Add a new content brick type in your `config/brickable` config file : 
 
 ```php
 'types' => [
@@ -220,17 +234,15 @@ Create your own content brick by following these steps :
 ],
 ```
 
-#### 2. Create your brick type view
+#### 2. Create your content brick type view
 
-Create a view that will host your brick type HTML.
+Create a view that will host your content brick type HTML.
 
-If you published the package views, you can create it in the `ressources/views/vendor/laravel-brickable` directory.
+If you published the package views, you should place it in the `ressources/views/vendor/laravel-brickable` directory.
 
-If not, put them wherever you wan (without forgetting to change the path return by the `setViewPath()` method from you brick type class).
+#### 3. Use your new content brick type
 
-#### 3. Use your new brick type
-
-Your brick type is now available in the `Brick::getBrickTypes()` and you can associate it to Eloquent models :
+Your content brick type is now available in the `Brickables::getTypes()` and you can associate it to Eloquent models :
 
 ```php
 $page = Page::find(1);

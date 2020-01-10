@@ -7,7 +7,7 @@ use Okipa\LaravelBrickable\Tests\BrickableTestCase;
 use Okipa\LaravelBrickable\Tests\Models\Brick;
 use Okipa\LaravelBrickable\Tests\Models\Page;
 
-class HasBrickableTest extends BrickableTestCase
+class HasBrickablesTest extends BrickableTestCase
 {
     /** @test */
     public function it_cannot_add_with_non_existent_brick_type()
@@ -91,11 +91,5 @@ class HasBrickableTest extends BrickableTestCase
             'right_content' => 'Right text',
         ])->toHtml();
         $this->assertEquals($html, $page->displayBricks());
-    }
-
-    /** @test */
-    public function it_returns_available_brickable_types()
-    {
-        $this->assertEquals(config('brickable.types'), Brick::getTypes());
     }
 }

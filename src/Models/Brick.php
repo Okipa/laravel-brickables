@@ -45,20 +45,6 @@ class Brick extends Model implements Htmlable, Sortable
     ];
 
     /**
-     * Get available brick types.
-     *
-     * @return array
-     */
-    public static function getTypes(): array
-    {
-        return array_map(function ($type) {
-            $type['label'] = __($type['label']);
-
-            return $type;
-        }, config('brickable.types'));
-    }
-
-    /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
     public function brickable()
