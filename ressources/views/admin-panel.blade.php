@@ -1,7 +1,7 @@
 <div class="card mt-3">
     <div class="card-header">
         <h2 class="m-0">
-            @lang('Content bricks')
+            @lang('laravel-brickables::laravel-brickables.contentBricks')
         </h2>
     </div>
     <div class="card-body">
