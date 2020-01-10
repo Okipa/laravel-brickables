@@ -13,7 +13,7 @@ interface HasBrickables
      * @param array $bricks
      *
      * @return \Illuminate\Support\Collection
-     * @throws \Okipa\LaravelBrickables\Exceptions\NonExistentBrickTypeException
+     * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      */
     public function addBricks(array $bricks): Collection;
 
@@ -24,7 +24,8 @@ interface HasBrickables
      * @param array $data
      *
      * @return \Okipa\LaravelBrickables\Models\Brick
-     * @throws \Okipa\LaravelBrickables\Exceptions\NonExistentBrickTypeException
+     * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
+     * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
      */
     public function addBrick(string $brickType, array $data): Brick;
 
@@ -34,7 +35,8 @@ interface HasBrickables
      * @param string $brickType
      *
      * @return \Okipa\LaravelBrickables\Models\Brick|null
-     * @throws \Okipa\LaravelBrickables\Exceptions\NonExistentBrickTypeException
+     * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
+     * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
      */
     public function getFirstBrick(string $brickType): ?Brick;
 

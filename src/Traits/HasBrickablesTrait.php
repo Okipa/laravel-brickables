@@ -3,7 +3,9 @@
 namespace Okipa\LaravelBrickables\Traits;
 
 use Illuminate\Support\Collection;
-use Okipa\LaravelBrickables\Exceptions\NonExistentBrickTypeException;
+use Okipa\LaravelBrickables\Abstracts\Brickable;
+use Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException;
+use Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException;
 use Okipa\LaravelBrickables\Models\Brick;
 
 trait HasBrickablesTrait
@@ -24,23 +26,37 @@ trait HasBrickablesTrait
     /**
      * @inheritDoc
      */
-    public function addBrick(string $brickType, array $data): Brick
+    public function addBrick(string $brickableClass, array $data): Brick
     {
-        $this->checkBrickTypeDoesExist($brickType);
+        $this->verifyBrickableType($brickableClass);
+        $this->verifyBrickableRegistration($brickableClass);
 
-        return $this->bricks()->create(['brickable_type' => $brickType, 'data' => $data]);
+        return $this->bricks()->create(['brickable_type' => $brickableClass, 'data' => $data]);
     }
 
     /**
-     * @param string $brickType
+     * @param string $brickableClass
      *
-     * @throws \Okipa\LaravelBrickables\Exceptions\NonExistentBrickTypeException
+     * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      */
-    protected function checkBrickTypeDoesExist(string $brickType): void
+    protected function verifyBrickableType(string $brickableClass): void
     {
-        if (! config('brickables.types.' . $brickType)) {
-            throw new NonExistentBrickTypeException('The « ' . $brickType
-                . ' » brick type configuration does not exist.');
+        if (! app($brickableClass) instanceof Brickable) {
+            throw new InvalidBrickableClassException('The given ' . $brickableClass
+                . ' brickable class should extend ' . Brickable::class . '.');
+        }
+    }
+
+    /**
+     * @param string $brickableClass
+     *
+     * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
+     */
+    protected function verifyBrickableRegistration(string $brickableClass): void
+    {
+        if (! in_array($brickableClass, config('brickables.registered'))) {
+            throw new NotRegisteredBrickableClassException('The given ' . $brickableClass
+                . ' brickable is not registered in the config(\'brickables.registered\') array.');
         }
     }
 
@@ -49,17 +65,18 @@ trait HasBrickablesTrait
      */
     public function bricks()
     {
-        return $this->morphMany(app(config('brickables.model')), 'model');
+        return $this->morphMany(app(config('brickables.brickModel')), 'model');
     }
 
     /**
      * @inheritDoc
      */
-    public function getFirstBrick(string $brickType): ?Brick
+    public function getFirstBrick(string $brickableClass): ?Brick
     {
-        $this->checkBrickTypeDoesExist($brickType);
+        $this->verifyBrickableType($brickableClass);
+        $this->verifyBrickableRegistration($brickableClass);
 
-        return $this->getBricks()->where('brickable_type', $brickType)->first();
+        return $this->getBricks()->where('brickable_type', $brickableClass)->first();
     }
 
     /**

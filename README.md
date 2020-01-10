@@ -28,12 +28,12 @@ Associate content bricks to an Eloquent model:
 $page = Page::find(1);
 
 // associate one content brick
-$page->addBrick('oneTextColumn', ['content' => 'Text content']);
+$page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
 
 // or associate several content bricks at once
 $page->addBricks([
-    ['oneTextColumn', ['content' => 'Text']],
-    ['twoTextColumns', ['left_content' => 'Left text', 'right_content' => 'Right text']]
+    [OneTextColumn::class, ['content' => 'Text']],
+    [TwoTextColumns::class, ['left_content' => 'Left text', 'right_content' => 'Right text']]
 ]);
 ```
 
@@ -46,9 +46,9 @@ And display them in your view:
 {{-- or manually --}}
 <h3>Title<h3>
 <p>Paragraph</p>
-{{ $page->getFirstBrick('oneTextColumn') }}
+{{ $page->getFirstBrick(OneTextColumn::class) }}
 <p>Other paragraph</p>
-{{ $page->getFirstBrick('twoTextColumns') }}
+{{ $page->getFirstBrick(TwoTextColumns::class) }}
 ```
 
 ## Table of contents
@@ -85,7 +85,7 @@ composer require okipa/laravel-brickables
 Then, publish the package migrations: 
 
 ```bash
-php artisan vendor:publish --tag=laravel-brickables:migrations
+php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=migrations
 ```
 
 And run your database migrations:
@@ -115,7 +115,7 @@ class Page extends Model implements HasBrickables
 Publish the package configuration file to customize it if necessary: 
 
 ```bash
-php artisan vendor:publish --tag=laravel-brickables:config
+php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=config
 ```
 
 ## Views
@@ -123,7 +123,7 @@ php artisan vendor:publish --tag=laravel-brickables:config
 Publish the package views to customize them if necessary: 
 
 ```bash
-php artisan vendor:publish --tag=laravel-brickables:views
+php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=views
 ```
 
 ## API documentation
@@ -134,7 +134,7 @@ Associate a single content brick to an Eloquent model:
 
 ```php
 $page = Page::find(1);
-$brick = $page->addBrick('oneTextColumn', ['content' => 'Text']);
+$brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text']);
 ```
 
 You also can associate several content bricks at once:
@@ -142,8 +142,8 @@ You also can associate several content bricks at once:
 ```php
 $page = Page::find(1);
 $bricks = $page->addBricks([
-    ['oneTextColumn', ['content' => 'Text']],
-    ['twoTextColumns', ['left_content' => 'Left text', 'right_content' => 'Right text']]
+    [OneTextColumn::class, ['content' => 'Text']],
+    [TwoTextColumns::class, ['left_content' => 'Left text', 'right_content' => 'Right text']]
 ]);
 ```
 
@@ -188,7 +188,7 @@ You also can find the first typed content brick associated to the model:
 
 ```php
 $page = Page::find(1);
-$brick = $page->getFirstBrick('oneTextColumn');
+$brick = $page->getFirstBrick(OneTextColumn::class);
 ```
 
 ### Query bricks
@@ -196,7 +196,7 @@ $brick = $page->getFirstBrick('oneTextColumn');
 You can query content bricks as for any Eloquent model:
 
 ```php
-Brick::where('brickable_type', 'oneTextColumn')->first();
+Brick::where('brickable_type', OneTextColumn::class)->first();
 ```
 
 ### Display content bricks in you views
@@ -204,7 +204,7 @@ Brick::where('brickable_type', 'oneTextColumn')->first();
 Display a single content brick in your view:
 
 ```blade
-{{ $page->getFirstBrick('oneTextColumn') }}
+{{ $page->getFirstBrick(OneTextColumn::class) }}
 ```
 
 Or display all the model related content bricks html:
@@ -218,7 +218,7 @@ Or display all the model related content bricks html:
 Getting the available content brick types allows you to provide a type selection on a view, for example:
 
 ```php
-$availableBrickTypes = Brickables::getTypes();
+$availableBrickTypes = Brickables::getAll();
 ```
 
 ### Create your own content brick
@@ -247,7 +247,7 @@ If you published the package views, you should place it in the `ressources/views
 
 #### 3. Use your new content brick type
 
-Your content brick type is now available in the `Brickables::getTypes()` and you can associate it to Eloquent models:
+Your content brick type is now available in the `Brickables::getAll()` and you can associate it to Eloquent models:
 
 ```php
 $page = Page::find(1);

@@ -3,6 +3,7 @@
 namespace Okipa\LaravelBrickables;
 
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Support\Collection;
 use Okipa\LaravelBrickables\Contracts\HasBrickables;
 
 class Brickables implements Htmlable
@@ -11,25 +12,18 @@ class Brickables implements Htmlable
     protected $html;
 
     /**
-     * Get available brick types.
+     * Get the available brickables.
      *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
-    public function getTypes(): array
+    public function getAll(): Collection
     {
-        return config('brickables.types');
-    }
+        $brickables = new Collection;
+        foreach (config('brickables.registered') as $brickableClass) {
+            $brickables->push(app($brickableClass));
+        }
 
-    /**
-     * Get available brick types.
-     *
-     * @param string $brickType
-     *
-     * @return array
-     */
-    public function getType(string $brickType): array
-    {
-        return config('brickables.types.' . $brickType);
+        return $brickables;
     }
 
     /**
