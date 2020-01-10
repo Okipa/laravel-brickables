@@ -54,6 +54,7 @@ And display them in your view:
 ## Table of contents
 
 * [Installation](#installation)
+* [Implementation](#implementation)
 * [Configuration](#configuration)
 * [Views](#views)
 * [API documentation](#api-documentation)
@@ -94,7 +95,9 @@ And run your database migrations:
 php artisan migrate
 ```
 
-Finally, implement the `HasBrickables` interface and use the `HasBrickablesTrait` trait to any Eloquent model that you want to be able to be associate to content bricks to.
+## Implementation
+
+Implement the `HasBrickables` interface and use the `HasBrickablesTrait` trait to any Eloquent model that you want to be able to be associate to content bricks to.
 
 ```php
 
@@ -108,6 +111,14 @@ class Page extends Model implements HasBrickables
 
 	// ...
 }
+```
+
+Then, declare the package default `web` routes that will be used to redirect by the generated admin panel to the create and edit bricks, and for bricks deletion:
+
+```php
+Route::get('brick/create/{brick}', [BrickController::class, 'edit'])->name('brick.create');
+Route::get('brick/edit/{brick}', [BrickController::class, 'edit'])->name('brick.edit');
+Route::delete('brick/destroy/{brick}', [BrickController::class, 'destroy'])->name('brick.destroy');
 ```
 
 ## Configuration
