@@ -12,7 +12,7 @@
 
 This package allows you to associate content bricks to Eloquent models and gives ability to easily manage them from an admin panel.
 
-This package is shipped with a few `Bootstrap 4.*` pre-built content bricks. You can use them as is, but you definitely should consider them as examples : customizing them or create new ones has been designed to be simple as hell ! :fire:
+This package is shipped with a few `Bootstrap 4.*` pre-built content bricks. You can use them as is, but you definitely should consider them as examples: customizing them or create new ones has been designed to be simple as hell ! :fire:
 
 ## Compatibility
 
@@ -22,7 +22,7 @@ This package is shipped with a few `Bootstrap 4.*` pre-built content bricks. You
 
 ## Usage
 
-Associate content bricks to an Eloquent model :
+Associate content bricks to an Eloquent model:
 
 ```php
 $page = Page::find(1);
@@ -37,7 +37,7 @@ $page->addBricks([
 ]);
 ```
 
-And display them in your view :
+And display them in your view:
 
 ```blade
 {{-- automatically --}}
@@ -75,13 +75,13 @@ And display them in your view :
 
 ## Installation
 
-Install the package via composer :
+Install the package via composer:
 
 ```bash
 composer require okipa/laravel-brickable
 ```
 
-Then, publish the package migrations : 
+Then, publish the package migrations: 
 
 ```bash
 php artisan vendor:publish --tag=laravel-brickable:migrations
@@ -106,7 +106,7 @@ class Page extends Model
 
 ## Configuration
 
-Publish the package configuration file to customize it if necessary : 
+Publish the package configuration file to customize it if necessary: 
 
 ```bash
 php artisan vendor:publish --tag=laravel-brickable:config
@@ -114,7 +114,7 @@ php artisan vendor:publish --tag=laravel-brickable:config
 
 ## Views
 
-Publish the package views to customize them if necessary : 
+Publish the package views to customize them if necessary: 
 
 ```bash
 php artisan vendor:publish --tag=laravel-brickable:views
@@ -124,14 +124,14 @@ php artisan vendor:publish --tag=laravel-brickable:views
 
 ### Add content bricks
 
-Associate a single content brick to an Eloquent model :
+Associate a single content brick to an Eloquent model:
 
 ```php
 $page = Page::find(1);
 $brick = $page->addBrick('oneTextColumn', ['content' => 'Text']);
 ```
 
-You also can associate several content bricks at once :
+You also can associate several content bricks at once:
 
 ```php
 $page = Page::find(1);
@@ -143,7 +143,7 @@ $bricks = $page->addBricks([
 
 ### Update a content brick
 
-Just update your content brick as you would fo for any other Eloquent model instance :
+Just update your content brick as you would fo for any other Eloquent model instance:
 
 ```php
 $brick->update(['content', 'Another text']);
@@ -155,7 +155,7 @@ $brick->save();
 
 ### Delete a content brick
 
-Just delete your content brick as you would fo for any other Eloquent model instance :
+Just delete your content brick as you would fo for any other Eloquent model instance:
 
 ```php
 $brick->delete();
@@ -167,18 +167,18 @@ By default all inserted media items are ordered by their creation order (from th
 
 The `Brick` model uses the `spatie/eloquent-sortable` package to handle the content bricks positioning.
 
-This third party package documentation is available here : https://github.com/spatie/eloquent-sortable.
+This third party package documentation is available here: https://github.com/spatie/eloquent-sortable.
 
 ### Retrieve content bricks
 
-Retrieve the content bricks associated to an Eloquent model :
+Retrieve the content bricks associated to an Eloquent model:
 
 ```php
 $page = Page::find(1);
 $bricks = $page->getBricks();
 ```
 
-You also can find the first typed content brick associated to the model :
+You also can find the first typed content brick associated to the model:
 
 ```php
 $page = Page::find(1);
@@ -187,7 +187,7 @@ $brick = $page->getFirstBrick('oneTextColumn');
 
 ### Query bricks
 
-You can query content bricks as for any Eloquent model :
+You can query content bricks as for any Eloquent model:
 
 ```php
 Brick::where('brick_type', 'oneTextColumn')->first();
@@ -195,20 +195,20 @@ Brick::where('brick_type', 'oneTextColumn')->first();
 
 ### Display content bricks in you views
 
-Display a single content brick in your view :
+Display a single content brick in your view:
 
 ```blade
 {{ $page->getFirstBrick('oneTextColumn') }}
 ```
 
-Or display all the model related content bricks :
+Or display all the model related content bricks:
 ```blade
 {{ $page->displayBricks() }}
 ```
 
 ### Retrieve available content brick types
 
-Getting the available content brick types allows you to provide a type selection on a view, for example :
+Getting the available content brick types allows you to provide a type selection on a view, for example:
 
 ```php
 $availableBrickTypes = Brickables::getTypes();
@@ -216,11 +216,11 @@ $availableBrickTypes = Brickables::getTypes();
 
 ### Create your own content brick
 
-Create your own content brick by following these steps :
+Create your own content brick by following these steps:
 
 #### 1. Create a new content brick type
 
-* Add a new content brick type in your `config/brickable` config file : 
+* Add a new content brick type in your `config/brickable` config file: 
 
 ```php
 'types' => [
@@ -240,14 +240,14 @@ If you published the package views, you should place it in the `ressources/views
 
 #### 3. Use your new content brick type
 
-Your content brick type is now available in the `Brickables::getTypes()` and you can associate it to Eloquent models :
+Your content brick type is now available in the `Brickables::getTypes()` and you can associate it to Eloquent models:
 
 ```php
 $page = Page::find(1);
 $page->addBrick('myBrickType', $data);
 ```
 
-And render it in your view :
+And render it in your view:
 
 ```blade
 {{ $page->getFirstBrick('myBrickType') }}
