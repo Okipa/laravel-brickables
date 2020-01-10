@@ -113,7 +113,7 @@ class Page extends Model implements HasBrickables
 }
 ```
 
-Then, declare the package default `web` routes that will be used by the package:
+Then, declare the package `web` routes that will be used by the package default brickables:
 
 ```php
 Route::get('brick/create/{brick}', [BrickController::class, 'edit'])->name('brick.create');
