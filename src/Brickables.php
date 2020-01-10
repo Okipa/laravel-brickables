@@ -7,7 +7,8 @@ use Okipa\LaravelBrickable\Contracts\HasBrickables;
 
 class Brickables implements Htmlable
 {
-    protected string $html;
+    /** @property string $html */
+    protected $html;
 
     /**
      * Get available brick types.
