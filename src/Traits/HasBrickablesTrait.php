@@ -6,15 +6,10 @@ use Illuminate\Support\Collection;
 use Okipa\LaravelBrickable\Exceptions\NonExistentBrickTypeException;
 use Okipa\LaravelBrickable\Models\Brick;
 
-trait HasBrickables
+trait HasBrickablesTrait
 {
     /**
-     * Associate an array of brick to the model.
-     *
-     * @param array $bricks
-     *
-     * @return \Illuminate\Support\Collection
-     * @throws \Okipa\LaravelBrickable\Exceptions\NonExistentBrickTypeException
+     * @inheritDoc
      */
     public function addBricks(array $bricks): Collection
     {
@@ -27,13 +22,7 @@ trait HasBrickables
     }
 
     /**
-     * Associate a brick to the model.
-     *
-     * @param string $brickType
-     * @param array $data
-     *
-     * @return \Okipa\LaravelBrickable\Models\Brick
-     * @throws \Okipa\LaravelBrickable\Exceptions\NonExistentBrickTypeException
+     * @inheritDoc
      */
     public function addBrick(string $brickType, array $data): Brick
     {
@@ -49,7 +38,7 @@ trait HasBrickables
      */
     protected function checkBrickTypeDoesExist(string $brickType): void
     {
-        if (! config('brickable.types.' . $brickType)) {
+        if (! config('brickables.types.' . $brickType)) {
             throw new NonExistentBrickTypeException('The « ' . $brickType
                 . ' » brick type configuration does not exist.');
         }
@@ -60,16 +49,11 @@ trait HasBrickables
      */
     public function bricks()
     {
-        return $this->morphMany(app(config('brickable.model')), 'model');
+        return $this->morphMany(app(config('brickables.model')), 'model');
     }
 
     /**
-     * Get first brick from given brick type.
-     *
-     * @param string $brickType
-     *
-     * @return \Okipa\LaravelBrickable\Models\Brick|null
-     * @throws \Okipa\LaravelBrickable\Exceptions\NonExistentBrickTypeException
+     * @inheritDoc
      */
     public function getFirstBrick(string $brickType): ?Brick
     {
@@ -79,28 +63,10 @@ trait HasBrickables
     }
 
     /**
-     * Get the model associated bricks.
-     *
-     * @return \Illuminate\Support\Collection
+     * @inheritDoc
      */
     public function getBricks(): Collection
     {
         return $this->bricks()->ordered()->get();
-    }
-
-    /**
-     * Display the model associated bricks HTML.
-     *
-     * @return string
-     */
-    public function displayBricks(): string
-    {
-        $html = '';
-        $bricks = $this->getBricks();
-        foreach ($bricks as $brick) {
-            $html .= $brick->toHtml();
-        }
-
-        return $html;
     }
 }

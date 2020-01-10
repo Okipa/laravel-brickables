@@ -13,11 +13,11 @@ return [
     'types' => [
         'oneTextColumn' => [
             'label' => 'One text column',
-            'view' => 'laravel-brickable::one-text-column',
+            'view' => 'laravel-brickable::brickables.one-text-column',
         ],
         'twoTextColumns' => [
             'label' => 'Two text columns',
-            'view' => 'laravel-brickable::two-text-columns',
+            'view' => 'laravel-brickable::brickables.two-text-columns',
         ],
         // add your content brick type configurations here ...
     ],

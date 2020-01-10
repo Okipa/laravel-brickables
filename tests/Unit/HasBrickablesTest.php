@@ -28,7 +28,7 @@ class HasBrickablesTest extends BrickableTestCase
     /** @test */
     public function it_can_add_brick_with_a_custom_brick_model()
     {
-        config()->set('brickable.model', Brick::class);
+        config()->set('brickables.model', Brick::class);
         $page = factory(Page::class)->create();
         $brick = $page->addBrick('oneTextColumn', ['content' => 'Text content']);
         $this->assertTrue($brick->is($page->bricks->first()));
@@ -73,23 +73,10 @@ class HasBrickablesTest extends BrickableTestCase
     }
 
     /** @test */
-    public function it_renders_a_brick_html()
+    public function it_renders_html()
     {
         $page = factory(Page::class)->create();
         $brick = $page->addBrick('oneTextColumn', ['content' => 'Text content']);
         $this->assertEquals(view($brick->getViewPath(), $brick->data), $brick->toHtml());
-    }
-
-    /** @test */
-    public function it_renders_a_bricks_collection_html()
-    {
-        $page = factory(Page::class)->create();
-        $html = '';
-        $html .= $page->addBrick('oneTextColumn', ['content' => 'Text content'])->toHtml();
-        $html .= $page->addBrick('twoTextColumns', [
-            'left_content' => 'Left text',
-            'right_content' => 'Right text',
-        ])->toHtml();
-        $this->assertEquals($html, $page->displayBricks());
     }
 }

@@ -12,7 +12,7 @@ class BrickTest extends BrickableTestCase
     {
         $page = factory(Page::class)->create();
         $brick = $page->addBrick('oneTextColumn', ['content' => 'Text content']);
-        $this->assertEquals(config('brickable.types.oneTextColumn.label'), $brick->getLabel());
+        $this->assertEquals(config('brickables.types.oneTextColumn.label'), $brick->getLabel());
     }
 
     /** @test */
@@ -20,6 +20,6 @@ class BrickTest extends BrickableTestCase
     {
         $page = factory(Page::class)->create();
         $brick = $page->addBrick('oneTextColumn', ['content' => 'Text content']);
-        $this->assertEquals(config('brickable.types.oneTextColumn.view'), $brick->getViewPath());
+        $this->assertEquals(config('brickables.types.oneTextColumn.view'), $brick->getViewPath());
     }
 }

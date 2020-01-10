@@ -96,9 +96,14 @@ php artisan migrate
 Finally, add the `Okipa\LaravelBrickable\Traits\HasBrickables` trait to any Eloquent model that you want to be able to manage content bricks to.
 
 ```php
-class Page extends Model
+
+use Illuminate\Database\Eloquent\Model;
+use Okipa\LaravelBrickable\Contracts\HasBrickables;
+use Okipa\LaravelBrickable\Traits\HasBrickablesTrait;
+
+class Page extends Model implements HasBrickables
 {
-	use HasBrickables;
+	use HasBrickablesTrait;
 
 	// ...
 }
@@ -201,9 +206,10 @@ Display a single content brick in your view:
 {{ $page->getFirstBrick('oneTextColumn') }}
 ```
 
-Or display all the model related content bricks:
+Or display all the model related content bricks html:
+
 ```blade
-{{ $page->displayBricks() }}
+{{ Brickables::display($page) }}
 ```
 
 ### Retrieve available content brick types
@@ -251,6 +257,14 @@ And render it in your view:
 
 ```blade
 {{ $page->getFirstBrick('myBrickType') }}
+```
+
+### Manage your model content bricks
+
+Display the related-model content bricks admin panel html:
+
+```blade
+{{ Brickables::adminPanel($page) }}
 ```
 
 ## Testing

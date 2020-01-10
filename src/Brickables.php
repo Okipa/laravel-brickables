@@ -2,6 +2,8 @@
 
 namespace Okipa\LaravelBrickable;
 
+use Okipa\LaravelBrickable\Contracts\HasBrickables;
+
 class Brickables
 {
     /**
@@ -11,7 +13,7 @@ class Brickables
      */
     public function getTypes(): array
     {
-        return config('brickable.types');
+        return config('brickables.types');
     }
 
     /**
@@ -23,6 +25,30 @@ class Brickables
      */
     public function getType(string $brickType): array
     {
-        return config('brickable.types.' . $brickType);
+        return config('brickables.types.' . $brickType);
+    }
+
+    /**
+     * Display all the model-related content bricks html at once.
+     *
+     * @param \Okipa\LaravelBrickable\Contracts\HasBrickables $model
+     *
+     * @return string
+     */
+    public function display(HasBrickables $model): string
+    {
+        return view('laravel-brickable::display.bricks', ['model' => $model]);
+    }
+
+    /**
+     * Display the model-related content bricks admin panel html.
+     *
+     * @param \Okipa\LaravelBrickable\Contracts\HasBrickables $model
+     *
+     * @return string
+     */
+    public function adminPanel(HasBrickables $model): string
+    {
+        return view('laravel-brickable::display.admin-panel', ['model' => $model]);
     }
 }

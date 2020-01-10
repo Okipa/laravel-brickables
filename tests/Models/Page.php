@@ -3,11 +3,12 @@
 namespace Okipa\LaravelBrickable\Tests\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Okipa\LaravelBrickable\Traits\HasBrickables;
+use Okipa\LaravelBrickable\Contracts\HasBrickables;
+use Okipa\LaravelBrickable\Traits\HasBrickablesTrait;
 
-class Page extends Model
+class Page extends Model implements HasBrickables
 {
-    use HasBrickables;
+    use HasBrickablesTrait;
 
     /**
      * The database table used by the model.
