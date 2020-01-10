@@ -45,9 +45,9 @@ class BrickablesServiceProvider extends ServiceProvider
 
         return Collection::make($this->app->databasePath() . DIRECTORY_SEPARATOR . 'migrations' . DIRECTORY_SEPARATOR)
             ->flatMap(function ($path) use ($filesystem) {
-                return $filesystem->glob($path . '*_create_bricks_tables.php');
+                return $filesystem->glob($path . '*_create_bricks_table.php');
             })
-            ->push($this->app->databasePath("/migrations/{$timestamp}_create_bricks_tables.php"))
+            ->push($this->app->databasePath("/migrations/{$timestamp}_create_bricks_table.php"))
             ->first();
     }
 
