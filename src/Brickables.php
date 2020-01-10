@@ -11,10 +11,18 @@ class Brickables
      */
     public function getTypes(): array
     {
-        return array_map(function ($type) {
-            $type['label'] = __($type['label']);
+        return config('brickable.types');
+    }
 
-            return $type;
-        }, config('brickable.types'));
+    /**
+     * Get available brick types.
+     *
+     * @param string $brickType
+     *
+     * @return array
+     */
+    public function getType(string $brickType): array
+    {
+        return config('brickable.types.' . $brickType);
     }
 }

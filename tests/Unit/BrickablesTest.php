@@ -12,4 +12,10 @@ class BrickablesTest extends BrickableTestCase
     {
         $this->assertEquals(config('brickable.types'), Brickables::getTypes());
     }
+
+    /** @test */
+    public function it_returns_brickable_type()
+    {
+        $this->assertEquals(config('brickable.types.oneTextColumn'), Brickables::getType('oneTextColumn'));
+    }
 }
