@@ -36,7 +36,7 @@ class Brickables implements Htmlable
      *
      * @param \Okipa\LaravelBrickable\Contracts\HasBrickables $model
      *
-     * @return string
+     * @return $this
      */
     public function display(HasBrickables $model): self
     {
@@ -50,7 +50,7 @@ class Brickables implements Htmlable
      *
      * @param \Okipa\LaravelBrickable\Contracts\HasBrickables $model
      *
-     * @return string
+     * @return $this
      */
     public function adminPanel(HasBrickables $model): self
     {
