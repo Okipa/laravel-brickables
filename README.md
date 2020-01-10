@@ -152,10 +152,7 @@ $bricks = $page->addBricks([
 Just update your content brick as you would fo for any other Eloquent model instance:
 
 ```php
-$brick->update(['content', 'Another text']);
-
-// or
-$brick->content = 'Another text';
+$brick->data = ['content', 'Another text'];
 $brick->save();
 ```
 
