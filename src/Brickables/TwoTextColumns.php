@@ -21,15 +21,4 @@ class TwoTextColumns extends Brickable
     {
         return 'laravel-brickables::brickables.two-text-columns';
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function setRoutes(): array
-    {
-        return [
-            'edit' => 'brickable.edit',
-            'destroy' => 'brickable.destroy',
-        ];
-    }
 }

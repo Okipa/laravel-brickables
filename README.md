@@ -64,8 +64,8 @@ And display them in your view:
   * [Retrieve content bricks](#retrieve-content-bricks)
   * [Query content bricks](#query-content-bricks)
   * [Display content bricks in you views](#display-content-bricks-in-you-views)
-  * [Retrieve available content brick types](#retrieve-available-content-brick-types)
-  * [Create your own content brick](#create-your-own-content-brick)
+  * [Retrieve brickables](#retrieve-brickables)
+  * [Create your own brickable](#create-your-own-brickable)
   * [Manage model content bricks](#manage-model-content-bricks)
 * [Testing](#testing)
 * [Changelog](#changelog)
@@ -188,7 +188,7 @@ $page = Page::find(1);
 $brick = $page->getFirstBrick(OneTextColumn::class);
 ```
 
-### Query bricks
+### Query content bricks
 
 You can query content bricks as for any Eloquent model:
 
@@ -228,7 +228,9 @@ $brickable = $brick->brickable;
 
 ### Create your own brickable
 
-Create a new class that extends the `Brickable` abstract class in your `app/vendor/Brickables` directory:
+Create a new class that extends class in your `app/vendor/Brickables` directory:
+
+Override any method from the `Brickable` abstract it extends to customize the brickable behaviour. 
 
 ```php
 <?php
@@ -253,17 +255,6 @@ class MyBrickable extends Brickable
     public function setViewPath(): string
     {
         return 'laravel-brickables::brickables.my-brickable';
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setRoutes(): array
-    {
-        return [
-            'edit' => 'brickable.edit',
-            'destroy' => 'brickable.destroy',
-        ];
     }
 }
 ```

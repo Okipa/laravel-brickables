@@ -10,8 +10,11 @@ abstract class Brickable
     /** @property string $viewPath */
     protected $viewPath;
 
-    /** @property array $routes */
-    protected $routes;
+    /** @property string $editRoutes */
+    protected $editRouteName;
+
+    /** @property string $editRoutes */
+    protected $destroyRouteName;
 
     /**
      * Brickable constructor.
@@ -20,15 +23,29 @@ abstract class Brickable
     {
         $this->label = $this->setLabel();
         $this->viewPath = $this->setViewPath();
-        $this->routes = $this->setRoutes();
+        $this->editRouteName = $this->setEditRouteName();
+        $this->destroyRouteName = $this->setDestroyRouteName();
     }
 
     /**
-     * Set the brickable routes.
+     * Set the brickable edit route name.
      *
-     * @return array
+     * @return string
      */
-    abstract public function setRoutes(): array;
+    public function setEditRouteName(): string
+    {
+        return 'brickable.edit';
+    }
+
+    /**
+     * Set the brickable destroy route name.
+     *
+     * @return string
+     */
+    public function setDestroyRouteName(): string
+    {
+        return 'brickable.destroy';
+    }
 
     /**
      * Get the brickable view path.
