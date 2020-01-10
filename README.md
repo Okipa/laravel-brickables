@@ -66,6 +66,7 @@ And display them in your view:
   * [Display content bricks in you views](#display-content-bricks-in-you-views)
   * [Retrieve available content brick types](#retrieve-available-content-brick-types)
   * [Create your own content brick](#create-your-own-content-brick)
+  * [Manage model content bricks](#manage-model-content-bricks)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -259,7 +260,7 @@ And render it in your view:
 {{ $page->getFirstBrick('myBrickType') }}
 ```
 
-### Manage your model content bricks
+### Manage model content bricks
 
 Display the related-model content bricks admin panel html:
 

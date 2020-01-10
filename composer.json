@@ -56,7 +56,10 @@
         "laravel": {
             "providers": [
                 "Okipa\\LaravelBrickable\\BrickableServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Brickables": "Okipa\\LaravelBrickable\\Facades\\Brickables"
+            }
         }
     },
     "config": {
