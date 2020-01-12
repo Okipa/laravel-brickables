@@ -37,7 +37,7 @@ class BricksController
         /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
         $brickable = (new $request->brickable_type);
         $request->validate($brickable->getValidationRules());
-        $model->addBrick(get_class($brickable), $request->validated());
+        $model->addBrick(get_class($brickable), $request->all());
 
         return back()->with('success', __($brickable->getLabel() . ' brick has been stored for '
             . Str::snake(class_basename($model), ' ') . '.'));
