@@ -2,10 +2,15 @@
 
 namespace Okipa\LaravelBrickables\Controllers;
 
+use Illuminate\Http\Request;
+
 class BricksController
 {
-    public function create()
+    /**
+     * @param Request $request
+     */
+    public function create(Request $request)
     {
-
+        dd($request->all());
     }
 }
