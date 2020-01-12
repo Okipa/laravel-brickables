@@ -39,7 +39,9 @@ class BricksController
         $request->validate($brickable->getValidationRules());
         $model->addBrick(get_class($brickable), $request->all());
 
-        return back()->with('success', __($brickable->getLabel() . ' brick has been stored for '
-            . Str::snake(class_basename($model), ' ') . '.'));
+        return route('brick.edit', compact('model', 'brickable'))->with(
+            'success',
+            __($brickable->getLabel() . ' brick has been stored for ' . Str::snake(class_basename($model), ' ') . '.')
+        );
     }
 }
