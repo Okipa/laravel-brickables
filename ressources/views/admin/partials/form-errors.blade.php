@@ -1,10 +1,9 @@
-<div class="card text-white bg-danger mb-3">
-    <div class="card-header">@lang('Invalid fields have been detected.')</div>
-    <div class="card-body">
+@if ($errors->any())
+    <div class="alert alert-danger">
         <ul>
-            @foreach ($errors->all() as $message)
-                <li class="card-text">{{ $message }}</li>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
             @endforeach
         </ul>
     </div>
-</div>
+@endif
