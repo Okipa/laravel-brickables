@@ -4,7 +4,7 @@
     @csrf
     @if($brick)@method('PUT')@endif
     <input type="hidden" name="model_id" value="{{ $model->id }}">
-    <input type="hidden" name="model_type" value="{{ $model->get }}">
+    <input type="hidden" name="model_type" value="{{ get_class($model) }}">
     @yield('inputs')
     @include('laravel-brickables::admin.partials.form-actions')
 </form>
