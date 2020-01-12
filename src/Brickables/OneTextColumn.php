@@ -17,8 +17,16 @@ class OneTextColumn extends Brickable
     /**
      * @inheritDoc
      */
-    public function setViewPath(): string
+    public function setTemplateViewPath(): string
     {
-        return 'laravel-brickables::brickables.one-text-column';
+        return 'laravel-brickables::brickables.one-text-column.template';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setAdminViewPath(): string
+    {
+        return 'laravel-brickables::brickables.one-text-column.admin';
     }
 }

@@ -16,4 +16,5 @@ return [
         Okipa\LaravelBrickables\Brickables\TwoTextColumns::class,
         // add your content brick type configurations here ...
     ],
+
 ];

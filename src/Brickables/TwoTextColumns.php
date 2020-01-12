@@ -17,8 +17,16 @@ class TwoTextColumns extends Brickable
     /**
      * @inheritDoc
      */
-    public function setViewPath(): string
+    public function setAdminViewPath(): string
     {
-        return 'laravel-brickables::brickables.two-text-columns';
+        return 'laravel-brickables::brickables.two-text-columns.admin';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setTemplateViewPath(): string
+    {
+        return 'laravel-brickables::brickables.two-text-columns.template';
     }
 }

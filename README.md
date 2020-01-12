@@ -54,10 +54,12 @@ And display them in your view:
 ## Table of contents
 
 * [Installation](#installation)
-* [Implementation](#implementation)
 * [Configuration](#configuration)
 * [Views](#views)
-* [API documentation](#api-documentation)
+* [Implementation](#implementation)
+  * [Models](#models)
+  * [Routes](#routes)
+* [How to](#how to)
   * [Add content bricks](#add-content-bricks)
   * [Update a content brick](#update-a-content-brick)
   * [Delete a content brick](#delete-a-content-brick)
@@ -95,7 +97,25 @@ And run your database migrations:
 php artisan migrate
 ```
 
+## Configuration
+
+Publish the package configuration file to customize it if necessary: 
+
+```bash
+php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=config
+```
+
+## Views
+
+Publish the package views to customize them if necessary: 
+
+```bash
+php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=views
+```
+
 ## Implementation
+
+### Models
 
 Implement the `HasBrickables` interface and use the `HasBrickablesTrait` trait to any Eloquent model that you want to be able to be associate to content bricks to.
 
@@ -113,31 +133,19 @@ class Page extends Model implements HasBrickables
 }
 ```
 
-Then, declare the package `web` routes that will be used by the package default brickables:
+### Routes
+
+Declare the `web` routes that will be necessary for the content bricks CRUD operations:
 
 ```php
-Route::get('brick/create/{brick}', [BrickController::class, 'edit'])->name('brick.create');
+Route::get('brick/create', [BrickController::class, 'create'])->name('brick.create');
+Route::post('brick/store', [BrickController::class, 'store'])->name('brick.store');
 Route::get('brick/edit/{brick}', [BrickController::class, 'edit'])->name('brick.edit');
+Route::put('brick/update/{brick}', [BrickController::class, 'update'])->name('brick.update');
 Route::delete('brick/destroy/{brick}', [BrickController::class, 'destroy'])->name('brick.destroy');
 ```
 
-## Configuration
-
-Publish the package configuration file to customize it if necessary: 
-
-```bash
-php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=config
-```
-
-## Views
-
-Publish the package views to customize them if necessary: 
-
-```bash
-php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=views
-```
-
-## API documentation
+## How to
 
 ### Add content bricks
 

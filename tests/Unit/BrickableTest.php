@@ -18,11 +18,30 @@ class BrickableTest extends BrickableTestCase
     }
 
     /** @test */
-    public function it_returns_brickable_view_path()
+    public function it_returns_brickable_template_view_path()
     {
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
-        $this->assertEquals((new OneTextColumn)->getViewPath(), $brick->brickable->getViewPath());
+        $this->assertEquals((new OneTextColumn)->getTemplateViewPath(), $brick->brickable->getTemplateViewPath());
+    }
+
+    /** @test */
+    public function it_returns_brickable_admin_view_path()
+    {
+        $page = factory(Page::class)->create();
+        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+        $this->assertEquals((new OneTextColumn)->getAdminViewPath(), $brick->brickable->getAdminViewPath());
+    }
+
+    /** @test */
+    public function it_returns_brickable_store_route()
+    {
+        Route::post('brick/store/{brick}', function () {
+            return;
+        })->name('brick.post');
+        $page = factory(Page::class)->create();
+        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+        $this->assertEquals((new OneTextColumn)->getStoreRoute(), $brick->brickable->getStoreRoute());
     }
 
     /** @test */
@@ -34,6 +53,17 @@ class BrickableTest extends BrickableTestCase
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
         $this->assertEquals((new OneTextColumn)->getEditRoute($brick), $brick->brickable->getEditRoute($brick));
+    }
+
+    /** @test */
+    public function it_returns_brickable_update_route()
+    {
+        Route::put('brick/update/{brick}', function () {
+            return;
+        })->name('brick.update');
+        $page = factory(Page::class)->create();
+        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+        $this->assertEquals((new OneTextColumn)->getUpdateRoute($brick), $brick->brickable->getUpdateRoute($brick));
     }
 
     /** @test */

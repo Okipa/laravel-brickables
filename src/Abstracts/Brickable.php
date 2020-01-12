@@ -7,13 +7,22 @@ abstract class Brickable
     /** @property string $label */
     protected $label;
 
-    /** @property string $viewPath */
-    protected $viewPath;
+    /** @property string $adminViewPath */
+    protected $adminViewPath;
 
-    /** @property string $editRoutes */
+    /** @property string $templateViewPath */
+    protected $templateViewPath;
+
+    /** @property string $storeRouteName */
+    protected $storeRouteName;
+
+    /** @property string $editRouteName */
     protected $editRouteName;
 
-    /** @property string $editRoutes */
+    /** @property string $updateRouteName */
+    protected $updateRouteName;
+
+    /** @property string $destroyRouteName */
     protected $destroyRouteName;
 
     /**
@@ -22,9 +31,22 @@ abstract class Brickable
     public function __construct()
     {
         $this->label = $this->setLabel();
-        $this->viewPath = $this->setViewPath();
+        $this->templateViewPath = $this->setTemplateViewPath();
+        $this->adminViewPath = $this->setAdminViewPath();
+        $this->storeRouteName = $this->setStoreRouteName();
         $this->editRouteName = $this->setEditRouteName();
+        $this->updateRouteName = $this->setUpdateRouteName();
         $this->destroyRouteName = $this->setDestroyRouteName();
+    }
+
+    /**
+     * Set the brickable store route name.
+     *
+     * @return string
+     */
+    public function setStoreRouteName(): string
+    {
+        return 'brick.store';
     }
 
     /**
@@ -38,6 +60,16 @@ abstract class Brickable
     }
 
     /**
+     * Set the brickable update route name.
+     *
+     * @return string
+     */
+    public function setUpdateRouteName(): string
+    {
+        return 'brick.update';
+    }
+
+    /**
      * Set the brickable destroy route name.
      *
      * @return string
@@ -48,21 +80,38 @@ abstract class Brickable
     }
 
     /**
-     * Get the brickable view path.
+     * Get the management view path.
      *
      * @return string
      */
-    public function getViewPath(): string
+    public function getAdminViewPath(): string
     {
-        return $this->viewPath;
+        return $this->adminViewPath;
     }
 
     /**
-     * Set the brickable view path.
+     * Set the management view path.
      *
      * @return string
      */
-    abstract public function setViewPath(): string;
+    abstract public function setAdminViewPath(): string;
+
+    /**
+     * Get the template view path.
+     *
+     * @return string
+     */
+    public function getTemplateViewPath(): string
+    {
+        return $this->templateViewPath;
+    }
+
+    /**
+     * Set the template view path.
+     *
+     * @return string
+     */
+    abstract public function setTemplateViewPath(): string;
 
     /**
      * Get the brickable label.
@@ -82,6 +131,18 @@ abstract class Brickable
     abstract public function setLabel(): string;
 
     /**
+     * Get the brickable store route.
+     *
+     * @param mixed $parameters
+     *
+     * @return string
+     */
+    public function getStoreRoute($parameters): string
+    {
+        return route($this->storeRouteName, $parameters);
+    }
+
+    /**
      * Get the brickable edit route.
      *
      * @param mixed $parameters
@@ -91,6 +152,18 @@ abstract class Brickable
     public function getEditRoute($parameters): string
     {
         return route($this->editRouteName, $parameters);
+    }
+
+    /**
+     * Get the brickable update route.
+     *
+     * @param mixed $parameters
+     *
+     * @return string
+     */
+    public function getUpdateRoute($parameters): string
+    {
+        return route($this->updateRouteName, $parameters);
     }
 
     /**
