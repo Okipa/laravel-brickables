@@ -6,9 +6,10 @@
             <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-font"></i></span>
             </div>
-            <textarea id="left-content" class="form-control" name="left_content" placeholder="@lang('Left content')">
-                {{ optional($brick)->left_content }}
-            </textarea>
+            <textarea id="left-content"
+                      class="form-control"
+                      name="left_content"
+                      placeholder="@lang('Left content')">{{ optional($brick)->left_content }}</textarea>
         </div>
     </div>
     <div class="form-group">
@@ -17,9 +18,10 @@
             <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-font"></i></span>
             </div>
-            <textarea id="right-content" class="form-control" name="right_content" placeholder="@lang('Right content')">
-                {{ optional($brick)->right_content }}
-            </textarea>
+            <textarea id="right-content"
+                      class="form-control"
+                      name="right_content"
+                      placeholder="@lang('Right content')">{{ optional($brick)->right_content }}</textarea>
         </div>
     </div>
 @endsection

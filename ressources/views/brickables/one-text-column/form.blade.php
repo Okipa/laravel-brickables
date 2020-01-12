@@ -6,9 +6,10 @@
             <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-font"></i></span>
             </div>
-            <textarea id="content" class="form-control" name="content" placeholder="@lang('Content')">
-                {{ optional($brick)->content }}
-            </textarea>
+            <textarea id="content"
+                      class="form-control"
+                      name="content"
+                      placeholder="@lang('Content')">{{ optional($brick)->content }}</textarea>
         </div>
     </div>
 @endsection
