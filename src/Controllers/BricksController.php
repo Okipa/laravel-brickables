@@ -38,7 +38,7 @@ class BricksController
         /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
         $brickable = (new $request->brickable_type);
         $request->validate($brickable->getValidationRules());
-        $brick = $model->addBrick(get_class($brickable), $request->all());
+        $brick = $model->addBrick(get_class($brickable), $request->only(array_keys($brickable->getValidationRules())));
 
         return redirect()->route('brick.edit', compact('brick'))->with(
             'success',
