@@ -1,5 +1,6 @@
 <h1>{{ $brickable->getLabel()}} > {{ $brick ? 'Edition' : 'Creation' }}</h1>
 <hr>
+@include('laravel-brickables::admin.partials.form-errors')
 <form method="POST" action="{{ $brick ? $brickable->getUpdateRoute($brick) : $brickable->getStoreRoute() }}">
     @csrf
     @if($brick)@method('PUT')@endif
