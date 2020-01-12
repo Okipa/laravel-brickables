@@ -4,6 +4,7 @@ namespace Okipa\LaravelBrickables\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Okipa\LaravelBrickables\Models\Brick;
 
 class BricksController
 {
@@ -39,9 +40,23 @@ class BricksController
         $request->validate($brickable->getValidationRules());
         $brick = $model->addBrick(get_class($brickable), $request->all());
 
-        return redirect()->route('brick.edit', compact('brick', 'model', 'brickable'))->with(
+        return redirect()->route('brick.edit', compact('brick'))->with(
             'success',
             __($brickable->getLabel() . ' brick has been stored for ' . Str::snake(class_basename($model), ' ') . '.')
         );
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function edit(Brick $brick)
+    {
+        $model = $brick->model;
+        /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
+        $brickable = (new $brick->brickable_type);
+
+        return view($brickable->getFormViewPath(), compact('brick', 'model', 'brickable'));
     }
 }
