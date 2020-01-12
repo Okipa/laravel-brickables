@@ -6,5 +6,13 @@ use Okipa\LaravelBrickables\Abstracts\Brickable;
 
 class OneTextColumn extends Brickable
 {
-    //
+    /**
+     * @inheritDoc
+     */
+    public function setValidationRules(): array
+    {
+        return [
+            'content' => ['required' => 'string'],
+        ];
+    }
 }

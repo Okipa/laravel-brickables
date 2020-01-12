@@ -27,6 +27,9 @@ abstract class Brickable
     /** @property string $destroyRouteName */
     protected $destroyRouteName;
 
+    /** @property array $validationRules */
+    protected $validationRules;
+
     /**
      * Brickable constructor.
      */
@@ -35,6 +38,7 @@ abstract class Brickable
         $this->label = $this->setLabel();
         $this->templateViewPath = $this->setBrickViewPath();
         $this->adminViewPath = $this->setFormViewPath();
+        $this->validationRules = $this->setValidationRules();
         $this->storeRouteName = $this->setStoreRouteName();
         $this->editRouteName = $this->setEditRouteName();
         $this->updateRouteName = $this->setUpdateRouteName();
@@ -100,6 +104,23 @@ abstract class Brickable
     {
         return 'brick.destroy';
     }
+
+    /**
+     * Get the brickable validation rules.
+     *
+     * @return array
+     */
+    public function getValidationRules(): array
+    {
+        return $this->validationRules;
+    }
+
+    /**
+     * Set the brickable validation rules.
+     *
+     * @return array
+     */
+    abstract public function setValidationRules(): array;
 
     /**
      * Get the management view path.
