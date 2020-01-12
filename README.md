@@ -40,10 +40,10 @@ $page->addBricks([
 And display them in your view:
 
 ```blade
-{{-- automatically --}}
-{{ $page->displayBricks() }}
+{{-- all at once --}}
+{{ Brickables::bricks($page) }}
 
-{{-- or manually --}}
+{{-- or one by one --}}
 <h3>Title<h3>
 <p>Paragraph</p>
 {{ $page->getFirstBrick(OneTextColumn::class) }}
@@ -226,7 +226,7 @@ Display a single content brick in your view:
 Or display all the model related content bricks html:
 
 ```blade
-{{ Brickables::display($page) }}
+{{ Brickables::bricks($page) }}
 ```
 
 ### Retrieve brickables

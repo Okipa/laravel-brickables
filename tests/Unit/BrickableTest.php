@@ -22,7 +22,7 @@ class BrickableTest extends BrickableTestCase
     {
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
-        $this->assertEquals((new OneTextColumn)->getTemplateViewPath(), $brick->brickable->getTemplateViewPath());
+        $this->assertEquals((new OneTextColumn)->getBrickViewPath(), $brick->brickable->getBrickViewPath());
     }
 
     /** @test */
@@ -30,15 +30,15 @@ class BrickableTest extends BrickableTestCase
     {
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
-        $this->assertEquals((new OneTextColumn)->getAdminViewPath(), $brick->brickable->getAdminViewPath());
+        $this->assertEquals((new OneTextColumn)->getFormViewPath(), $brick->brickable->getFormViewPath());
     }
 
     /** @test */
     public function it_returns_brickable_store_route()
     {
-        Route::post('brick/store/{brick}', function () {
+        Route::post('brick/store', function () {
             return;
-        })->name('brick.post');
+        })->name('brick.store');
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
         $this->assertEquals((new OneTextColumn)->getStoreRoute(), $brick->brickable->getStoreRoute());

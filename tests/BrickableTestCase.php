@@ -3,16 +3,13 @@
 namespace Okipa\LaravelBrickables\Tests;
 
 use Okipa\LaravelBrickables\BrickablesServiceProvider;
+use Okipa\LaravelBrickables\Facades\Brickables;
 use Orchestra\Testbench\TestCase;
 
 abstract class BrickableTestCase extends TestCase
 {
     /**
-     * Define environment setup.
-     *
-     * @param \Illuminate\Foundation\Application $app
-     *
-     * @return void
+     * @inheritDoc
      */
     protected function getEnvironmentSetUp($app)
     {
@@ -26,11 +23,7 @@ abstract class BrickableTestCase extends TestCase
     }
 
     /**
-     * Get package providers.
-     *
-     * @param \Illuminate\Foundation\Application $app
-     *
-     * @return array
+     * @inheritDoc
      */
     protected function getPackageProviders($app)
     {
@@ -38,9 +31,17 @@ abstract class BrickableTestCase extends TestCase
     }
 
     /**
-     * Setup the test environment.
-     *
-     * @return void
+     * @inheritDoc
+     */
+    protected function getPackageAliases($app)
+    {
+        return [
+            'Brickables' => Brickables::class,
+        ];
+    }
+
+    /**
+     * @inheritDoc
      */
     protected function setUp(): void
     {

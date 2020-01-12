@@ -2,6 +2,8 @@
 
 namespace Okipa\LaravelBrickables\Abstracts;
 
+use Illuminate\Support\Str;
+
 abstract class Brickable
 {
     /** @property string $label */
@@ -31,12 +33,32 @@ abstract class Brickable
     public function __construct()
     {
         $this->label = $this->setLabel();
-        $this->templateViewPath = $this->setTemplateViewPath();
-        $this->adminViewPath = $this->setAdminViewPath();
+        $this->templateViewPath = $this->setBrickViewPath();
+        $this->adminViewPath = $this->setFormViewPath();
         $this->storeRouteName = $this->setStoreRouteName();
         $this->editRouteName = $this->setEditRouteName();
         $this->updateRouteName = $this->setUpdateRouteName();
         $this->destroyRouteName = $this->setDestroyRouteName();
+    }
+
+    /**
+     * Set the brickable template view path.
+     *
+     * @return string
+     */
+    public function setBrickViewPath(): string
+    {
+        return 'laravel-brickables::brickables.' . Str::snake(class_basename($this), '-') . '.brick';
+    }
+
+    /**
+     * Set the brickable admin view path.
+     *
+     * @return string
+     */
+    public function setFormViewPath(): string
+    {
+        return 'laravel-brickables::brickables.' . Str::snake(class_basename($this), '-') . '.form';
     }
 
     /**
@@ -84,34 +106,20 @@ abstract class Brickable
      *
      * @return string
      */
-    public function getAdminViewPath(): string
+    public function getFormViewPath(): string
     {
         return $this->adminViewPath;
     }
-
-    /**
-     * Set the management view path.
-     *
-     * @return string
-     */
-    abstract public function setAdminViewPath(): string;
 
     /**
      * Get the template view path.
      *
      * @return string
      */
-    public function getTemplateViewPath(): string
+    public function getBrickViewPath(): string
     {
         return $this->templateViewPath;
     }
-
-    /**
-     * Set the template view path.
-     *
-     * @return string
-     */
-    abstract public function setTemplateViewPath(): string;
 
     /**
      * Get the brickable label.
@@ -128,7 +136,10 @@ abstract class Brickable
      *
      * @return string
      */
-    abstract public function setLabel(): string;
+    public function setLabel(): string
+    {
+        return ucfirst(Str::snake(class_basename($this), ' '));
+    }
 
     /**
      * Get the brickable store route.
@@ -137,7 +148,7 @@ abstract class Brickable
      *
      * @return string
      */
-    public function getStoreRoute($parameters): string
+    public function getStoreRoute($parameters = []): string
     {
         return route($this->storeRouteName, $parameters);
     }
@@ -149,7 +160,7 @@ abstract class Brickable
      *
      * @return string
      */
-    public function getEditRoute($parameters): string
+    public function getEditRoute($parameters = []): string
     {
         return route($this->editRouteName, $parameters);
     }
@@ -161,7 +172,7 @@ abstract class Brickable
      *
      * @return string
      */
-    public function getUpdateRoute($parameters): string
+    public function getUpdateRoute($parameters = []): string
     {
         return route($this->updateRouteName, $parameters);
     }

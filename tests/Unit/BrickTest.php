@@ -13,6 +13,6 @@ class BrickTest extends BrickableTestCase
     {
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
-        $this->assertEquals(view($brick->brickable->getViewPath(), $brick->data), $brick->toHtml());
+        $this->assertEquals(view($brick->brickable->getBrickViewPath(), $brick->data), $brick->toHtml());
     }
 }

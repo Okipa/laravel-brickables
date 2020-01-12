@@ -33,9 +33,9 @@ class Brickables implements Htmlable
      *
      * @return $this
      */
-    public function display(HasBrickables $model): self
+    public function bricks(HasBrickables $model): self
     {
-        $this->html = view('laravel-brickables::interfaces.bricks', ['model' => $model])->toHtml();
+        $this->html = view('laravel-brickables::bricks', ['model' => $model]);
 
         return $this;
     }
@@ -49,7 +49,7 @@ class Brickables implements Htmlable
      */
     public function adminPanel(HasBrickables $model): self
     {
-        $this->html = view('laravel-brickables::interfaces.admin-panel', ['model' => $model]);
+        $this->html = view('laravel-brickables::admin.panel', ['model' => $model]);
 
         return $this;
     }

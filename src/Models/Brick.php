@@ -58,7 +58,7 @@ class Brick extends Model implements Htmlable, Sortable
      */
     public function toHtml(): string
     {
-        return (string) view($this->brickable->getViewPath(), $this->getAttribute('data'));
+        return (string) view($this->brickable->getBrickViewPath(), $this->getAttribute('data'));
     }
 
     /**
