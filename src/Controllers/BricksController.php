@@ -16,9 +16,9 @@ class BricksController
     {
         $brick = null;
         /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $model */
-        $model = app($request->model_type)->findOrFail($request->model_id);
+        $model = (new $request->model_type)->findOrFail($request->model_id);
         /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
-        $brickable = app($request->brickable_type);
+        $brickable = (new $request->brickable_type);
 
         return view($brickable->getFormViewPath(), compact('brick', 'model', 'brickable'));
     }
@@ -33,9 +33,9 @@ class BricksController
     public function store(Request $request)
     {
         /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $model */
-        $model = app($request->model_type)->findOrFail($request->model_id);
+        $model = (new $request->model_type)->findOrFail($request->model_id);
         /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
-        $brickable = app($request->brickable_type);
+        $brickable = (new $request->brickable_type);
         $request->validate($brickable->getValidationRules());
         $model->addBrick(get_class($brickable), $request->validated());
 
