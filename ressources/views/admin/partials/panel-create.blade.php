@@ -1,5 +1,5 @@
 <form role="form" method="GET" action="{{ route('brick.create') }}">
-    <select name="" id="">
+    <select name="brickable_type">
         @foreach(Brickables::getAll() as $brickable)
             <option value="{{ get_class($brickable) }}">{{ $brickable->getLabel() }}</option>
         @endforeach

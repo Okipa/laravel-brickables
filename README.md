@@ -135,14 +135,14 @@ class Page extends Model implements HasBrickables
 
 ### Routes
 
-Declare the `web` routes that will be necessary for the content bricks CRUD operations:
+Declare these `web` routes that will be necessary for the content bricks CRUD operations:
 
 ```php
-Route::get('brick/create', [BrickController::class, 'create'])->name('brick.create');
-Route::post('brick/store', [BrickController::class, 'store'])->name('brick.store');
-Route::get('brick/edit/{brick}', [BrickController::class, 'edit'])->name('brick.edit');
-Route::put('brick/update/{brick}', [BrickController::class, 'update'])->name('brick.update');
-Route::delete('brick/destroy/{brick}', [BrickController::class, 'destroy'])->name('brick.destroy');
+Route::get('brick/create', [Okipa\LaravelBrickables\Controllers\BricksController::class, 'create'])->name('brick.create');
+Route::post('brick/store', [Okipa\LaravelBrickables\Controllers\BricksController::class, 'store'])->name('brick.store');
+Route::get('brick/edit/{brick}', [Okipa\LaravelBrickables\Controllers\BricksController::class, 'edit'])->name('brick.edit');
+Route::put('brick/update/{brick}', [Okipa\LaravelBrickables\Controllers\BricksController::class, 'update'])->name('brick.update');
+Route::delete('brick/destroy/{brick}', [Okipa\LaravelBrickables\Controllers\BricksController::class, 'destroy'])->name('brick.destroy');
 ```
 
 ## How to
