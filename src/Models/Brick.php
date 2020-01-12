@@ -48,7 +48,7 @@ class Brick extends Model implements Htmlable, Sortable
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo
      */
-    public function brickable()
+    public function model()
     {
         return $this->morphTo();
     }
