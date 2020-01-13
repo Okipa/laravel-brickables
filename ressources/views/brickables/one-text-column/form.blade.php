@@ -9,7 +9,7 @@
             <textarea id="content"
                       class="form-control"
                       name="content"
-                      placeholder="@lang('Content')">{{ optional($brick)->content }}</textarea>
+                      placeholder="@lang('Content')">{{ $brick ? $brick->data['content'] : null }}</textarea>
         </div>
     </div>
 @endsection

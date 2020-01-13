@@ -9,7 +9,7 @@
             <textarea id="left-content"
                       class="form-control"
                       name="left_content"
-                      placeholder="@lang('Left content')">{{ optional($brick)->left_content }}</textarea>
+                      placeholder="@lang('Left content')">{{ $brick ? $brick->data['left_content'] : null }}</textarea>
         </div>
     </div>
     <div class="form-group">
@@ -21,7 +21,7 @@
             <textarea id="right-content"
                       class="form-control"
                       name="right_content"
-                      placeholder="@lang('Right content')">{{ optional($brick)->right_content }}</textarea>
+                      placeholder="@lang('Right content')">{{ $brick ? $brick->data['right_content'] : null }}</textarea>
         </div>
     </div>
 @endsection
