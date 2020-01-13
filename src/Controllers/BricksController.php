@@ -5,7 +5,6 @@ namespace Okipa\LaravelBrickables\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Models\Brick;
 
 class BricksController
