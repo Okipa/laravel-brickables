@@ -28,8 +28,8 @@ trait HasBrickablesTrait
      */
     public function addBrick(string $brickableClass, array $data): Brick
     {
-        $this->verifyBrickableType($brickableClass);
-        $this->verifyBrickableRegistration($brickableClass);
+        $this->checkBrickableType($brickableClass);
+        $this->checkBrickableIsRegistered($brickableClass);
 
         return $this->bricks()->create(['brickable_type' => $brickableClass, 'data' => $data]);
     }
@@ -39,7 +39,7 @@ trait HasBrickablesTrait
      *
      * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      */
-    protected function verifyBrickableType(string $brickableClass): void
+    protected function checkBrickableType(string $brickableClass): void
     {
         if (! app($brickableClass) instanceof Brickable) {
             throw new InvalidBrickableClassException('The given ' . $brickableClass
@@ -52,7 +52,7 @@ trait HasBrickablesTrait
      *
      * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
      */
-    protected function verifyBrickableRegistration(string $brickableClass): void
+    protected function checkBrickableIsRegistered(string $brickableClass): void
     {
         if (! in_array($brickableClass, config('brickables.registered'))) {
             throw new NotRegisteredBrickableClassException('The given ' . $brickableClass
@@ -73,8 +73,8 @@ trait HasBrickablesTrait
      */
     public function getFirstBrick(string $brickableClass): ?Brick
     {
-        $this->verifyBrickableType($brickableClass);
-        $this->verifyBrickableRegistration($brickableClass);
+        $this->checkBrickableType($brickableClass);
+        $this->checkBrickableIsRegistered($brickableClass);
 
         return $this->getBricks()->where('brickable_type', $brickableClass)->first();
     }

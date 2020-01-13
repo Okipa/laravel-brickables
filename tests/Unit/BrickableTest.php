@@ -3,77 +3,153 @@
 namespace Okipa\LaravelBrickables\Tests\Unit;
 
 use Illuminate\Support\Facades\Route;
-use Okipa\LaravelBrickables\Brickables\OneTextColumn;
+use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class BrickableTest extends BrickableTestCase
 {
     /** @test */
-    public function it_returns_brickable_label()
+    public function brickable_can_set_and_returns_label()
     {
-        $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
-        $this->assertEquals((new OneTextColumn)->getLabel(), $brick->brickable->getLabel());
+        $brickable = new Class extends Brickable {
+            public function setLabel(): string
+            {
+                return 'Dummy label';
+            }
+
+            public function setValidationRules(): array
+            {
+                return [];
+            }
+        };
+        $this->assertEquals('Dummy label', $brickable->getLabel());
     }
 
     /** @test */
-    public function it_returns_brickable_template_view_path()
+    public function brickable_can_set_and_returns_brick_view_path()
     {
-        $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
-        $this->assertEquals((new OneTextColumn)->getBrickViewPath(), $brick->brickable->getBrickViewPath());
+        $brickable = new Class extends Brickable {
+            public function setBrickViewPath(): string
+            {
+                return 'dummy.brick.view.path';
+            }
+
+            public function setValidationRules(): array
+            {
+                return [];
+            }
+        };
+        $this->assertEquals('dummy.brick.view.path', $brickable->getBrickViewPath());
     }
 
     /** @test */
-    public function it_returns_brickable_admin_view_path()
+    public function brickable_can_set_and_returns_form_view_path()
     {
-        $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
-        $this->assertEquals((new OneTextColumn)->getFormViewPath(), $brick->brickable->getFormViewPath());
+        $brickable = new Class extends Brickable {
+            public function setFormViewPath(): string
+            {
+                return 'dummy.form.view.path';
+            }
+
+            public function setValidationRules(): array
+            {
+                return [];
+            }
+        };
+        $this->assertEquals('dummy.form.view.path', $brickable->getFormViewPath());
     }
 
     /** @test */
-    public function it_returns_brickable_store_route()
+    public function brickable_can_set_and_returns_store_route()
     {
-        Route::post('brick/store', function () {
-            return;
-        })->name('brick.store');
-        $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
-        $this->assertEquals((new OneTextColumn)->getStoreRoute(), $brick->brickable->getStoreRoute());
+        Route::post('dummy/store', function () { })->name('dummy.store');
+        $brickable = new Class extends Brickable {
+            public function setStoreRouteName(): string
+            {
+                return 'dummy.store';
+            }
+
+            public function setValidationRules(): array
+            {
+                return [];
+            }
+        };
+        $this->assertEquals('http://localhost/dummy/store', $brickable->getStoreRoute());
     }
 
     /** @test */
-    public function it_returns_brickable_edit_route()
+    public function brickable_can_set_and_returns_edit_route()
     {
-        Route::get('brick/edit/{brick}', function () {
-            return;
-        })->name('brick.edit');
+        Route::get('dummy/edit/{brick}', function () { })->name('dummy.edit');
+        $brickable = new Class extends Brickable {
+            public function setEditRouteName(): string
+            {
+                return 'dummy.edit';
+            }
+
+            public function setValidationRules(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickable)]);
         $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
-        $this->assertEquals((new OneTextColumn)->getEditRoute($brick), $brick->brickable->getEditRoute($brick));
+        $brick = $page->addBrick(get_class($brickable), []);
+        $this->assertEquals('http://localhost/dummy/edit/' . $brick->id, $brickable->getEditRoute($brick));
     }
 
     /** @test */
-    public function it_returns_brickable_update_route()
+    public function brickable_can_set_and_returns_update_route()
     {
-        Route::put('brick/update/{brick}', function () {
-            return;
-        })->name('brick.update');
+        Route::put('dummy/update/{brick}', function () { })->name('dummy.update');
+        $brickable = new Class extends Brickable {
+            public function setUpdateRouteName(): string
+            {
+                return 'dummy.update';
+            }
+
+            public function setValidationRules(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickable)]);
         $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
-        $this->assertEquals((new OneTextColumn)->getUpdateRoute($brick), $brick->brickable->getUpdateRoute($brick));
+        $brick = $page->addBrick(get_class($brickable), []);
+        $this->assertEquals('http://localhost/dummy/update/' . $brick->id, $brickable->getUpdateRoute($brick));
     }
 
     /** @test */
-    public function it_returns_brickable_destroy_route()
+    public function brickable_can_set_and_returns_destroy_route()
     {
-        Route::delete('brick/destroy/{brick}', function () {
-            return;
-        })->name('brick.destroy');
+        Route::delete('dummy/destroy/{brick}', function () { })->name('dummy.destroy');
+        $brickable = new Class extends Brickable {
+            public function setDestroyRouteName(): string
+            {
+                return 'dummy.destroy';
+            }
+
+            public function setValidationRules(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickable)]);
         $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
-        $this->assertEquals((new OneTextColumn)->getDestroyRoute($brick), $brick->brickable->getDestroyRoute($brick));
+        $brick = $page->addBrick(get_class($brickable), []);
+        $this->assertEquals('http://localhost/dummy/destroy/' . $brick->id, $brickable->getDestroyRoute($brick));
+    }
+
+    /** @test */
+    public function brickable_can_set_and_returns_validation_rules()
+    {
+        $brickable = new Class extends Brickable {
+            public function setValidationRules(): array
+            {
+                return ['custom' => ['validation', 'rules']];
+            }
+        };
+        $this->assertEquals(['custom' => ['validation', 'rules']], $brickable->getValidationRules());
     }
 }

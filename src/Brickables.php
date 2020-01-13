@@ -4,7 +4,10 @@ namespace Okipa\LaravelBrickables;
 
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Route;
 use Okipa\LaravelBrickables\Contracts\HasBrickables;
+use Okipa\LaravelBrickables\Controllers\BricksController;
+use Okipa\LaravelBrickables\Middleware\CheckBrickableRequest;
 
 class Brickables implements Htmlable
 {
@@ -60,5 +63,19 @@ class Brickables implements Htmlable
     public function toHtml()
     {
         return (string) $this->html;
+    }
+
+    /**
+     * Register the brickables CRUD routes.
+     */
+    public function routes(): void
+    {
+        Route::middleware(CheckBrickableRequest::class)->group(function () {
+            Route::get('brick/create', [BricksController::class, 'create'])->name('brick.create');
+            Route::post('brick/store', [BricksController::class, 'store'])->name('brick.store');
+            Route::get('brick/edit/{brick}', [BricksController::class, 'edit'])->name('brick.edit');
+            Route::put('brick/update/{brick}', [BricksController::class, 'update'])->name('brick.update');
+            Route::delete('brick/destroy/{brick}', [BricksController::class, 'destroy'])->name('brick.destroy');
+        });
     }
 }

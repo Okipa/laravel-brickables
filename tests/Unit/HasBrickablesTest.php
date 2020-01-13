@@ -2,13 +2,11 @@
 
 namespace Okipa\LaravelBrickables\Tests\Unit;
 
-use Okipa\LaravelBrickables\Brickables\OneTextColumn;
-use Okipa\LaravelBrickables\Brickables\TwoTextColumns;
+use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException;
 use Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException;
-use Okipa\LaravelBrickables\Tests\Brickables\TestBrickable;
+use Okipa\LaravelBrickables\Models\Brick;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
-use Okipa\LaravelBrickables\Tests\Models\Brick;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class HasBrickablesTest extends BrickableTestCase
@@ -16,44 +14,80 @@ class HasBrickablesTest extends BrickableTestCase
     /** @test */
     public function it_cannot_add_invalid_brickable_class()
     {
+        $brickable = new Class {
+            //
+        };
         $page = factory(Page::class)->create();
         $this->expectException(InvalidBrickableClassException::class);
-        $page->addBrick(Page::class, []);
+        $page->addBrick(get_class($brickable), []);
     }
 
     /** @test */
     public function it_cannot_add_not_registered_brickable_class()
     {
+        $brickable = new Class extends Brickable {
+            public function setValidationRules(): array
+            {
+                return [];
+            }
+        };
         $page = factory(Page::class)->create();
         $this->expectException(NotRegisteredBrickableClassException::class);
-        $page->addBrick(TestBrickable::class, []);
+        $page->addBrick(get_class($brickable), []);
     }
 
     /** @test */
     public function it_can_add_brick()
     {
+        $brickable = new Class extends Brickable {
+            public function setValidationRules(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickable)]);
         $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+        $brick = $page->addBrick(get_class($brickable), []);
         $this->assertTrue($brick->is($page->bricks->first()));
     }
 
     /** @test */
     public function it_can_add_brick_with_a_custom_brick_model()
     {
-        config()->set('brickables.brickModel', Brick::class);
+        $brickModel = new class extends Brick {
+            public function dummy(): string
+            {
+                return 'dummy';
+            }
+        };
+        $brickable = new Class extends Brickable {
+            public function setValidationRules(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.brickModel', get_class($brickModel));
+        config()->set('brickables.registered', [get_class($brickable)]);
         $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+        $brick = $page->addBrick(get_class($brickable), []);
         $this->assertTrue($brick->is($page->bricks->first()));
-        $this->assertEquals('fake-view-path', $brick->getBrickableViewPath());
+        $this->assertEquals('dummy', $brick->dummy());
     }
 
     /** @test */
     public function it_can_add_bricks()
     {
+        $brickable = new Class extends Brickable {
+            public function setValidationRules(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickable)]);
         $page = factory(Page::class)->create();
         $bricks = $page->addBricks([
-            [OneTextColumn::class, ['content' => 'Text content']],
-            [TwoTextColumns::class, ['left_content' => 'Left text', 'right_content' => 'Right text']],
+            [get_class($brickable), []],
+            [get_class($brickable), []],
         ]);
         $this->assertCount(2, $bricks);
         $this->assertEmpty($page->bricks->diff($bricks));
@@ -62,10 +96,17 @@ class HasBrickablesTest extends BrickableTestCase
     /** @test */
     public function it_can_get_bricks()
     {
+        $brickable = new Class extends Brickable {
+            public function setValidationRules(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickable)]);
         $page = factory(Page::class)->create();
         $page->addBricks([
-            [OneTextColumn::class, ['content' => 'Text content']],
-            [TwoTextColumns::class, ['left_content' => 'Left text', 'right_content' => 'Right text']],
+            [get_class($brickable), []],
+            [get_class($brickable), []],
         ]);
         $this->assertCount(2, $page->getBricks());
         $this->assertEmpty($page->bricks->diff($page->getBricks()));
@@ -74,13 +115,20 @@ class HasBrickablesTest extends BrickableTestCase
     /** @test */
     public function it_returns_first_brick()
     {
+        $brickable = new Class extends Brickable {
+            public function setValidationRules(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickable)]);
         $page = factory(Page::class)->create();
         $page->addBricks([
-            [TwoTextColumns::class, ['left_content' => 'Left text', 'right_content' => 'Right text']],
-            [OneTextColumn::class, ['content' => 'Text content #1']],
-            [OneTextColumn::class, ['content' => 'Text content #2']],
+            [get_class($brickable), ['content' => 'Text content #1']],
+            [get_class($brickable), ['content' => 'Text content #2']],
+            [get_class($brickable), ['content' => 'Text content #3']],
         ]);
-        $brick = $page->getFirstBrick(OneTextColumn::class);
+        $brick = $page->getFirstBrick(get_class($brickable));
         $this->assertTrue($brick->is($page->bricks()->where('data->content', 'Text content #1')->first()));
     }
 }

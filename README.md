@@ -10,9 +10,9 @@
 
 :warning: PACKAGE IN DEVELOPMENT :warning:
 
-This package allows you to associate content bricks to Eloquent models and gives ability to easily manage them from an admin panel.
+This package allows you to associate content bricks to Eloquent models and provides a full and customizable admin panel to manage them.
 
-This package is shipped with a pre-built content bricks. You can use them as is, but you definitely should consider use them as examples: customizing them or create new ones has been designed to be simple as hell ! :fire:
+This package is shipped with pre-built brickables. You can use them as is, but you definitely should consider them as examples: customizing them or create new ones has been designed to be simple as hell ! :fire:
 
 ## Compatibility
 
@@ -22,7 +22,7 @@ This package is shipped with a pre-built content bricks. You can use them as is,
 
 ## Usage
 
-Associate content bricks to an Eloquent model:
+Associate content bricks to Eloquent models:
 
 ```php
 $page = Page::find(1);
@@ -37,18 +37,20 @@ $page->addBricks([
 ]);
 ```
 
-And display them in your view:
+Display bricks in your views:
 
 ```blade
 {{-- all at once --}}
 {{ Brickables::bricks($page) }}
 
 {{-- or one by one --}}
-<h3>Title<h3>
-<p>Paragraph</p>
 {{ $page->getFirstBrick(OneTextColumn::class) }}
-<p>Other paragraph</p>
-{{ $page->getFirstBrick(TwoTextColumns::class) }}
+```
+
+Display the model-related bricks admin panel in your views:
+
+```blade
+{{ Brickables::adminPanel($page) }}
 ```
 
 ## Table of contents
@@ -66,7 +68,7 @@ And display them in your view:
   * [Set content bricks order](#set-content-bricks-order)
   * [Retrieve content bricks](#retrieve-content-bricks)
   * [Query content bricks](#query-content-bricks)
-  * [Display content bricks in you views](#display-content-bricks-in-you-views)
+  * [Display content bricks](#display-content-bricks)
   * [Retrieve brickables](#retrieve-brickables)
   * [Create your own brickable](#create-your-own-brickable)
   * [Manage model content bricks](#manage-model-content-bricks)
@@ -117,7 +119,7 @@ php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesService
 
 ### Models
 
-Implement the `HasBrickables` interface and use the `HasBrickablesTrait` trait to any Eloquent model that you want to be able to be associate to content bricks to.
+Implement the `HasBrickables` interface and use the `HasBrickablesTrait` trait to any Eloquent model that you want to be able to be associated to content bricks to.
 
 ```php
 
@@ -135,15 +137,13 @@ class Page extends Model implements HasBrickables
 
 ### Routes
 
-Declare these `web` routes that will be necessary for the content bricks CRUD operations:
+Add the `web` routes that will be required by the content bricks admin panel for the CRUD operations:
 
 ```php
-Route::get('brick/create', [Okipa\LaravelBrickables\Controllers\BricksController::class, 'create'])->name('brick.create');
-Route::post('brick/store', [Okipa\LaravelBrickables\Controllers\BricksController::class, 'store'])->name('brick.store');
-Route::get('brick/edit/{brick}', [Okipa\LaravelBrickables\Controllers\BricksController::class, 'edit'])->name('brick.edit');
-Route::put('brick/update/{brick}', [Okipa\LaravelBrickables\Controllers\BricksController::class, 'update'])->name('brick.update');
-Route::delete('brick/destroy/{brick}', [Okipa\LaravelBrickables\Controllers\BricksController::class, 'destroy'])->name('brick.destroy');
+Brickables::routes(); // or add them manually
 ```
+
+These routes are consuming the `Okipa\LaravelBrickables\Controllers\BricksController` controller. You also may create your own controller which could extends this one.
 
 ## How to
 
@@ -215,7 +215,7 @@ You can query content bricks as for any Eloquent model:
 Brick::where('brickable_type', OneTextColumn::class)->first();
 ```
 
-### Display content bricks in you views
+### Display content bricks
 
 Display a single content brick in your view:
 

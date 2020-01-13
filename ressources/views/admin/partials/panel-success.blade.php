@@ -1,5 +1,5 @@
 @isset($success)
     <div class="alert alert-success">
-        {{ $success }}
+        <i class="fas fa-check fa-fw"></i> {{ $success }}
     </div>
 @endisset
