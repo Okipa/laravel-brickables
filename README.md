@@ -188,11 +188,11 @@ $brick->delete();
 
 ### Set content bricks order
 
-By default all inserted media items are ordered by their creation order (from the oldest to the newest).
+By default all bricks are ordered by their creation order (from the oldest to the newest).
 
 The `Brick` model uses the `spatie/eloquent-sortable` package to handle the content bricks positioning.
 
-This third party package documentation is available here: https://github.com/spatie/eloquent-sortable.
+To see how to use this third party package, check its documentation here: https://github.com/spatie/eloquent-sortable.
 
 ### Retrieve content bricks
 
