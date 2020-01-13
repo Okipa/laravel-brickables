@@ -3,7 +3,7 @@
     <input type="hidden" name="model_type" value="{{ get_class($model) }}">
     <input type="hidden" name="admin_panel_url" value="{{ url()->current() }}#bricks-admin-panel">
     <div>
-        <select class="custom-select mr-3 @error('title') is-invalid @enderror" name="brickable_type">
+        <select class="custom-select mr-3 @error('brickable_type') is-invalid @enderror" name="brickable_type">
             <option value="">@lang('validation.attributes.brickable_type')</option>
             @foreach(Brickables::getAll() as $brickable)
                 <option value="{{ get_class($brickable) }}">{{ $brickable->getLabel() }}</option>
