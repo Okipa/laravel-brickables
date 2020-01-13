@@ -10,7 +10,7 @@
             @endforeach
         </select>
         @error('brickable_type')
-            <div class="invalid-feedback">{{ $message }}</div>
+        <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
     <button class="btn btn-primary" type="submit" title="@lang('Create')">
