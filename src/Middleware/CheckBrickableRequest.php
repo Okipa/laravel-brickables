@@ -54,5 +54,8 @@ class CheckBrickableRequest
         if (! $request->model_id) {
             abort(Response::HTTP_FORBIDDEN, 'Missing model id.');
         }
+        if ($request->brickable_type && ! (new $request->brickable_type) instanceof Brickable) {
+            abort(Response::HTTP_FORBIDDEN, $request->brickable_type . ' should extends ' . Brickable::class . '.');
+        }
     }
 }

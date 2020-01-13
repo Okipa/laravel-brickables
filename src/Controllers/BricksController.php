@@ -3,6 +3,7 @@
 namespace Okipa\LaravelBrickables\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Models\Brick;
@@ -12,19 +13,14 @@ class BricksController
     /**
      * @param Request $request
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function create(Request $request)
     {
-        $request->validate([
-            'brickable_type' => [
-                'required', 'string', function ($attribute, $value, $fail) {
-                    if (! app($value) instanceof Brickable) {
-                        $fail($attribute . ' should extends ' . Brickable::class . '.');
-                    }
-                },
-            ],
-        ]);
+        $validator = Validator::make($request->only('brickable_type'), ['brickable_type' => ['required', 'string']]);
+        if ($validator->fails()) {
+            return redirect()->to($request->admin_panel_url)->withErrors($validator)->withInput();
+        }
         $brick = null;
         /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $model */
         $model = (new $request->model_type)->findOrFail($request->model_id);
