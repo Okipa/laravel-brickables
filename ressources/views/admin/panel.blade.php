@@ -5,8 +5,6 @@
         <div>@include('laravel-brickables::admin.partials.panel-create')</div>
     </div>
     <div class="card-body">
-        @include('laravel-brickables::admin.partials.validation-success')
-        @include('laravel-brickables::admin.partials.validation-errors')
         @if($bricks->isEmpty())
             @include('laravel-brickables::admin.partials.panel-empty')
         @else
