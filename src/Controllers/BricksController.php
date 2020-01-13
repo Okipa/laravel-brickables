@@ -22,7 +22,7 @@ class BricksController
         $brickable = (new $request->brickable_type);
         $adminPanelUrl = $request->admin_panel_url;
 
-        return view($brickable->getFormViewPath(), [compact('brick', 'model', 'brickable', 'adminPanelUrl')]);
+        return view($brickable->getFormViewPath(), compact('brick', 'model', 'brickable', 'adminPanelUrl'));
     }
 
     /**
