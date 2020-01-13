@@ -48,7 +48,7 @@ class BricksController
 
         return redirect()->to($request->admin_panel_url)->with(
             'success',
-            __($brickable->getLabel() . ' brick has been added on ' . Str::snake(class_basename($model), ' ') . '.')
+            __($brickable->getLabel() . ' brick has been added on ' . $model->getReadableClassName() . '.')
         );
     }
 
@@ -86,7 +86,7 @@ class BricksController
 
         return redirect()->to($request->admin_panel_url)->with(
             'success',
-            __($brickable->getLabel() . ' brick has been updated for ' . Str::snake(class_basename($model), ' ') . '.')
+            __($brickable->getLabel() . ' brick has been updated for ' . $model->getReadableClassName() . '.')
         );
     }
 
@@ -107,7 +107,7 @@ class BricksController
 
         return redirect()->to($request->admin_panel_url)->with(
             'success',
-            __($brickable->getLabel() . ' brick has been deleted from ' . Str::snake(class_basename($model), ' ') . '.')
+            __($brickable->getLabel() . ' brick has been deleted from ' . $model->getReadableClassName() . '.')
         );
     }
 }

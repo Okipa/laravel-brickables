@@ -1,5 +1,5 @@
 <div class="d-flex">
-    <a class="btn btn-danger mr-2" href="{{ url()->previous() }}" role="button">
+    <a class="btn btn-danger mr-2" href="{{ $adminPanelUrl }}" role="button">
         <i class="fas fa-ban fa-fw"></i> @lang('Cancel')
     </a>
     <button type="submit" class="btn btn-primary">
