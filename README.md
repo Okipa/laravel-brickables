@@ -61,7 +61,7 @@ Display the model-related bricks admin panel in your views:
 * [Implementation](#implementation)
   * [Models](#models)
   * [Routes](#routes)
-* [How to](#how to)
+* [How to](#how-to)
   * [Add content bricks](#add-content-bricks)
   * [Update a content brick](#update-a-content-brick)
   * [Delete a content brick](#delete-a-content-brick)
