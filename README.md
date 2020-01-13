@@ -173,7 +173,8 @@ $bricks = $page->addBricks([
 Just update your content brick as you would fo for any other Eloquent model instance:
 
 ```php
-$brick->data = ['content', 'Another text']; // as data are store in json, you'll have to process this way
+// as data are store in json, you'll have to process this way
+$brick->data = ['content', 'Another text'];
 $brick->save();
 ```
 
