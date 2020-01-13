@@ -143,7 +143,9 @@ Add the `web` routes that will be required by the content bricks admin panel for
 Brickables::routes(); // or add them manually
 ```
 
-These routes are consuming the `Okipa\LaravelBrickables\Controllers\BricksController` controller. You also may create your own controller which could extends this one.
+These routes are consuming the `Okipa\LaravelBrickables\Controllers\BricksController` controller.
+
+You also may create your own controller which can extends this one (or not !).
 
 ## How to
 
