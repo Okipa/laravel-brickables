@@ -69,12 +69,4 @@ class Brick extends Model implements Htmlable, Sortable
     {
         return app($this->getAttribute('brickable_type'));
     }
-
-    /**
-     * @return string
-     */
-    public function getReadableClassName(): string
-    {
-        ucfirst(Str::snake(class_basename($this), ' '));
-    }
 }

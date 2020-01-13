@@ -3,6 +3,7 @@
 namespace Okipa\LaravelBrickables\Contracts;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Okipa\LaravelBrickables\Models\Brick;
 
 interface HasBrickables
@@ -46,4 +47,9 @@ interface HasBrickables
      * @return \Illuminate\Support\Collection
      */
     public function getBricks(): Collection;
+
+    /**
+     * @return string
+     */
+    public function getReadableClassName(): string;
 }

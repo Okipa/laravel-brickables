@@ -3,6 +3,7 @@
 namespace Okipa\LaravelBrickables\Traits;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException;
 use Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException;
@@ -85,5 +86,13 @@ trait HasBrickablesTrait
     public function getBricks(): Collection
     {
         return $this->bricks()->ordered()->get();
+    }
+
+    /**
+     * @return string
+     */
+    public function getReadableClassName(): string
+    {
+        ucfirst(Str::snake(class_basename($this), ' '));
     }
 }
