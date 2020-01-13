@@ -1,4 +1,4 @@
 <div>
-    Dummy brick view.
+    Custom brick view.
 </div>
 {{ $data }}
