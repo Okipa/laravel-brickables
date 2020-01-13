@@ -203,7 +203,7 @@ $page = Page::find(1);
 $bricks = $page->getBricks();
 ```
 
-You also can find the first typed content brick associated to the model:
+You also can get the first content brick which :
 
 ```php
 $page = Page::find(1);
@@ -212,7 +212,7 @@ $brick = $page->getFirstBrick(OneTextColumn::class);
 
 ### Query content bricks
 
-You can query content bricks as for any Eloquent model:
+Query content bricks as for any Eloquent model:
 
 ```php
 Brick::where('brickable_type', OneTextColumn::class)->first();
@@ -226,7 +226,7 @@ Display a single content brick in your view:
 {{ $page->getFirstBrick(OneTextColumn::class) }}
 ```
 
-Or display all the model related content bricks html:
+Or display all the model-related content bricks:
 
 ```blade
 {{ Brickables::bricks($page) }}

@@ -10,7 +10,7 @@
             @include('laravel-brickables::admin.partials.panel-empty')
         @else
             @foreach($bricks as $brick)
-                <div class="card">
+                <div class="card @unless($loop->first)mt-3@endunless">
                     <div class="card-header d-flex justify-content-between">
                         <h3 class="h4 m-0">@lang($brick->brickable->getLabel())</h3>
                         <div class="d-flex">
