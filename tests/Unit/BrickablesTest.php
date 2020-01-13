@@ -28,7 +28,7 @@ class BrickablesTest extends BrickableTestCase
     /** @test */
     public function it_displays_model_bricks_html()
     {
-        view()->addNamespace('laravel-brickables', 'tests/dummy/views');
+        view()->addNamespace('laravel-brickables', 'tests/views');
         $brickable = new Class extends Brickable {
             public function setBrickViewPath(): string
             {
@@ -49,7 +49,7 @@ class BrickablesTest extends BrickableTestCase
     /** @test */
     public function it_displays_model_bricks_admin_panel_html()
     {
-        view()->addNamespace('laravel-brickables', 'tests/dummy/views');
+        view()->addNamespace('laravel-brickables', 'tests/views');
         $brickable = new Class extends Brickable {
             public function setBrickViewPath(): string
             {

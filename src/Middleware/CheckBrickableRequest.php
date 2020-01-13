@@ -3,6 +3,8 @@
 namespace Okipa\LaravelBrickables\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
+use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Models\Brick;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +20,7 @@ class CheckBrickableRequest
      * @return mixed
      * @throws \Exception
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
         $request->brick ? $this->withBrickChecks($request) : $this->withoutBrickChecks($request);
         if (! $request->admin_panel_url) {
@@ -29,9 +31,9 @@ class CheckBrickableRequest
     }
 
     /**
-     * @param $request
+     * @param \Illuminate\Http\Request $request
      */
-    protected function withBrickChecks($request): void
+    protected function withBrickChecks(Request $request): void
     {
         if (! $request->brick instanceof Brick) {
             abort(Response::HTTP_FORBIDDEN, get_class($request->brick) . ' should extends ' . Brick::class . '.');
@@ -39,9 +41,9 @@ class CheckBrickableRequest
     }
 
     /**
-     * @param $request
+     * @param \Illuminate\Http\Request $request
      */
-    protected function withoutBrickChecks($request): void
+    protected function withoutBrickChecks(Request $request): void
     {
         if (! $request->model_type) {
             abort(Response::HTTP_FORBIDDEN, 'Missing model type.');

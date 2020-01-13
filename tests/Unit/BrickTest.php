@@ -11,7 +11,7 @@ class BrickTest extends BrickableTestCase
     /** @test */
     public function it_renders_html()
     {
-        view()->addNamespace('laravel-brickables', 'tests/dummy/views');
+        view()->addNamespace('laravel-brickables', 'tests/views');
         $brickable = new Class extends Brickable {
             public function setBrickViewPath(): string
             {

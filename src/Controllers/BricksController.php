@@ -4,6 +4,7 @@ namespace Okipa\LaravelBrickables\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Models\Brick;
 
 class BricksController
@@ -15,6 +16,15 @@ class BricksController
      */
     public function create(Request $request)
     {
+        $request->validate([
+            'brickable_type' => [
+                'required', 'string', function ($attribute, $value, $fail) {
+                    if (! app($value) instanceof Brickable) {
+                        $fail($attribute . ' should extends ' . Brickable::class . '.');
+                    }
+                },
+            ],
+        ]);
         $brick = null;
         /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $model */
         $model = (new $request->model_type)->findOrFail($request->model_id);

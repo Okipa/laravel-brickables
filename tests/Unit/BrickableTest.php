@@ -63,7 +63,8 @@ class BrickableTest extends BrickableTestCase
     /** @test */
     public function brickable_can_set_and_returns_store_route()
     {
-        Route::post('dummy/store', function () { })->name('dummy.store');
+        Route::post('dummy/store', function () {
+        })->name('dummy.store');
         $brickable = new Class extends Brickable {
             public function setStoreRouteName(): string
             {
@@ -81,7 +82,8 @@ class BrickableTest extends BrickableTestCase
     /** @test */
     public function brickable_can_set_and_returns_edit_route()
     {
-        Route::get('dummy/edit/{brick}', function () { })->name('dummy.edit');
+        Route::get('dummy/edit/{brick}', function () {
+        })->name('dummy.edit');
         $brickable = new Class extends Brickable {
             public function setEditRouteName(): string
             {
@@ -102,7 +104,8 @@ class BrickableTest extends BrickableTestCase
     /** @test */
     public function brickable_can_set_and_returns_update_route()
     {
-        Route::put('dummy/update/{brick}', function () { })->name('dummy.update');
+        Route::put('dummy/update/{brick}', function () {
+        })->name('dummy.update');
         $brickable = new Class extends Brickable {
             public function setUpdateRouteName(): string
             {
@@ -123,7 +126,8 @@ class BrickableTest extends BrickableTestCase
     /** @test */
     public function brickable_can_set_and_returns_destroy_route()
     {
-        Route::delete('dummy/destroy/{brick}', function () { })->name('dummy.destroy');
+        Route::delete('dummy/destroy/{brick}', function () {
+        })->name('dummy.destroy');
         $brickable = new Class extends Brickable {
             public function setDestroyRouteName(): string
             {
