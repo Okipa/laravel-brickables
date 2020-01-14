@@ -146,6 +146,52 @@ class BrickableTest extends BrickableTestCase
     }
 
     /** @test */
+    public function brickable_can_set_and_returns_move_up_route()
+    {
+        Route::post('dummy/move/up/{brick}', function () {
+            //
+        })->name('dummy.move.up');
+        $brickable = new Class extends Brickable {
+            public function setMoveUpRouteName(): string
+            {
+                return 'dummy.move.up';
+            }
+
+            public function setValidationRules(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickable)]);
+        $page = factory(Page::class)->create();
+        $brick = $page->addBrick(get_class($brickable), []);
+        $this->assertEquals('http://localhost/dummy/move/up/' . $brick->id, $brickable->getMoveUpRoute($brick));
+    }
+
+    /** @test */
+    public function brickable_can_set_and_returns_move_down_route()
+    {
+        Route::post('dummy/move/down/{brick}', function () {
+            //
+        })->name('dummy.move.down');
+        $brickable = new Class extends Brickable {
+            public function setMoveDownRouteName(): string
+            {
+                return 'dummy.move.down';
+            }
+
+            public function setValidationRules(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickable)]);
+        $page = factory(Page::class)->create();
+        $brick = $page->addBrick(get_class($brickable), []);
+        $this->assertEquals('http://localhost/dummy/move/down/' . $brick->id, $brickable->getMoveDownRoute($brick));
+    }
+
+    /** @test */
     public function brickable_can_set_and_returns_validation_rules()
     {
         $brickable = new Class extends Brickable {

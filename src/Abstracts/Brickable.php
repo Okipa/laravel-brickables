@@ -15,6 +15,9 @@ abstract class Brickable
     /** @property string $templateViewPath */
     protected $templateViewPath;
 
+    /** @property array $validationRules */
+    protected $validationRules;
+
     /** @property string $storeRouteName */
     protected $storeRouteName;
 
@@ -27,8 +30,11 @@ abstract class Brickable
     /** @property string $destroyRouteName */
     protected $destroyRouteName;
 
-    /** @property array $validationRules */
-    protected $validationRules;
+    /** @property string $moveUpRouteName */
+    protected $moveUpRouteName;
+
+    /** @property string $moveUpRouteName */
+    protected $moveDownRouteName;
 
     /**
      * Brickable constructor.
@@ -43,6 +49,8 @@ abstract class Brickable
         $this->editRouteName = $this->setEditRouteName();
         $this->updateRouteName = $this->setUpdateRouteName();
         $this->destroyRouteName = $this->setDestroyRouteName();
+        $this->moveUpRouteName = $this->setMoveUpRouteName();
+        $this->moveDownRouteName = $this->setMoveDownRouteName();
     }
 
     /**
@@ -103,6 +111,26 @@ abstract class Brickable
     public function setDestroyRouteName(): string
     {
         return 'brick.destroy';
+    }
+
+    /**
+     * Set the brickable move up route name.
+     *
+     * @return string
+     */
+    public function setMoveUpRouteName(): string
+    {
+        return 'brick.move.up';
+    }
+
+    /**
+     * Set the brickable move down route name.
+     *
+     * @return string
+     */
+    public function setMoveDownRouteName(): string
+    {
+        return 'brick.move.down';
     }
 
     /**
@@ -218,5 +246,29 @@ abstract class Brickable
     public function getDestroyRoute($parameters = []): string
     {
         return route($this->destroyRouteName, $parameters);
+    }
+
+    /**
+     * Get the brickable move up route.
+     *
+     * @param mixed $parameters
+     *
+     * @return string
+     */
+    public function getMoveUpRoute($parameters = []): string
+    {
+        return route($this->moveUpRouteName, $parameters);
+    }
+
+    /**
+     * Get the brickable move down route.
+     *
+     * @param mixed $parameters
+     *
+     * @return string
+     */
+    public function getMoveDownRoute($parameters = []): string
+    {
+        return route($this->moveDownRouteName, $parameters);
     }
 }

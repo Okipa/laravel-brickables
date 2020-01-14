@@ -89,6 +89,8 @@ trait HasBrickablesTrait
     }
 
     /**
+     * Get the model name readable for a human.
+     *
      * @return string
      */
     public function getReadableClassName(): string

@@ -135,4 +135,46 @@ class BricksControllerTest extends BrickableTestCase
         $brick->data = json_encode($brick->data);
         $this->assertDatabaseMissing('bricks', $brick->toArray());
     }
+
+    /** @test */
+    public function move_up_action_moves_up_brick_and_redirects_to_admin_panel()
+    {
+        Route::post('brick/move/up/{brick}', [BricksController::class, 'moveUp'])
+            ->middleware(SubstituteBindings::class, CRUDBrickable::class);
+        $page = factory(Page::class)->create();
+        $brickOne = $page->addBrick(OneTextColumn::class, ['content' => 'Text #1']);
+        $brickTwo = $page->addBrick(OneTextColumn::class, ['content' => 'Text #2']);
+        $brickThree = $page->addBrick(OneTextColumn::class, ['content' => 'Text #3']);
+        $this->assertEquals(1, $brickOne->position);
+        $this->assertEquals(2, $brickTwo->position);
+        $this->assertEquals(3, $brickThree->position);
+        $this->call('POST', 'brick/move/up/' . $brickThree->id, ['admin_panel_url' => 'admin-panel'])
+            ->assertRedirect('admin-panel');
+        $this->assertEquals(1, $brickOne->fresh()->position);
+        $this->assertEquals(2, $brickThree->fresh()->position);
+        $this->assertEquals(3, $brickTwo->fresh()->position);
+    }
+
+    /** @test */
+    public function move_down_action_moves_down_brick_and_redirects_to_admin_panel()
+    {
+        Route::post('brick/move/down/{brick}', [BricksController::class, 'moveDown'])
+            ->middleware(SubstituteBindings::class, CRUDBrickable::class);
+        $pageOne = factory(Page::class)->create();
+        $pageTwo = factory(Page::class)->create();
+        $brickOne = $pageOne->addBrick(OneTextColumn::class, ['content' => 'Text #1']);
+        $pageTwo->addBrick(OneTextColumn::class, ['content' => 'Text #2']);
+        $brickTwo = $pageOne->addBrick(OneTextColumn::class, ['content' => 'Text #3']);
+        $pageTwo->addBrick(OneTextColumn::class, ['content' => 'Text #4']);
+        $brickThree = $pageOne->addBrick(OneTextColumn::class, ['content' => 'Text #5']);
+        $pageTwo->addBrick(OneTextColumn::class, ['content' => 'Text #6']);
+        $this->assertEquals(1, $brickOne->position);
+        $this->assertEquals(2, $brickTwo->position);
+        $this->assertEquals(3, $brickThree->position);
+        $this->call('POST', 'brick/move/down/' . $brickOne->id, ['admin_panel_url' => 'admin-panel'])
+            ->assertRedirect('admin-panel');
+        $this->assertEquals(1, $brickTwo->fresh()->position);
+        $this->assertEquals(2, $brickOne->fresh()->position);
+        $this->assertEquals(3, $brickThree->fresh()->position);
+    }
 }

@@ -4,7 +4,6 @@ namespace Okipa\LaravelBrickables\Models;
 
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
@@ -68,5 +67,15 @@ class Brick extends Model implements Htmlable, Sortable
     public function getBrickableAttribute(): Brickable
     {
         return app($this->brickable_type);
+    }
+
+    /**
+     * Build the sort query from the spatie/eloquent-sortable package.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function buildSortQuery()
+    {
+        return static::query()->where('model_id', $this->model_id);
     }
 }

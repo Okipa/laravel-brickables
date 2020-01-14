@@ -13,6 +13,8 @@
                     <div class="card-header d-flex justify-content-between">
                         <h3 class="h4 m-0">@lang($brick->brickable->getLabel())</h3>
                         <div class="d-flex">
+                            @include('laravel-brickables::admin.partials.panel-move-up')
+                            @include('laravel-brickables::admin.partials.panel-move-down')
                             @include('laravel-brickables::admin.partials.panel-edit')
                             @include('laravel-brickables::admin.partials.panel-destroy')
                         </div>

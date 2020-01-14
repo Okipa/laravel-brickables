@@ -76,6 +76,8 @@ class Brickables implements Htmlable
             Route::get('brick/edit/{brick}', [BricksController::class, 'edit'])->name('brick.edit');
             Route::put('brick/update/{brick}', [BricksController::class, 'update'])->name('brick.update');
             Route::delete('brick/destroy/{brick}', [BricksController::class, 'destroy'])->name('brick.destroy');
+            Route::post('brick/move/up/{brick}', [BricksController::class, 'moveUp'])->name('brick.move.up');
+            Route::post('brick/move/down/{brick}', [BricksController::class, 'moveDown'])->name('brick.move.down');
         });
     }
 }

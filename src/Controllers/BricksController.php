@@ -5,8 +5,6 @@ namespace Okipa\LaravelBrickables\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
-use Okipa\LaravelBrickables\Abstracts\Brickable;
-use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Models\Brick;
 
 class BricksController extends Controller
@@ -46,24 +44,24 @@ class BricksController extends Controller
         /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
         $brickable = (new $request->brickable_type);
         $request->validate($brickable->getValidationRules());
-        $model->addBrick($request->brickable_type, $request->only($brickable->getValidatedKeys()));
+        $brick = $model->addBrick($request->brickable_type, $request->only($brickable->getValidatedKeys()));
 
-        return $this->sendBrickCreatedResponse($request, $model, $brickable);
+        return $this->sendBrickCreatedResponse($request, $brick);
     }
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param \Okipa\LaravelBrickables\Contracts\HasBrickables $model
-     * @param \Okipa\LaravelBrickables\Abstracts\Brickable $brickable
+     * @param \Okipa\LaravelBrickables\Models\Brick $brick
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function sendBrickCreatedResponse(Request $request, HasBrickables $model, Brickable $brickable)
+    protected function sendBrickCreatedResponse(Request $request, Brick $brick)
     {
-        return redirect()->to($request->admin_panel_url)->with(
-            'success',
-            __($brickable->getLabel() . ' brick has been added on ' . $model->getReadableClassName() . '.')
-        );
+        return redirect()->to($request->admin_panel_url)
+            ->with('success', __('The entry :model > :brickable has been created.', [
+                'brickable' => __($brick->brickable->getLabel()),
+                'model' => __($brick->model->getReadableClassName()),
+            ]));
     }
 
     /**
@@ -72,7 +70,7 @@ class BricksController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit(Request $request, Brick $brick)
+    public function edit(Brick $brick, Request $request)
     {
         /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $model */
         $model = $brick->model;
@@ -95,22 +93,22 @@ class BricksController extends Controller
         $brick->data = $request->only($brick->brickable->getValidatedKeys());
         $brick->save();
 
-        return $this->sendBrickUpdatedResponse($request, $brick->model, $brick->brickable);
+        return $this->sendBrickUpdatedResponse($request, $brick);
     }
 
     /**
      * @param \Illuminate\Http\Request $request
-     * @param \Okipa\LaravelBrickables\Contracts\HasBrickables $model
-     * @param \Okipa\LaravelBrickables\Abstracts\Brickable $brickable
+     * @param \Okipa\LaravelBrickables\Models\Brick $brick
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function sendBrickUpdatedResponse(Request $request, HasBrickables $model, Brickable $brickable)
+    protected function sendBrickUpdatedResponse(Request $request, Brick $brick)
     {
-        return redirect()->to($request->admin_panel_url)->with(
-            'success',
-            __($brickable->getLabel() . ' brick has been updated for ' . $model->getReadableClassName() . '.')
-        );
+        return redirect()->to($request->admin_panel_url)
+            ->with('success', __('The entry :model > :brickable has been updated.', [
+                'brickable' => __($brick->brickable->getLabel()),
+                'model' => __($brick->model->getReadableClassName()),
+            ]));
     }
 
     /**
@@ -122,15 +120,61 @@ class BricksController extends Controller
      */
     public function destroy(Brick $brick, Request $request)
     {
-        /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $model */
-        $model = $brick->model;
-        /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
-        $brickable = (new $brick->brickable_type);
+        $brickClone = clone $brick;
         $brick->delete();
 
-        return redirect()->to($request->admin_panel_url)->with(
-            'success',
-            __($brickable->getLabel() . ' brick has been deleted from ' . $model->getReadableClassName() . '.')
-        );
+        return $this->sendBrickDestroyedResponse($request, $brickClone);
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \Okipa\LaravelBrickables\Models\Brick $brick
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function sendBrickDestroyedResponse(Request $request, Brick $brick)
+    {
+        return redirect()->to($request->admin_panel_url)
+            ->with('success', __('The entry :model > :brickable has been deleted.', [
+                'brickable' => __($brick->brickable->getLabel()),
+                'model' => __($brick->model->getReadableClassName()),
+            ]));
+    }
+
+    /**
+     * @param \Okipa\LaravelBrickables\Models\Brick $brick
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function moveUp(Brick $brick, Request $request)
+    {
+        $brick->moveOrderUp();
+
+        return $this->sendBrickMovedResponse($request, $brick->fresh());
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \Okipa\LaravelBrickables\Models\Brick $brick
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function sendBrickMovedResponse(Request $request, Brick $brick)
+    {
+        return redirect()->to($request->admin_panel_url);
+    }
+
+    /**
+     * @param \Okipa\LaravelBrickables\Models\Brick $brick
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function moveDown(Brick $brick, Request $request)
+    {
+        $brick->moveOrderDown();
+
+        return $this->sendBrickMovedResponse($request, $brick->fresh());
     }
 }
