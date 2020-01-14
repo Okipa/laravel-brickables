@@ -1,5 +1,4 @@
-<h1>@lang($model->getReadableClassName()) > @lang($brickable->getLabel()) > @lang($brick ? 'Edition' : 'Creation')</h1>
-<hr>
+@include('laravel-brickables::admin.partials.form-title')
 <form method="POST" action="{{ $brick ? $brickable->getUpdateRoute($brick) : $brickable->getStoreRoute() }}">
     @csrf
     @if($brick)@method('PUT')@endif

@@ -156,4 +156,16 @@ class BrickableTest extends BrickableTestCase
         };
         $this->assertEquals(['custom' => ['validation', 'rules']], $brickable->getValidationRules());
     }
+
+    /** @test */
+    public function brickable_can_get_validated_keys()
+    {
+        $brickable = new Class extends Brickable {
+            public function setValidationRules(): array
+            {
+                return ['custom' => ['validation', 'rules']];
+            }
+        };
+        $this->assertEquals(['custom'], $brickable->getValidatedKeys());
+    }
 }

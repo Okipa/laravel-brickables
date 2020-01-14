@@ -3,11 +3,13 @@
 namespace Okipa\LaravelBrickables\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
+use Okipa\LaravelBrickables\Abstracts\Brickable;
+use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Models\Brick;
 
-class BricksController
+class BricksController extends Controller
 {
     /**
      * @param \Illuminate\Http\Request $request
@@ -44,8 +46,20 @@ class BricksController
         /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
         $brickable = (new $request->brickable_type);
         $request->validate($brickable->getValidationRules());
-        $model->addBrick($request->brickable_type, $request->only(array_keys($brickable->getValidationRules())));
+        $model->addBrick($request->brickable_type, $request->only($brickable->getValidatedKeys()));
 
+        return $this->sendBrickCreatedResponse($request, $model, $brickable);
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \Okipa\LaravelBrickables\Contracts\HasBrickables $model
+     * @param \Okipa\LaravelBrickables\Abstracts\Brickable $brickable
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function sendBrickCreatedResponse(Request $request, HasBrickables $model, Brickable $brickable)
+    {
         return redirect()->to($request->admin_panel_url)->with(
             'success',
             __($brickable->getLabel() . ' brick has been added on ' . $model->getReadableClassName() . '.')
@@ -58,12 +72,12 @@ class BricksController
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit(Brick $brick, Request $request)
+    public function edit(Request $request, Brick $brick)
     {
         /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $model */
         $model = $brick->model;
         /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
-        $brickable = (new $brick->brickable_type);
+        $brickable = $brick->brickable;
         $adminPanelUrl = $request->admin_panel_url;
 
         return view($brickable->getFormViewPath(), compact('brick', 'model', 'brickable', 'adminPanelUrl'));
@@ -77,13 +91,22 @@ class BricksController
      */
     public function update(Brick $brick, Request $request)
     {
-        /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $model */
-        $model = $brick->model;
-        /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
-        $brickable = (new $brick->brickable_type);
-        $brick->data = $request->only(array_keys($brickable->getValidationRules()));
+        $request->validate($brick->brickable->getValidationRules());
+        $brick->data = $request->only($brick->brickable->getValidatedKeys());
         $brick->save();
 
+        return $this->sendBrickUpdatedResponse($request, $brick->model, $brick->brickable);
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \Okipa\LaravelBrickables\Contracts\HasBrickables $model
+     * @param \Okipa\LaravelBrickables\Abstracts\Brickable $brickable
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function sendBrickUpdatedResponse(Request $request, HasBrickables $model, Brickable $brickable)
+    {
         return redirect()->to($request->admin_panel_url)->with(
             'success',
             __($brickable->getLabel() . ' brick has been updated for ' . $model->getReadableClassName() . '.')

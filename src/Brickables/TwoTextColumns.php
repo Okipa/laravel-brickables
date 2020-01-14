@@ -12,8 +12,8 @@ class TwoTextColumns extends Brickable
     public function setValidationRules(): array
     {
         return [
-            'left_content' => ['required' => 'string'],
-            'right_content' => ['required' => 'string'],
+            'left_content' => ['required', 'string'],
+            'right_content' => ['required', 'string'],
         ];
     }
 }

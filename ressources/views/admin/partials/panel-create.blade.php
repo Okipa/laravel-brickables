@@ -3,15 +3,16 @@
     <input type="hidden" name="model_type" value="{{ get_class($model) }}">
     <input type="hidden" name="admin_panel_url" value="{{ url()->current() }}#bricks-admin-panel">
     <div>
-        <select class="custom-select mr-3 @error('brickable_type') is-invalid @enderror" name="brickable_type">
+        <select class="custom-select mr-3{{ optional($errors ?? null)->has('brickable_type') ? ' is-invalid' : null }}"
+                name="brickable_type">
             <option value="">@lang('validation.attributes.brickable_type')</option>
             @foreach(Brickables::getAll() as $brickable)
                 <option value="{{ get_class($brickable) }}">{{ $brickable->getLabel() }}</option>
             @endforeach
         </select>
-        @error('brickable_type')
-        <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
+        @if(optional($errors ?? null)->has('brickable_type'))
+            <div class="invalid-feedback">{{ $errors->first('brickable_type') }}</div>
+        @endif
     </div>
     <button class="btn btn-primary" type="submit" title="@lang('Create')">
         <i class="fas fa-plus-circle fa-fw"></i> @lang('Add')

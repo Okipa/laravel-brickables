@@ -11,6 +11,6 @@ class OneTextColumn extends Brickable
      */
     public function setValidationRules(): array
     {
-        return ['content' => ['required' => 'string']];
+        return ['content' => ['required', 'string']];
     }
 }

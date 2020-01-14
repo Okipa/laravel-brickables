@@ -106,6 +106,16 @@ abstract class Brickable
     }
 
     /**
+     * Get the brickable data keys which are defined in the validation rules.
+     *
+     * @return array
+     */
+    public function getValidatedKeys(): array
+    {
+        return array_keys($this->getValidationRules());
+    }
+
+    /**
      * Get the brickable validation rules.
      *
      * @return array

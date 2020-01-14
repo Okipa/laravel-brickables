@@ -7,12 +7,12 @@
                 <span class="input-group-text"><i class="fas fa-font"></i></span>
             </div>
             <textarea id="content"
-                      class="form-control @error('content') is-invalid @enderror"
+                      class="form-control{{ optional($errors ?? null)->has('content') ? ' is-invalid' : null }}"
                       name="content"
                       placeholder="@lang('Content')">{{ $brick ? $brick->data['content'] : null }}</textarea>
-            @error('content')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
+            @if(optional($errors ?? null)->has('content'))
+                <div class="invalid-feedback">{{ $errors->first('content') }}</div>
+            @endif
         </div>
     </div>
 @endsection
