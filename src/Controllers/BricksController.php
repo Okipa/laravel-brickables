@@ -157,6 +157,7 @@ class BricksController extends Controller
     /**
      * @param \Illuminate\Http\Request $request
      * @param \Okipa\LaravelBrickables\Models\Brick $brick
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @return \Illuminate\Http\RedirectResponse
      */
