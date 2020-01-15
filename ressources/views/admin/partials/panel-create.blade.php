@@ -3,21 +3,23 @@
     <input type="hidden" name="model_type" value="{{ get_class($model) }}">
     <input type="hidden" name="admin_panel_url" value="{{ url()->current() }}#bricks-admin-panel">
     <div class="mr-3">
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">
-                    <i class="fas fa-shapes"></i>
-                </span>
+        <div class="form-group m-0">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">
+                        <i class="fas fa-shapes"></i>
+                    </span>
+                </div>
+                <select class="custom-select mr-3{{ optional($errors ?? null)->has('brickable_type') ? ' is-invalid' : null }}"
+                        name="brickable_type">
+                    <option value="">@lang('validation.attributes.brickable_type')</option>
+                    @foreach(Brickables::getAll() as $brickable)
+                        <option value="{{ get_class($brickable) }}">{{ $brickable->getLabel() }}</option>
+                    @endforeach
+                </select>
             </div>
-            <select class="custom-select mr-3{{ optional($errors ?? null)->has('brickable_type') ? ' is-invalid' : null }}"
-                    name="brickable_type">
-                <option value="">@lang('validation.attributes.brickable_type')</option>
-                @foreach(Brickables::getAll() as $brickable)
-                    <option value="{{ get_class($brickable) }}">{{ $brickable->getLabel() }}</option>
-                @endforeach
-            </select>
             @if(optional($errors ?? null)->has('brickable_type'))
-                <div class="invalid-feedback">{{ $errors->first('brickable_type') }}</div>
+                <div class="invalid-tooltip">{{ $errors->first('brickable_type') }}</div>
             @endif
         </div>
     </div>
