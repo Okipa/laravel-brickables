@@ -143,6 +143,12 @@ These routes are consuming the `Okipa\LaravelBrickables\Controllers\BricksContro
 
 To customize the admin panel treatments, create your own `BricksController`, extending the package one. You will also have to create your own routes.
 
+### Translations
+
+All displayed labels or sentences are translatables.
+
+See how to translate them on the Laravel official documentation : https://laravel.com/docs/localization#using-translation-strings-as-keys
+
 ## How to
 
 ### Add content bricks
