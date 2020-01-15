@@ -103,6 +103,8 @@ Publish the package configuration file to customize it if necessary:
 php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=config
 ```
 
+:warning: You may have to run a `composer dump-autoload` after changing a path in your configuration file.
+
 ## Views
 
 Publish the package views to customize them if necessary: 

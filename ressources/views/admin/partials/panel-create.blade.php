@@ -17,10 +17,10 @@
                         <option value="{{ get_class($brickable) }}">{{ $brickable->getLabel() }}</option>
                     @endforeach
                 </select>
+                @if(optional($errors ?? null)->has('brickable_type'))
+                    <div class="invalid-feedback">{{ $errors->first('brickable_type') }}</div>
+                @endif
             </div>
-            @if(optional($errors ?? null)->has('brickable_type'))
-                <div class="invalid-feedback">{{ $errors->first('brickable_type') }}</div>
-            @endif
         </div>
     </div>
     <button class="btn btn-primary" type="submit" title="@lang('Create')">
