@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row my-5">
     <div class="col-md-6">
         {{ $left_content }}
     </div>
