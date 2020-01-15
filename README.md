@@ -72,6 +72,7 @@ Display the model-related bricks admin panel in your views:
   * [Retrieve brickables](#retrieve-brickables)
   * [Create your own brickable](#create-your-own-brickable)
   * [Manage model content bricks](#manage-model-content-bricks)
+  * [Empower bricks with extra abilities](#empower-bricks-with-extra-abilities)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -312,7 +313,7 @@ Customize the admin panel views by [publishing them](#views).
 
 You also can customize the admin panel operations (CRUD, moving, ...) by [defining your own routes and controller](#routes).
 
-### Empower bricks with new abilities
+### Empower bricks with extra abilities
 
 Add abilities to your bricks, like adding image management for example.
 
