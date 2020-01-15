@@ -298,7 +298,7 @@ Your brickable is now ready to associate to Eloquent models.
 
 ### Manage model content bricks
 
-Display the related-model content bricks admin panel html:
+Use the ready-to-use admin panel to manage related-model content bricks:
 
 ```blade
 {{ Brickables::adminPanel($page) }}
