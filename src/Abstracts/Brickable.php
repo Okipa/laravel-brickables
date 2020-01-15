@@ -187,7 +187,7 @@ abstract class Brickable
      */
     public function getLabel(): string
     {
-        return $this->label;
+        return __($this->label);
     }
 
     /**

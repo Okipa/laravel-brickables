@@ -59,8 +59,8 @@ class BricksController extends Controller
     {
         return redirect()->to($request->admin_panel_url)
             ->with('success', __('The entry :model > :brickable has been created.', [
-                'brickable' => __($brick->brickable->getLabel()),
-                'model' => __($brick->model->getReadableClassName()),
+                'brickable' => $brick->brickable->getLabel(),
+                'model' => $brick->model->getReadableClassName(),
             ]));
     }
 
@@ -106,8 +106,8 @@ class BricksController extends Controller
     {
         return redirect()->to($request->admin_panel_url)
             ->with('success', __('The entry :model > :brickable has been updated.', [
-                'brickable' => __($brick->brickable->getLabel()),
-                'model' => __($brick->model->getReadableClassName()),
+                'brickable' => $brick->brickable->getLabel(),
+                'model' => $brick->model->getReadableClassName(),
             ]));
     }
 
@@ -136,8 +136,8 @@ class BricksController extends Controller
     {
         return redirect()->to($request->admin_panel_url)
             ->with('success', __('The entry :model > :brickable has been deleted.', [
-                'brickable' => __($brick->brickable->getLabel()),
-                'model' => __($brick->model->getReadableClassName()),
+                'brickable' => $brick->brickable->getLabel(),
+                'model' => $brick->model->getReadableClassName(),
             ]));
     }
 

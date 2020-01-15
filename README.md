@@ -314,6 +314,11 @@ Customize the admin panel views by [publishing them](#views).
 
 You also can customize the admin panel operations (CRUD, moving, ...) by [defining your own routes and controller](#routes).
 
+**:bulb: Tips**
+
+* Add a javascript confirmation request to intercept the content bricks delete action, otherwise, the removal action will be directly executed without asking the user agreement.
+* In case of views customization, delete the untouched ones after the views publication in order to get them automatically updated in case of package upgrade.
+
 ### Empower bricks with extra abilities
 
 Add abilities to your bricks, like adding image management for example.

@@ -11,7 +11,7 @@
             @foreach($bricks as $brick)
                 <div class="card {{ $loop->first ? null : 'mt-3' }}">
                     <div class="card-header d-flex justify-content-between">
-                        <h3 class="h4 m-0">@lang($brick->brickable->getLabel())</h3>
+                        <h3 class="h4 m-0">{{ $brick->brickable->getLabel() }}</h3>
                         <div class="d-flex">
                             @include('laravel-brickables::admin.partials.panel-move-up')
                             @include('laravel-brickables::admin.partials.panel-move-down')

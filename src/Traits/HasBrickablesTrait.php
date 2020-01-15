@@ -95,6 +95,6 @@ trait HasBrickablesTrait
      */
     public function getReadableClassName(): string
     {
-        return ucfirst(Str::snake(class_basename($this), ' '));
+        return __(ucfirst(Str::snake(class_basename($this), ' ')));
     }
 }
