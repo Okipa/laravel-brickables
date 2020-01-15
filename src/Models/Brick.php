@@ -66,7 +66,7 @@ class Brick extends Model implements Htmlable, Sortable
      */
     public function getBrickableAttribute(): Brickable
     {
-        return app($this->brickable_type);
+        return (new $this->brickable_type);
     }
 
     /**
