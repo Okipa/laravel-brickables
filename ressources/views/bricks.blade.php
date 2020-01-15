@@ -1,1 +1,3 @@
-@foreach($model->getBricks() as $brick){{ $brick }}@endforeach
+@foreach($model->getBricks() as $brick)
+    <div class="my-3">{{ $brick }}</div>
+@endforeach

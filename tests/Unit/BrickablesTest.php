@@ -42,8 +42,11 @@ class BrickablesTest extends BrickableTestCase
         };
         config()->set('brickables.registered', [get_class($brickable)]);
         $page = factory(Page::class)->create();
-        $brick = $page->addBrick(get_class($brickable), ['data' => 'dummy']);
-        $this->assertEquals($brick->toHtml(), Brickables::bricks($page)->toHtml());
+        $page->addBrick(get_class($brickable), ['data' => 'dummy']);
+        $this->assertEquals(
+            view('laravel-brickables::bricks', ['model' => $page]),
+            Brickables::bricks($page)->toHtml()
+        );
     }
 
     /** @test */
