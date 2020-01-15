@@ -137,15 +137,15 @@ class Page extends Model implements HasBrickables
 
 ### Routes
 
-Add the `web` routes that will be required by the content bricks admin panel for the CRUD operations:
+Add the `web` routes that will be required by the content bricks admin panel:
 
 ```php
-Brickables::routes(); // or add them manually
+Brickables::routes();
 ```
 
 These routes are consuming the `Okipa\LaravelBrickables\Controllers\BricksController` controller.
 
-You also may create your own controller which can extends this one (or not !).
+To customize the admin panel treatments, create your own `BricksController`, extending the package one. You will also have to create your own routes.
 
 ## How to
 
@@ -307,6 +307,48 @@ Display the related-model content bricks admin panel html:
 ```blade
 {{ Brickables::adminPanel($page) }}
 ```
+
+Customize the admin panel views by [publishing them](#views).
+
+You also can customize the admin panel operations (CRUD, moving, ...) by [defining your own routes and controller](#routes).
+
+### Empower bricks with new abilities
+
+Add abilities to your bricks, like adding image management for example.
+
+Create your own `Brick` class extending the `Okipa\LaravelBrickables\Models\Brick` one.
+
+```php
+<?php
+
+namespace App;
+
+class Brick extends Okipa\LaravelBrickables\Models\Brick implements Spatie\MediaLibrary\HasMedia\HasMedia
+{
+    // example of image management feature addition with the spatie/laravel-medialibrary package
+    use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+    
+    // ...
+}
+```
+
+Then, set your custom `Brick` model namespace in the package config file.
+
+```php
+<?php
+
+return [
+
+    /*
+     * The fully qualified class name of the brick model.
+     */
+    'brickModel' => App\Brick::class,
+  
+    // ...  
+];
+```
+
+That's it, your `Brick` model will now be used by the package.
 
 ## Testing
 

@@ -2,6 +2,6 @@
     @csrf
     <input type="hidden" name="admin_panel_url" value="{{ url()->current() }}#bricks-admin-panel">
     <button class="btn btn-link p-0" type="submit" title="@lang('Move down')">
-        <i class="fas fa-arrow-alt-circle-down fa-fw"></i>
+        <i class="fas fa-chevron-circle-down fa-fw"></i>
     </button>
 </form>
