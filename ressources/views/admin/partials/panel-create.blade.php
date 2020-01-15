@@ -10,7 +10,7 @@
                         <i class="fas fa-shapes"></i>
                     </span>
                 </div>
-                <select class="custom-select mr-3{{ optional($errors ?? null)->has('brickable_type') ? ' is-invalid' : null }}"
+                <select class="custom-select{{ optional($errors ?? null)->has('brickable_type') ? ' is-invalid' : null }}"
                         name="brickable_type">
                     <option value="">@lang('validation.attributes.brickable_type')</option>
                     @foreach(Brickables::getAll() as $brickable)
