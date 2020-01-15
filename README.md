@@ -88,15 +88,10 @@ Install the package via composer:
 composer require okipa/laravel-brickables
 ```
 
-Then, publish the package migrations: 
+Then, publish and run the database migrations: 
 
 ```bash
 php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=migrations
-```
-
-And run your database migrations:
-
-```bash
 php artisan migrate
 ```
 
