@@ -19,7 +19,7 @@
                 </select>
             </div>
             @if(optional($errors ?? null)->has('brickable_type'))
-                <div class="invalid-tooltip">{{ $errors->first('brickable_type') }}</div>
+                <div class="invalid-feedback">{{ $errors->first('brickable_type') }}</div>
             @endif
         </div>
     </div>
