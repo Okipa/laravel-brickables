@@ -28,7 +28,7 @@ Associate content bricks to Eloquent models:
 $page = Page::find(1);
 
 // associate one content brick
-$page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+$page->addBrick(OneTextColumn::class, ['content' => 'Text']);
 
 // or associate several content bricks at once
 $page->addBricks([

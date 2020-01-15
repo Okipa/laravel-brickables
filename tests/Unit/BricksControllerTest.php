@@ -67,7 +67,7 @@ class BricksControllerTest extends BrickableTestCase
             'model_id' => $page->id,
             'brickable_type' => OneTextColumn::class,
             'admin_panel_url' => 'admin-panel',
-            'content' => 'Text content',
+            'content' => 'Text',
         ])->assertRedirect('admin-panel');
         $brick = $page->getFirstBrick(OneTextColumn::class);
         $brick->data = json_encode($brick->data);
@@ -82,7 +82,7 @@ class BricksControllerTest extends BrickableTestCase
         Route::post('/', function () {
         })->name('brick.update');
         $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text']);
         $this->call('GET', 'brick/edit/' . $brick->id, ['admin_panel_url' => 'admin-panel'])
             ->assertOk()
             ->assertViewIs((new OneTextColumn)->getFormViewPath())
@@ -98,7 +98,7 @@ class BricksControllerTest extends BrickableTestCase
         Route::put('brick/update/{brick}', [BricksController::class, 'update'])
             ->middleware(SubstituteBindings::class, CRUDBrickable::class);
         $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text']);
         $this->call('POST', 'brick/update/' . $brick->id, [
             '_method' => 'PUT',
             'admin_panel_url' => 'admin-panel',
@@ -111,13 +111,13 @@ class BricksControllerTest extends BrickableTestCase
         Route::put('brick/update/{brick}', [BricksController::class, 'update'])
             ->middleware(SubstituteBindings::class, CRUDBrickable::class);
         $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text']);
         $this->call('POST', 'brick/update/' . $brick->id, [
             '_method' => 'PUT',
             'admin_panel_url' => 'admin-panel',
-            'content' => 'New text content',
+            'content' => 'New text',
         ])->assertRedirect('admin-panel');
-        $brick->data = json_encode(['content' => 'New text content']);
+        $brick->data = json_encode(['content' => 'New text']);
         $this->assertDatabaseHas('bricks', $brick->toArray());
     }
 
@@ -127,7 +127,7 @@ class BricksControllerTest extends BrickableTestCase
         Route::delete('brick/destroy/{brick}', [BricksController::class, 'destroy'])
             ->middleware(SubstituteBindings::class, CRUDBrickable::class);
         $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text']);
         $this->call('POST', 'brick/destroy/' . $brick->id, [
             '_method' => 'DELETE',
             'admin_panel_url' => 'admin-panel',

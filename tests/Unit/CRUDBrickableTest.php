@@ -102,7 +102,7 @@ class CRUDBrickableTest extends BrickableTestCase
             //
         })->middleware(SubstituteBindings::class, CRUDBrickable::class);
         $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text']);
         $response = $this->call('GET', '/' . $brick->id)->assertForbidden();
         $this->assertEquals(
             'The admin_panel_url value is missing from the request.',
@@ -117,7 +117,7 @@ class CRUDBrickableTest extends BrickableTestCase
             //
         })->middleware(SubstituteBindings::class, CRUDBrickable::class);
         $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text content']);
+        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text']);
         $this->call('GET', '/' . $brick->id, ['admin_panel_url' => 'url'])->assertOk();
     }
 }

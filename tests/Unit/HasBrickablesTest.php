@@ -124,11 +124,11 @@ class HasBrickablesTest extends BrickableTestCase
         config()->set('brickables.registered', [get_class($brickable)]);
         $page = factory(Page::class)->create();
         $page->addBricks([
-            [get_class($brickable), ['content' => 'Text content #1']],
-            [get_class($brickable), ['content' => 'Text content #2']],
-            [get_class($brickable), ['content' => 'Text content #3']],
+            [get_class($brickable), ['content' => 'Text #1']],
+            [get_class($brickable), ['content' => 'Text #2']],
+            [get_class($brickable), ['content' => 'Text #3']],
         ]);
         $brick = $page->getFirstBrick(get_class($brickable));
-        $this->assertTrue($brick->is($page->bricks()->where('data->content', 'Text content #1')->first()));
+        $this->assertTrue($brick->is($page->bricks()->where('data->content', 'Text #1')->first()));
     }
 }
