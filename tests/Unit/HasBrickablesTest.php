@@ -129,6 +129,6 @@ class HasBrickablesTest extends BrickableTestCase
             [get_class($brickable), ['text' => 'Text #3']],
         ]);
         $brick = $page->getFirstBrick(get_class($brickable));
-        $this->assertTrue($brick->is($page->bricks()->where('data->content', 'Text #1')->first()));
+        $this->assertTrue($brick->is($page->bricks()->where('data->text', 'Text #1')->first()));
     }
 }
