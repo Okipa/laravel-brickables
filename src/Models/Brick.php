@@ -41,9 +41,7 @@ class Brick extends Model implements Htmlable, Sortable
      *
      * @var array
      */
-    protected $casts = [
-        'data' => 'json',
-    ];
+    protected $casts = ['data' => 'json'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\MorphTo

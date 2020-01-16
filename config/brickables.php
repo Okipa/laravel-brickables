@@ -3,9 +3,9 @@
 return [
 
     /*
-     * The fully qualified class name of the brick model.
+     * The fully qualified class name of the Brick model associated by default to all brickables.
      */
-    'brickModel' => Okipa\LaravelBrickables\Models\Brick::class,
+    'defaultBrickModel' => Okipa\LaravelBrickables\Models\Brick::class,
 
     /*
      * Register here the available brickables.

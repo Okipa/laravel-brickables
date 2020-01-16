@@ -3,9 +3,13 @@
 namespace Okipa\LaravelBrickables\Abstracts;
 
 use Illuminate\Support\Str;
+use Okipa\LaravelBrickables\Models\Brick;
 
 abstract class Brickable
 {
+    /** @property string $brickModelClass */
+    protected $brickModelClass;
+
     /** @property string $label */
     protected $label;
 
@@ -41,6 +45,7 @@ abstract class Brickable
      */
     public function __construct()
     {
+        $this->brickModelClass = $this->setBrickModelClass();
         $this->label = $this->setLabel();
         $this->templateViewPath = $this->setBrickViewPath();
         $this->adminViewPath = $this->setFormViewPath();
@@ -54,11 +59,21 @@ abstract class Brickable
     }
 
     /**
+     * Set the brickable related brick model.
+     *
+     * @return string
+     */
+    protected function setBrickModelClass(): string
+    {
+        return config('brickables.defaultBrickModel');
+    }
+
+    /**
      * Set the brickable template view path.
      *
      * @return string
      */
-    public function setBrickViewPath(): string
+    protected function setBrickViewPath(): string
     {
         return 'laravel-brickables::brickables.' . Str::snake(class_basename($this), '-') . '.brick';
     }
@@ -68,7 +83,7 @@ abstract class Brickable
      *
      * @return string
      */
-    public function setFormViewPath(): string
+    protected function setFormViewPath(): string
     {
         return 'laravel-brickables::brickables.' . Str::snake(class_basename($this), '-') . '.form';
     }
@@ -78,7 +93,7 @@ abstract class Brickable
      *
      * @return string
      */
-    public function setStoreRouteName(): string
+    protected function setStoreRouteName(): string
     {
         return 'brick.store';
     }
@@ -88,7 +103,7 @@ abstract class Brickable
      *
      * @return string
      */
-    public function setEditRouteName(): string
+    protected function setEditRouteName(): string
     {
         return 'brick.edit';
     }
@@ -98,7 +113,7 @@ abstract class Brickable
      *
      * @return string
      */
-    public function setUpdateRouteName(): string
+    protected function setUpdateRouteName(): string
     {
         return 'brick.update';
     }
@@ -108,7 +123,7 @@ abstract class Brickable
      *
      * @return string
      */
-    public function setDestroyRouteName(): string
+    protected function setDestroyRouteName(): string
     {
         return 'brick.destroy';
     }
@@ -118,7 +133,7 @@ abstract class Brickable
      *
      * @return string
      */
-    public function setMoveUpRouteName(): string
+    protected function setMoveUpRouteName(): string
     {
         return 'brick.move.up';
     }
@@ -128,7 +143,7 @@ abstract class Brickable
      *
      * @return string
      */
-    public function setMoveDownRouteName(): string
+    protected function setMoveDownRouteName(): string
     {
         return 'brick.move.down';
     }
@@ -158,7 +173,7 @@ abstract class Brickable
      *
      * @return array
      */
-    abstract public function setValidationRules(): array;
+    abstract protected function setValidationRules(): array;
 
     /**
      * Get the management view path.
@@ -270,5 +285,15 @@ abstract class Brickable
     public function getMoveDownRoute($parameters = []): string
     {
         return route($this->moveDownRouteName, $parameters);
+    }
+
+    /**
+     * Get the brickable related brick model.
+     *
+     * @return \Okipa\LaravelBrickables\Models\Brick
+     */
+    public function getBrickModel(): Brick
+    {
+        return app($this->brickModelClass);
     }
 }

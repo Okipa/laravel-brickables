@@ -4,11 +4,30 @@ namespace Okipa\LaravelBrickables\Tests\Unit;
 
 use Illuminate\Support\Facades\Route;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
+use Okipa\LaravelBrickables\Models\Brick;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
+use Okipa\LaravelBrickables\Tests\Models\BrickModel;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class BrickableTest extends BrickableTestCase
 {
+    /** @test */
+    public function brickable_can_set_and_returns_model()
+    {
+        $brickable = new Class extends Brickable {
+            public function setBrickModelClass(): string
+            {
+                return BrickModel::class;
+            }
+
+            public function setValidationRules(): array
+            {
+                return [];
+            }
+        };
+        $this->assertEquals(BrickModel::class, $brickable->getBrickModel()->getMorphClass());
+    }
+
     /** @test */
     public function brickable_can_set_and_returns_label()
     {
