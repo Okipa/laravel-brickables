@@ -5,6 +5,7 @@ namespace Okipa\LaravelBrickables;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
+use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Controllers\BricksController;
 use Okipa\LaravelBrickables\Middleware\CRUDBrickable;
@@ -23,7 +24,9 @@ class Brickables implements Htmlable
     {
         $brickables = new Collection;
         foreach (config('brickables.registered') as $brickableClass) {
-            $brickables->push((new $brickableClass));
+            /** @var Brickable $brickable */
+            $brickable = app($brickableClass);
+            $brickables->push($brickable);
         }
 
         return $brickables;

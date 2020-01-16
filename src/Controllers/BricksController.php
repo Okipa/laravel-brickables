@@ -72,6 +72,7 @@ class BricksController extends Controller
      */
     public function edit(Brick $brick, Request $request)
     {
+        $brick = $this->castToConfigBrickModel($brick);
         /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $model */
         $model = $brick->model;
         /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
@@ -83,12 +84,26 @@ class BricksController extends Controller
 
     /**
      * @param \Okipa\LaravelBrickables\Models\Brick $brick
+     *
+     * @return \Okipa\LaravelBrickables\Models\Brick
+     */
+    protected function castToConfigBrickModel(Brick $brick): Brick
+    {
+        /** @var Brick $configBrickModel */
+        $configBrickModel = app(config('brickables.brickModel'));
+
+        return $configBrickModel->findOrFail($brick->id);
+    }
+
+    /**
+     * @param \Okipa\LaravelBrickables\Models\Brick $brick
      * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Brick $brick, Request $request)
     {
+        $brick = $this->castToConfigBrickModel($brick);
         $request->validate($brick->brickable->getValidationRules());
         $brick->data = $request->only($brick->brickable->getValidatedKeys());
         $brick->save();
@@ -120,6 +135,7 @@ class BricksController extends Controller
      */
     public function destroy(Brick $brick, Request $request)
     {
+        $brick = $this->castToConfigBrickModel($brick);
         $brickClone = clone $brick;
         $brick->delete();
 
