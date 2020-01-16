@@ -28,12 +28,12 @@ Associate content bricks to Eloquent models:
 $page = Page::find(1);
 
 // associate one content brick
-$page->addBrick(OneTextColumn::class, ['content' => 'Text']);
+$page->addBrick(OneTextColumn::class, ['text' => 'Text']);
 
 // or associate several content bricks at once
 $page->addBricks([
-    [OneTextColumn::class, ['content' => 'Text']],
-    [TwoTextColumns::class, ['left_content' => 'Left text', 'right_content' => 'Right text']]
+    [OneTextColumn::class, ['text' => 'Text']],
+    [TwoTextColumns::class, ['left_text' => 'Left text', 'right_text' => 'Right text']]
 ]);
 ```
 
@@ -159,7 +159,7 @@ Associate a single content brick to an Eloquent model:
 
 ```php
 $page = Page::find(1);
-$brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text']);
+$brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
 ```
 
 You also can associate several content bricks at once:
@@ -167,8 +167,8 @@ You also can associate several content bricks at once:
 ```php
 $page = Page::find(1);
 $bricks = $page->addBricks([
-    [OneTextColumn::class, ['content' => 'Text']],
-    [TwoTextColumns::class, ['left_content' => 'Left text', 'right_content' => 'Right text']]
+    [OneTextColumn::class, ['text' => 'Text']],
+    [TwoTextColumns::class, ['left_text' => 'Left text', 'right_text' => 'Right text']]
 ]);
 ```
 
@@ -178,7 +178,7 @@ Just update your content brick as you would fo for any other Eloquent model inst
 
 ```php
 // as data are store in json, you'll have to process this way
-$brick->data = ['content', 'Another text'];
+$brick->data = ['text', 'Another text'];
 $brick->save();
 ```
 

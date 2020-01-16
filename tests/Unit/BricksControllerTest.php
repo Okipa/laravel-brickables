@@ -67,7 +67,7 @@ class BricksControllerTest extends BrickableTestCase
             'model_id' => $page->id,
             'brickable_type' => OneTextColumn::class,
             'admin_panel_url' => 'admin-panel',
-            'content' => 'Text',
+            'text' => 'Text',
         ])->assertRedirect('admin-panel');
         $brick = $page->getFirstBrick(OneTextColumn::class);
         $brick->data = json_encode($brick->data);
@@ -82,7 +82,7 @@ class BricksControllerTest extends BrickableTestCase
         Route::post('/', function () {
         })->name('brick.update');
         $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text']);
+        $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
         $this->call('GET', 'brick/edit/' . $brick->id, ['admin_panel_url' => 'admin-panel'])
             ->assertOk()
             ->assertViewIs((new OneTextColumn)->getFormViewPath())
@@ -98,7 +98,7 @@ class BricksControllerTest extends BrickableTestCase
         Route::put('brick/update/{brick}', [BricksController::class, 'update'])
             ->middleware(SubstituteBindings::class, CRUDBrickable::class);
         $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text']);
+        $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
         $this->call('POST', 'brick/update/' . $brick->id, [
             '_method' => 'PUT',
             'admin_panel_url' => 'admin-panel',
@@ -111,13 +111,13 @@ class BricksControllerTest extends BrickableTestCase
         Route::put('brick/update/{brick}', [BricksController::class, 'update'])
             ->middleware(SubstituteBindings::class, CRUDBrickable::class);
         $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text']);
+        $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
         $this->call('POST', 'brick/update/' . $brick->id, [
             '_method' => 'PUT',
             'admin_panel_url' => 'admin-panel',
-            'content' => 'New text',
+            'text' => 'New text',
         ])->assertRedirect('admin-panel');
-        $brick->data = json_encode(['content' => 'New text']);
+        $brick->data = json_encode(['text' => 'New text']);
         $this->assertDatabaseHas('bricks', $brick->toArray());
     }
 
@@ -127,7 +127,7 @@ class BricksControllerTest extends BrickableTestCase
         Route::delete('brick/destroy/{brick}', [BricksController::class, 'destroy'])
             ->middleware(SubstituteBindings::class, CRUDBrickable::class);
         $page = factory(Page::class)->create();
-        $brick = $page->addBrick(OneTextColumn::class, ['content' => 'Text']);
+        $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
         $this->call('POST', 'brick/destroy/' . $brick->id, [
             '_method' => 'DELETE',
             'admin_panel_url' => 'admin-panel',
@@ -142,9 +142,9 @@ class BricksControllerTest extends BrickableTestCase
         Route::post('brick/move/up/{brick}', [BricksController::class, 'moveUp'])
             ->middleware(SubstituteBindings::class, CRUDBrickable::class);
         $page = factory(Page::class)->create();
-        $brickOne = $page->addBrick(OneTextColumn::class, ['content' => 'Text #1']);
-        $brickTwo = $page->addBrick(OneTextColumn::class, ['content' => 'Text #2']);
-        $brickThree = $page->addBrick(OneTextColumn::class, ['content' => 'Text #3']);
+        $brickOne = $page->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
+        $brickTwo = $page->addBrick(OneTextColumn::class, ['text' => 'Text #2']);
+        $brickThree = $page->addBrick(OneTextColumn::class, ['text' => 'Text #3']);
         $this->assertEquals(1, $brickOne->position);
         $this->assertEquals(2, $brickTwo->position);
         $this->assertEquals(3, $brickThree->position);
@@ -162,12 +162,12 @@ class BricksControllerTest extends BrickableTestCase
             ->middleware(SubstituteBindings::class, CRUDBrickable::class);
         $pageOne = factory(Page::class)->create();
         $pageTwo = factory(Page::class)->create();
-        $brickOne = $pageOne->addBrick(OneTextColumn::class, ['content' => 'Text #1']);
-        $pageTwo->addBrick(OneTextColumn::class, ['content' => 'Text #2']);
-        $brickTwo = $pageOne->addBrick(OneTextColumn::class, ['content' => 'Text #3']);
-        $pageTwo->addBrick(OneTextColumn::class, ['content' => 'Text #4']);
-        $brickThree = $pageOne->addBrick(OneTextColumn::class, ['content' => 'Text #5']);
-        $pageTwo->addBrick(OneTextColumn::class, ['content' => 'Text #6']);
+        $brickOne = $pageOne->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
+        $pageTwo->addBrick(OneTextColumn::class, ['text' => 'Text #2']);
+        $brickTwo = $pageOne->addBrick(OneTextColumn::class, ['text' => 'Text #3']);
+        $pageTwo->addBrick(OneTextColumn::class, ['text' => 'Text #4']);
+        $brickThree = $pageOne->addBrick(OneTextColumn::class, ['text' => 'Text #5']);
+        $pageTwo->addBrick(OneTextColumn::class, ['text' => 'Text #6']);
         $this->assertEquals(1, $brickOne->position);
         $this->assertEquals(2, $brickTwo->position);
         $this->assertEquals(3, $brickThree->position);
