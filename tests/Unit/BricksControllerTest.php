@@ -2,11 +2,8 @@
 
 namespace Okipa\LaravelBrickables\Tests\Unit;
 
-use Illuminate\Routing\Middleware\SubstituteBindings;
-use Illuminate\Support\Facades\Route;
 use Okipa\LaravelBrickables\Brickables\OneTextColumn;
-use Okipa\LaravelBrickables\Controllers\BricksController;
-use Okipa\LaravelBrickables\Middleware\CRUDBrickable;
+use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 
@@ -15,7 +12,7 @@ class BricksControllerTest extends BrickableTestCase
     /** @test */
     public function create_action_without_brickable_type_returns_validation_error()
     {
-        Route::get('brick/create', [BricksController::class, 'create'])->middleware(CRUDBrickable::class);
+        Brickables::routes();
         $page = factory(Page::class)->create();
         $this->call('GET', 'brick/create', [
             'model_type' => Page::class,
@@ -27,9 +24,7 @@ class BricksControllerTest extends BrickableTestCase
     /** @test */
     public function create_action_displays_brickable_admin_view_with_data()
     {
-        Route::get('brick/create', [BricksController::class, 'create'])->middleware(CRUDBrickable::class);
-        Route::post('/', function () {
-        })->name('brick.store');
+        Brickables::routes();
         $page = factory(Page::class)->create();
         $this->call('GET', 'brick/create', [
             'model_type' => Page::class,
@@ -47,7 +42,7 @@ class BricksControllerTest extends BrickableTestCase
     /** @test */
     public function store_action_with_wrong_data_returns_validation_error()
     {
-        Route::post('brick/store', [BricksController::class, 'store'])->middleware(CRUDBrickable::class);
+        Brickables::routes();
         $page = factory(Page::class)->create();
         $this->call('POST', 'brick/store', [
             'model_type' => Page::class,
@@ -60,7 +55,7 @@ class BricksControllerTest extends BrickableTestCase
     /** @test */
     public function store_action_stores_new_brick_and_redirects_to_admin_panel()
     {
-        Route::post('brick/store', [BricksController::class, 'store'])->middleware(CRUDBrickable::class);
+        Brickables::routes();
         $page = factory(Page::class)->create();
         $this->call('POST', 'brick/store', [
             'model_type' => Page::class,
@@ -77,10 +72,7 @@ class BricksControllerTest extends BrickableTestCase
     /** @test */
     public function edit_action_displays_brickable_admin_view_with_data()
     {
-        Route::get('brick/edit/{brick}', [BricksController::class, 'edit'])
-            ->middleware(SubstituteBindings::class, CRUDBrickable::class);
-        Route::post('/', function () {
-        })->name('brick.update');
+        Brickables::routes();
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
         $this->call('GET', 'brick/edit/' . $brick->id, ['admin_panel_url' => 'admin-panel'])
@@ -95,8 +87,7 @@ class BricksControllerTest extends BrickableTestCase
     /** @test */
     public function update_action_with_wrong_data_returns_validation_error()
     {
-        Route::put('brick/update/{brick}', [BricksController::class, 'update'])
-            ->middleware(SubstituteBindings::class, CRUDBrickable::class);
+        Brickables::routes();
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
         $this->call('POST', 'brick/update/' . $brick->id, [
@@ -108,8 +99,7 @@ class BricksControllerTest extends BrickableTestCase
     /** @test */
     public function update_action_updates_brick_and_redirects_to_admin_panel()
     {
-        Route::put('brick/update/{brick}', [BricksController::class, 'update'])
-            ->middleware(SubstituteBindings::class, CRUDBrickable::class);
+        Brickables::routes();
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
         $this->call('POST', 'brick/update/' . $brick->id, [
@@ -124,8 +114,7 @@ class BricksControllerTest extends BrickableTestCase
     /** @test */
     public function destroy_action_destroys_brick_and_redirects_to_admin_panel()
     {
-        Route::delete('brick/destroy/{brick}', [BricksController::class, 'destroy'])
-            ->middleware(SubstituteBindings::class, CRUDBrickable::class);
+        Brickables::routes();
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
         $this->call('POST', 'brick/destroy/' . $brick->id, [
@@ -139,8 +128,7 @@ class BricksControllerTest extends BrickableTestCase
     /** @test */
     public function move_up_action_moves_up_brick_and_redirects_to_admin_panel()
     {
-        Route::post('brick/move/up/{brick}', [BricksController::class, 'moveUp'])
-            ->middleware(SubstituteBindings::class, CRUDBrickable::class);
+        Brickables::routes();
         $page = factory(Page::class)->create();
         $brickOne = $page->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
         $brickTwo = $page->addBrick(OneTextColumn::class, ['text' => 'Text #2']);
@@ -158,8 +146,7 @@ class BricksControllerTest extends BrickableTestCase
     /** @test */
     public function move_down_action_moves_down_brick_and_redirects_to_admin_panel()
     {
-        Route::post('brick/move/down/{brick}', [BricksController::class, 'moveDown'])
-            ->middleware(SubstituteBindings::class, CRUDBrickable::class);
+        Brickables::routes();
         $pageOne = factory(Page::class)->create();
         $pageTwo = factory(Page::class)->create();
         $brickOne = $pageOne->addBrick(OneTextColumn::class, ['text' => 'Text #1']);

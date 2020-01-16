@@ -2,8 +2,8 @@
 
 namespace Okipa\LaravelBrickables\Traits;
 
-use DB;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException;
@@ -98,9 +98,9 @@ trait HasBrickablesTrait
      */
     public function getBricks(): Collection
     {
-        /** @var \Okipa\LaravelBrickables\Models\Brick $defaultBrickModel */
-        $defaultBrickModel = app(config('brickables.defaultBrickModel'));
-        $bricks = DB::table($defaultBrickModel->getTable())
+        /** @var \Okipa\LaravelBrickables\Models\Brick $bricksBaseModel */
+        $bricksBaseModel = app(config('brickables.bricks.model'));
+        $bricks = DB::table($bricksBaseModel->getTable())
             ->where('model_type', $this->getMorphClass())
             ->where('model_id', $this->id)
             ->get();

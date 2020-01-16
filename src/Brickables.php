@@ -3,11 +3,12 @@
 namespace Okipa\LaravelBrickables;
 
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Contracts\HasBrickables;
-use Okipa\LaravelBrickables\Controllers\BricksController;
+use Okipa\LaravelBrickables\Controllers\DispatchController;
 use Okipa\LaravelBrickables\Middleware\CRUDBrickable;
 
 class Brickables implements Htmlable
@@ -69,18 +70,18 @@ class Brickables implements Htmlable
     }
 
     /**
-     * Register the brickables CRUD routes.
+     * Register the brickables routes.
      */
     public function routes(): void
     {
-        Route::middleware([CRUDBrickable::class])->group(function () {
-            Route::get('brick/create', [BricksController::class, 'create'])->name('brick.create');
-            Route::post('brick/store', [BricksController::class, 'store'])->name('brick.store');
-            Route::get('brick/edit/{brick}', [BricksController::class, 'edit'])->name('brick.edit');
-            Route::put('brick/update/{brick}', [BricksController::class, 'update'])->name('brick.update');
-            Route::delete('brick/destroy/{brick}', [BricksController::class, 'destroy'])->name('brick.destroy');
-            Route::post('brick/move/up/{brick}', [BricksController::class, 'moveUp'])->name('brick.move.up');
-            Route::post('brick/move/down/{brick}', [BricksController::class, 'moveDown'])->name('brick.move.down');
+        Route::middleware([CRUDBrickable::class, SubstituteBindings::class])->group(function () {
+            Route::get('brick/create', [DispatchController::class, 'create'])->name('brick.create');
+            Route::post('brick/store', [DispatchController::class, 'store'])->name('brick.store');
+            Route::get('brick/edit/{brick}', [DispatchController::class, 'edit'])->name('brick.edit');
+            Route::put('brick/update/{brick}', [DispatchController::class, 'update'])->name('brick.update');
+            Route::delete('brick/destroy/{brick}', [DispatchController::class, 'destroy'])->name('brick.destroy');
+            Route::post('brick/move/up/{brick}', [DispatchController::class, 'moveUp'])->name('brick.move.up');
+            Route::post('brick/move/down/{brick}', [DispatchController::class, 'moveDown'])->name('brick.move.down');
         });
     }
 }

@@ -3,6 +3,7 @@
 namespace Okipa\LaravelBrickables\Abstracts;
 
 use Illuminate\Support\Str;
+use Okipa\LaravelBrickables\Controllers\BricksController;
 use Okipa\LaravelBrickables\Models\Brick;
 
 abstract class Brickable
@@ -10,8 +11,8 @@ abstract class Brickable
     /** @property string $brickModelClass */
     protected $brickModelClass;
 
-    /** @property string $controllerClass */
-    protected $controllerClass;
+    /** @property string $bricksControllerClass */
+    protected $bricksControllerClass;
 
     /** @property string $label */
     protected $label;
@@ -49,7 +50,7 @@ abstract class Brickable
     public function __construct()
     {
         $this->brickModelClass = $this->setBrickModelClass();
-        $this->controllerClass = $this->setControllerClass();
+        $this->bricksControllerClass = $this->setbricksControllerClass();
         $this->label = $this->setLabel();
         $this->templateViewPath = $this->setBrickViewPath();
         $this->adminViewPath = $this->setFormViewPath();
@@ -63,23 +64,23 @@ abstract class Brickable
     }
 
     /**
-     * Set the brickable related brick model class.
+     * Set the brickable-related brick model class.
      *
      * @return string
      */
     protected function setBrickModelClass(): string
     {
-        return config('brickables.defaultBrickModel');
+        return config('brickables.bricks.model');
     }
 
     /**
-     * Set the brickable related controller class.
+     * Set the brickable-related controller class.
      *
      * @return string
      */
-    protected function setControllerClass(): string
+    protected function setbricksControllerClass(): string
     {
-        return config('brickables.defaultBricksController');
+        return config('brickables.bricks.controller');
     }
 
     /**
@@ -302,12 +303,22 @@ abstract class Brickable
     }
 
     /**
-     * Get the brickable related brick model.
+     * Get the brickable-related brick model.
      *
      * @return \Okipa\LaravelBrickables\Models\Brick
      */
     public function getBrickModel(): Brick
     {
-        return app($this->brickModelClass);
+        return (new $this->brickModelClass);
+    }
+
+    /**
+     * Get the brickable-related bricks controller.
+     *
+     * @return \Okipa\LaravelBrickables\Controllers\BricksController
+     */
+    public function getBricksController(): BricksController
+    {
+        return (new $this->bricksControllerClass);
     }
 }

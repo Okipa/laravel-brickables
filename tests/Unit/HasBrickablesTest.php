@@ -68,7 +68,7 @@ class HasBrickablesTest extends BrickableTestCase
                 return [];
             }
         };
-        config()->set('brickables.defaultBrickModel', get_class($brickModel));
+        config()->set('brickables.bricks.model', get_class($brickModel));
         config()->set('brickables.registered', [get_class($brickable)]);
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(get_class($brickable), []);

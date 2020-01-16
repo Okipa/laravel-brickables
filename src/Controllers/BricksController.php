@@ -4,7 +4,6 @@ namespace Okipa\LaravelBrickables\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Validator;
 use Okipa\LaravelBrickables\Models\Brick;
 
 class BricksController extends Controller
@@ -16,10 +15,6 @@ class BricksController extends Controller
      */
     public function create(Request $request)
     {
-        $validator = Validator::make($request->only('brickable_type'), ['brickable_type' => ['required', 'string']]);
-        if ($validator->fails()) {
-            return redirect()->to($request->admin_panel_url)->withErrors($validator)->withInput();
-        }
         $brick = null;
         /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $model */
         $model = (new $request->model_type)->findOrFail($request->model_id);
@@ -89,7 +84,7 @@ class BricksController extends Controller
      *
      * @return Brick
      */
-    public function castToRelatedBrickModel(Brick $brick): Brick
+    protected function castToRelatedBrickModel(Brick $brick): Brick
     {
         /** @var \Okipa\LaravelBrickables\Models\Brick $model */
         $model = $brick->brickable->getBrickModel();
