@@ -14,7 +14,7 @@ class BrickablesTest extends BrickableTestCase
     public function it_returns_all_registered_brickables()
     {
         $brickable = new Class extends Brickable {
-            public function setValidationRules(): array
+            protected function setValidationRules(): array
             {
                 return [];
             }
@@ -35,7 +35,7 @@ class BrickablesTest extends BrickableTestCase
                 return 'laravel-brickables::test-brick';
             }
 
-            public function setValidationRules(): array
+            protected function setValidationRules(): array
             {
                 return [];
             }
@@ -59,7 +59,7 @@ class BrickablesTest extends BrickableTestCase
                 return 'laravel-brickables::test-brick';
             }
 
-            public function setValidationRules(): array
+            protected function setValidationRules(): array
             {
                 return [];
             }

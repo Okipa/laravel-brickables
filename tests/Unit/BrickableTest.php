@@ -20,7 +20,7 @@ class BrickableTest extends BrickableTestCase
                 return BrickModel::class;
             }
 
-            public function setValidationRules(): array
+            protected function setValidationRules(): array
             {
                 return [];
             }
@@ -37,7 +37,7 @@ class BrickableTest extends BrickableTestCase
                 return 'Dummy label';
             }
 
-            public function setValidationRules(): array
+            protected function setValidationRules(): array
             {
                 return [];
             }
@@ -54,7 +54,7 @@ class BrickableTest extends BrickableTestCase
                 return 'dummy.brick.view.path';
             }
 
-            public function setValidationRules(): array
+            protected function setValidationRules(): array
             {
                 return [];
             }
@@ -71,7 +71,7 @@ class BrickableTest extends BrickableTestCase
                 return 'dummy.form.view.path';
             }
 
-            public function setValidationRules(): array
+            protected function setValidationRules(): array
             {
                 return [];
             }
@@ -90,7 +90,7 @@ class BrickableTest extends BrickableTestCase
                 return 'dummy.store';
             }
 
-            public function setValidationRules(): array
+            protected function setValidationRules(): array
             {
                 return [];
             }
@@ -109,7 +109,7 @@ class BrickableTest extends BrickableTestCase
                 return 'dummy.edit';
             }
 
-            public function setValidationRules(): array
+            protected function setValidationRules(): array
             {
                 return [];
             }
@@ -131,7 +131,7 @@ class BrickableTest extends BrickableTestCase
                 return 'dummy.update';
             }
 
-            public function setValidationRules(): array
+            protected function setValidationRules(): array
             {
                 return [];
             }
@@ -153,7 +153,7 @@ class BrickableTest extends BrickableTestCase
                 return 'dummy.destroy';
             }
 
-            public function setValidationRules(): array
+            protected function setValidationRules(): array
             {
                 return [];
             }
@@ -176,7 +176,7 @@ class BrickableTest extends BrickableTestCase
                 return 'dummy.move.up';
             }
 
-            public function setValidationRules(): array
+            protected function setValidationRules(): array
             {
                 return [];
             }
@@ -199,7 +199,7 @@ class BrickableTest extends BrickableTestCase
                 return 'dummy.move.down';
             }
 
-            public function setValidationRules(): array
+            protected function setValidationRules(): array
             {
                 return [];
             }
@@ -214,7 +214,7 @@ class BrickableTest extends BrickableTestCase
     public function brickable_can_set_and_returns_validation_rules()
     {
         $brickable = new Class extends Brickable {
-            public function setValidationRules(): array
+            protected function setValidationRules(): array
             {
                 return ['custom' => ['validation', 'rules']];
             }
@@ -226,7 +226,7 @@ class BrickableTest extends BrickableTestCase
     public function brickable_can_get_validated_keys()
     {
         $brickable = new Class extends Brickable {
-            public function setValidationRules(): array
+            protected function setValidationRules(): array
             {
                 return ['custom' => ['validation', 'rules']];
             }

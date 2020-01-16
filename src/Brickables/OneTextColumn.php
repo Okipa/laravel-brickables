@@ -9,7 +9,7 @@ class OneTextColumn extends Brickable
     /**
      * @inheritDoc
      */
-    public function setValidationRules(): array
+    protected function setValidationRules(): array
     {
         return ['text' => ['required', 'string']];
     }

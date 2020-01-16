@@ -9,7 +9,7 @@ class TwoTextColumns extends Brickable
     /**
      * @inheritDoc
      */
-    public function setValidationRules(): array
+    protected function setValidationRules(): array
     {
         return [
             'left_text' => ['required', 'string'],
