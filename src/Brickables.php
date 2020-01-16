@@ -23,7 +23,7 @@ class Brickables implements Htmlable
     {
         $brickables = new Collection;
         foreach (config('brickables.registered') as $brickableClass) {
-            $brickables->push(app($brickableClass));
+            $brickables->push((new $brickableClass));
         }
 
         return $brickables;
