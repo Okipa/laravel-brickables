@@ -10,6 +10,9 @@ abstract class Brickable
     /** @property string $brickModelClass */
     protected $brickModelClass;
 
+    /** @property string $controllerClass */
+    protected $controllerClass;
+
     /** @property string $label */
     protected $label;
 
@@ -46,6 +49,7 @@ abstract class Brickable
     public function __construct()
     {
         $this->brickModelClass = $this->setBrickModelClass();
+        $this->controllerClass = $this->setControllerClass();
         $this->label = $this->setLabel();
         $this->templateViewPath = $this->setBrickViewPath();
         $this->adminViewPath = $this->setFormViewPath();
@@ -59,13 +63,23 @@ abstract class Brickable
     }
 
     /**
-     * Set the brickable related brick model.
+     * Set the brickable related brick model class.
      *
      * @return string
      */
     protected function setBrickModelClass(): string
     {
         return config('brickables.defaultBrickModel');
+    }
+
+    /**
+     * Set the brickable related controller class.
+     *
+     * @return string
+     */
+    protected function setControllerClass(): string
+    {
+        return config('brickables.defaultBricksController');
     }
 
     /**
