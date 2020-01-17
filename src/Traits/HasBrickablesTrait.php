@@ -101,7 +101,7 @@ trait HasBrickablesTrait
     {
         /** @var \Okipa\LaravelBrickables\Models\Brick $bricksBaseModel */
         $bricksBaseModel = app(config('brickables.bricks.model'));
-        $bricks = $bricksBaseModel->where('model_type', $this->getMorphClass())->where('model_id', $this->id)->get();
+        $bricks = $bricksBaseModel->where('model_type', $this->getMorphClass())->where('model_id', $this->id)->ordered()->get();
 
         return Brickables::castBricks($bricks);
     }
