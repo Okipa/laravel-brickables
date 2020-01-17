@@ -30,13 +30,6 @@ class Brick extends Model implements Htmlable, Sortable
     protected $table = 'bricks';
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['brickable_type', 'data'];
-
-    /**
      * The attributes that should be cast to native types.
      *
      * @var array

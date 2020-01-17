@@ -12,10 +12,14 @@ class Brickable extends \Okipa\LaravelBrickables\Abstracts\Brickable
         return 'laravel-brickables::test-brick';
     }
 
-    /**
-     * @inheritDoc
-     */
-    protected function setValidationRules(): array
+    /** @inheritDoc */
+    protected function setStoreValidationRules(): array
+    {
+        return [];
+    }
+
+    /** @inheritDoc */
+    protected function setUpdateValidationRules(): array
     {
         return [];
     }

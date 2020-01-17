@@ -23,8 +23,11 @@ abstract class Brickable
     /** @property string $templateViewPath */
     protected $templateViewPath;
 
-    /** @property array $validationRules */
-    protected $validationRules;
+    /** @property array $storeValidationRules */
+    protected $storeValidationRules;
+
+    /** @property array $updateValidationRules */
+    protected $updateValidationRules;
 
     /** @property string $storeRouteName */
     protected $storeRouteName;
@@ -54,7 +57,8 @@ abstract class Brickable
         $this->label = $this->setLabel();
         $this->templateViewPath = $this->setBrickViewPath();
         $this->adminViewPath = $this->setFormViewPath();
-        $this->validationRules = $this->setValidationRules();
+        $this->storeValidationRules = $this->setStoreValidationRules();
+        $this->updateValidationRules = $this->setUpdateValidationRules();
         $this->storeRouteName = $this->setStoreRouteName();
         $this->editRouteName = $this->setEditRouteName();
         $this->updateRouteName = $this->setUpdateRouteName();
@@ -164,31 +168,38 @@ abstract class Brickable
     }
 
     /**
-     * Get the brickable data keys which are defined in the validation rules.
+     * Get the brickable store validation rules.
      *
      * @return array
      */
-    public function getValidatedKeys(): array
+    public function getStoreValidationRules(): array
     {
-        return array_keys($this->getValidationRules());
+        return $this->storeValidationRules;
     }
 
     /**
-     * Get the brickable validation rules.
+     * Set the brickable store validation rules.
      *
      * @return array
      */
-    public function getValidationRules(): array
+    abstract protected function setStoreValidationRules(): array;
+
+    /**
+     * Get the brickable update validation rules.
+     *
+     * @return array
+     */
+    public function getUpdateValidationRules(): array
     {
-        return $this->validationRules;
+        return $this->updateValidationRules;
     }
 
     /**
-     * Set the brickable validation rules.
+     * Set the brickable update validation rules.
      *
      * @return array
      */
-    abstract protected function setValidationRules(): array;
+    abstract protected function setUpdateValidationRules(): array;
 
     /**
      * Get the management view path.

@@ -39,10 +39,24 @@ class BricksController extends Controller
         $model = (new $request->model_type)->findOrFail($request->model_id);
         /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
         $brickable = (new $request->brickable_type);
-        $request->validate($brickable->getValidationRules());
-        $brick = $model->addBrick($request->brickable_type, $request->only($brickable->getValidatedKeys()));
+        $validated = $request->validate($brickable->getStoreValidationRules());
+        $brick = $model->addBrick($request->brickable_type, $validated);
+        $this->stored($request, $brick);
 
         return $this->sendBrickCreatedResponse($request, $brick);
+    }
+
+    /**
+     * Execute additional treatment once the brick has been stored.
+     *
+     * @param $request
+     * @param $brick
+     *
+     * @return void
+     */
+    protected function stored($request, $brick): void
+    {
+        //
     }
 
     /**
@@ -87,11 +101,25 @@ class BricksController extends Controller
     public function update(Brick $brick, Request $request)
     {
         $brick = Brickables::castBrick($brick);
-        $request->validate($brick->brickable->getValidationRules());
-        $brick->data = $request->only($brick->brickable->getValidatedKeys());
+        $validated = $request->validate($brick->brickable->getUpdateValidationRules());
+        $brick->data = $validated;
         $brick->save();
+        $this->updated($request, $brick);
 
         return $this->sendBrickUpdatedResponse($request, $brick);
+    }
+
+    /**
+     * Execute additional treatment once the brick has been updated.
+     *
+     * @param $request
+     * @param $brick
+     *
+     * @return void
+     */
+    protected function updated($request, $brick): void
+    {
+        //
     }
 
     /**

@@ -16,7 +16,12 @@ class BrickablesTest extends BrickableTestCase
     public function it_returns_all_registered_brickables()
     {
         $brickable = new Class extends Brickable {
-            protected function setValidationRules(): array
+            protected function setStoreValidationRules(): array
+            {
+                return [];
+            }
+
+            protected function setUpdateValidationRules(): array
             {
                 return [];
             }
@@ -37,7 +42,12 @@ class BrickablesTest extends BrickableTestCase
                 return 'laravel-brickables::test-brick';
             }
 
-            protected function setValidationRules(): array
+            protected function setStoreValidationRules(): array
+            {
+                return [];
+            }
+
+            protected function setUpdateValidationRules(): array
             {
                 return [];
             }
@@ -61,7 +71,12 @@ class BrickablesTest extends BrickableTestCase
                 return 'laravel-brickables::test-brick';
             }
 
-            protected function setValidationRules(): array
+            protected function setStoreValidationRules(): array
+            {
+                return [];
+            }
+
+            protected function setUpdateValidationRules(): array
             {
                 return [];
             }
@@ -80,7 +95,12 @@ class BrickablesTest extends BrickableTestCase
     public function it_cast_bricks_to_their_brickable_related_brick_model()
     {
         $brickableOne = new Class extends Brickable {
-            protected function setValidationRules(): array
+            protected function setStoreValidationRules(): array
+            {
+                return [];
+            }
+
+            protected function setUpdateValidationRules(): array
             {
                 return [];
             }
@@ -91,7 +111,12 @@ class BrickablesTest extends BrickableTestCase
                 return BrickModel::class;
             }
 
-            protected function setValidationRules(): array
+            protected function setStoreValidationRules(): array
+            {
+                return [];
+            }
+
+            protected function setUpdateValidationRules(): array
             {
                 return [];
             }
@@ -123,7 +148,12 @@ class BrickablesTest extends BrickableTestCase
                 return BrickModel::class;
             }
 
-            protected function setValidationRules(): array
+            protected function setStoreValidationRules(): array
+            {
+                return [];
+            }
+
+            protected function setUpdateValidationRules(): array
             {
                 return [];
             }

@@ -285,7 +285,13 @@ use Okipa\LaravelBrickables\Abstracts\Brickable;
 class MyNewBrickable extends Brickable
 {
     /** @inheritDoc */
-    protected function setValidationRules(): array
+    protected function setStoreValidationRules(): array
+    {
+        return ['text' => ['required', 'string']];
+    }
+
+    /** @inheritDoc */
+    protected function setUpdateValidationRules(): array
     {
         return ['text' => ['required', 'string']];
     }
@@ -356,15 +362,19 @@ class MyNewBrickableBricksController extends BricksController
     // ...    
 
     /** @inheritDoc */
-    public function update(Brick $brick, Request $request)
+    protected function stored(Request $request, Brick $brick): void
     {
-        $response = parent::update($request);
+        // image management example with the spatie/laravel-medialibrary package
+        $brick->addMediaFromRequest('image')->toMediaCollection('bricks');
+    }
+
+    /** @inheritDoc */
+    protected function updated(Request $request, Brick $brick): void
+    {
         // image management example with the spatie/laravel-medialibrary package
         if ($request->file('image')) {
             $brick->addMediaFromRequest('image')->toMediaCollection('bricks');
         }
-
-        return $response;
     }
 
     // ...
