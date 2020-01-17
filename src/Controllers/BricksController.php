@@ -53,7 +53,7 @@ class BricksController extends Controller
     protected function sendBrickCreatedResponse(Request $request, Brick $brick)
     {
         return redirect()->to($request->admin_panel_url)
-            ->with('success', __('The entry :model > :brickable has been created.', [
+            ->with('toast_success', __('The entry :model > :brickable has been created.', [
                 'brickable' => $brick->brickable->getLabel(),
                 'model' => $brick->model->getReadableClassName(),
             ]));
@@ -117,7 +117,7 @@ class BricksController extends Controller
     protected function sendBrickUpdatedResponse(Request $request, Brick $brick)
     {
         return redirect()->to($request->admin_panel_url)
-            ->with('success', __('The entry :model > :brickable has been updated.', [
+            ->with('toast_success', __('The entry :model > :brickable has been updated.', [
                 'brickable' => $brick->brickable->getLabel(),
                 'model' => $brick->model->getReadableClassName(),
             ]));
@@ -148,7 +148,7 @@ class BricksController extends Controller
     protected function sendBrickDestroyedResponse(Request $request, Brick $brick)
     {
         return redirect()->to($request->admin_panel_url)
-            ->with('success', __('The entry :model > :brickable has been deleted.', [
+            ->with('toast_success', __('The entry :model > :brickable has been deleted.', [
                 'brickable' => $brick->brickable->getLabel(),
                 'model' => $brick->model->getReadableClassName(),
             ]));
