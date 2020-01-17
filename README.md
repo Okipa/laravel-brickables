@@ -141,13 +141,13 @@ Add the `web` routes that will be required by the content bricks admin panel:
 Brickables::routes();
 ```
 
-These routes are consuming the `Okipa\LaravelBrickables\Controllers\BricksController` controller.
+These routes are consuming the `Okipa\LaravelBrickables\Controllers\BricksController` controller by default.
 
-To customize the admin panel treatments, create your own `BricksController`, extending the package one. You will also have to create your own routes.
+To customize the admin panel actions, check the [Empower bricks with extra abilities](#empower-brickables-with-extra-abilities) part.
 
 ### Translations
 
-All displayed labels or sentences are translatables.
+All displayed labels or sentences are translatable.
 
 See how to translate them on the Laravel official documentation : https://laravel.com/docs/localization#using-translation-strings-as-keys
 
