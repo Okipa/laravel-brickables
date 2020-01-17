@@ -54,7 +54,7 @@ class BricksController extends Controller
      *
      * @return void
      */
-    protected function stored($request, $brick): void
+    protected function stored(Request $request, Brick $brick): void
     {
         //
     }
@@ -117,7 +117,7 @@ class BricksController extends Controller
      *
      * @return void
      */
-    protected function updated($request, $brick): void
+    protected function updated(Request $request, Brick $brick): void
     {
         //
     }
