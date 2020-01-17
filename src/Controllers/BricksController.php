@@ -49,10 +49,11 @@ class BricksController extends Controller
     /**
      * Execute additional treatment once the brick has been stored.
      *
-     * @param $request
-     * @param $brick
+     * @param \Illuminate\Http\Request $request
+     * @param \Okipa\LaravelBrickables\Models\Brick $brick
      *
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function stored(Request $request, Brick $brick): void
     {
@@ -112,10 +113,11 @@ class BricksController extends Controller
     /**
      * Execute additional treatment once the brick has been updated.
      *
-     * @param $request
-     * @param $brick
+     * @param \Illuminate\Http\Request $request
+     * @param \Okipa\LaravelBrickables\Models\Brick $brick
      *
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function updated(Request $request, Brick $brick): void
     {
@@ -185,9 +187,9 @@ class BricksController extends Controller
     /**
      * @param \Illuminate\Http\Request $request
      * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @return \Illuminate\Http\RedirectResponse
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function sendBrickMovedResponse(Request $request, Brick $brick)
     {
