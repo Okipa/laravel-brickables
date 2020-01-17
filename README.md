@@ -198,6 +198,8 @@ The `Brick` model uses the `spatie/eloquent-sortable` package to handle the cont
 
 To see how to use this third party package, check its documentation here: https://github.com/spatie/eloquent-sortable.
 
+You may note that the bricks order management is already handled in the provided [admin panel](#manage-model-content-bricks).
+
 ### Retrieve content bricks
 
 Retrieve the content bricks associated to an Eloquent model:
