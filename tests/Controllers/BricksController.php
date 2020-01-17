@@ -9,9 +9,10 @@ class BricksController extends \Okipa\LaravelBrickables\Controllers\BricksContro
     /** @inheritDoc */
     public function create(Request $request)
     {
+        $brick = null;
         /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
         $brickable = (new $request->brickable_type);
 
-        return view($brickable->getFormViewPath(), ['data' => 'dummy']);
+        return view($brickable->getFormViewPath(), compact('brick'));
     }
 }

@@ -179,6 +179,6 @@ class BricksControllerTest extends BrickableTestCase
             'admin_panel_url' => 'admin-panel',
         ])->assertOk()
             ->assertViewIs((new Brickable)->getFormViewPath())
-            ->assertViewHas('data', null);
+            ->assertViewHas('brick', null);
     }
 }

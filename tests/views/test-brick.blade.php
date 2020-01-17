@@ -1,4 +1,4 @@
 <div>
     Custom brick view.
 </div>
-{{ $data }}
+{{ data_get($brick, 'data.custom') }}

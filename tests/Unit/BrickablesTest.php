@@ -54,9 +54,9 @@ class BrickablesTest extends BrickableTestCase
         };
         config()->set('brickables.registered', [get_class($brickable)]);
         $page = factory(Page::class)->create();
-        $page->addBrick(get_class($brickable), ['data' => 'dummy']);
+        $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
         $this->assertEquals(
-            view('laravel-brickables::bricks', ['model' => $page]),
+            view('laravel-brickables::bricks', ['model' => $page])->toHtml(),
             Brickables::bricks($page)->toHtml()
         );
     }
@@ -84,9 +84,9 @@ class BrickablesTest extends BrickableTestCase
         config()->set('brickables.registered', [get_class($brickable)]);
         Brickables::routes();
         $page = factory(Page::class)->create();
-        $page->addBrick(get_class($brickable), ['data' => 'dummy']);
+        $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
         $this->assertEquals(
-            view('laravel-brickables::admin.panel', ['model' => $page]),
+            view('laravel-brickables::admin.panel', ['model' => $page])->toHtml(),
             Brickables::adminPanel($page)->toHtml()
         );
     }
