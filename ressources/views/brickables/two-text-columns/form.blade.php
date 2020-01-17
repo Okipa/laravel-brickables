@@ -1,4 +1,4 @@
-@extends('laravel-brickables::admin.form')
+@extends('laravel-brickables::admin.form.content')
 @section('inputs')
     <div class="form-group">
         <label for="left-content">@lang('Left content')</label>

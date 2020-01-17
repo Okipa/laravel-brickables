@@ -86,7 +86,7 @@ class BrickablesTest extends BrickableTestCase
         $page = factory(Page::class)->create();
         $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
         $this->assertEquals(
-            view('laravel-brickables::admin.panel', ['model' => $page])->toHtml(),
+            view('laravel-brickables::admin.panel.layout', ['model' => $page])->toHtml(),
             Brickables::adminPanel($page)->toHtml()
         );
     }

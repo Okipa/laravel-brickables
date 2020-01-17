@@ -1,4 +1,3 @@
-@include('laravel-brickables::admin.partials.form-title')
 <form method="POST"
       action="{{ $brick ? $brickable->getUpdateRoute($brick) : $brickable->getStoreRoute() }}"
       enctype="multipart/form-data">
@@ -9,5 +8,5 @@
     <input type="hidden" name="brickable_type" value="{{ get_class($brickable) }}">
     <input type="hidden" name="admin_panel_url" value="{{ $adminPanelUrl }}">
     @yield('inputs')
-    @include('laravel-brickables::admin.partials.form-actions')
+    @include('laravel-brickables::admin.form.actions')
 </form>

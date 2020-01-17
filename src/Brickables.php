@@ -57,7 +57,7 @@ class Brickables implements Htmlable
      */
     public function adminPanel(HasBrickables $model): self
     {
-        $this->html = view('laravel-brickables::admin.panel', ['model' => $model]);
+        $this->html = view('laravel-brickables::admin.panel.layout', ['model' => $model]);
 
         return $this;
     }
