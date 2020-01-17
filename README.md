@@ -394,6 +394,7 @@ class MyNewBrickable extends Brickable
         return MyNewBrickableBrick::class;
     }
 
+    /** @inheritDoc */
     protected function setBricksControllerClass(): string
     {
         return MyNewBrickableBricksController::class;
