@@ -7,7 +7,6 @@ use Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException;
 use Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException;
 use Okipa\LaravelBrickables\Models\Brick;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
-use Okipa\LaravelBrickables\Tests\Models\BrickModel;
 use Okipa\LaravelBrickables\Tests\Models\HasBrickablesModel;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 

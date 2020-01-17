@@ -4,6 +4,7 @@ namespace Okipa\LaravelBrickables\Tests\Unit;
 
 use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Facades\Brickables;
+use Okipa\LaravelBrickables\Tests\Brickables\Brickable;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 
@@ -163,5 +164,21 @@ class BricksControllerTest extends BrickableTestCase
         $this->assertEquals(1, $brickTwo->fresh()->position);
         $this->assertEquals(2, $brickOne->fresh()->position);
         $this->assertEquals(3, $brickThree->fresh()->position);
+    }
+
+    /** @test */
+    public function it_uses_brickable_custom_controller()
+    {
+        Brickables::routes();
+        $page = factory(Page::class)->create();
+        view()->addNamespace('laravel-brickables', 'tests/views');
+        $this->call('GET', 'brick/create', [
+            'model_type' => Page::class,
+            'model_id' => $page->id,
+            'brickable_type' => Brickable::class,
+            'admin_panel_url' => 'admin-panel',
+        ])->assertOk()
+            ->assertViewIs((new Brickable)->getFormViewPath())
+            ->assertViewHas('data', null);
     }
 }
