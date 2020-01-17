@@ -218,10 +218,11 @@ $brick = $page->getFirstBrick(OneTextColumn::class);
 
 ### Query content bricks
 
-Query content bricks as for any Eloquent model:
+As brickables can specify the model they use, you should query content bricks and then cast them to their respective models:
 
 ```php
-Brick::where('brickable_type', OneTextColumn::class)->first();
+$bricks = Brick::all();
+$bricks = Brickables::castBricks($bricks);
 ```
 
 ### Display content bricks

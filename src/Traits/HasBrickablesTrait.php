@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException;
 use Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException;
+use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
 
 trait HasBrickablesTrait
@@ -15,11 +16,11 @@ trait HasBrickablesTrait
     /**
      * @inheritDoc
      */
-    public function addBricks(array $bricks): Collection
+    public function addBricks(array $bricksData): Collection
     {
         $createdBricks = new Collection();
-        foreach ($bricks as $brick) {
-            $createdBricks->push($this->addBrick($brick[0], $brick[1]));
+        foreach ($bricksData as $brickData) {
+            $createdBricks->push($this->addBrick($brickData[0], $brickData[1]));
         }
 
         return $createdBricks;
@@ -100,33 +101,9 @@ trait HasBrickablesTrait
     {
         /** @var \Okipa\LaravelBrickables\Models\Brick $bricksBaseModel */
         $bricksBaseModel = app(config('brickables.bricks.model'));
-        $bricks = DB::table($bricksBaseModel->getTable())
-            ->where('model_type', $this->getMorphClass())
-            ->where('model_id', $this->id)
-            ->get();
+        $bricks = $bricksBaseModel->where('model_type', $this->getMorphClass())->where('model_id', $this->id)->get();
 
-        return $this->castToBrickableRelatedModels($bricks);
-    }
-
-    /**
-     * @param \Illuminate\Support\Collection $bricks
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    protected function castToBrickableRelatedModels(Collection $bricks): Collection
-    {
-        $casted = new Collection;
-        foreach ($bricks->pluck('brickable_type') as $brickableClass) {
-            $brickableTypedBricks = $bricks->where('brickable_type', $brickableClass);
-            /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
-            $brickable = app($brickableClass);
-            /** @var \Okipa\LaravelBrickables\Models\Brick $model */
-            $model = $brickable->getBrickModel();
-            $castedBricks = $model->hydrate($brickableTypedBricks->toArray());
-            $casted->push($castedBricks);
-        }
-
-        return $casted->flatten();
+        return Brickables::castBricks($bricks);
     }
 
     /**

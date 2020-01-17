@@ -93,37 +93,18 @@ class HasBrickablesTest extends BrickableTestCase
     }
 
     /** @test */
-    public function it_can_get_bricks_with_different_brickable_models()
+    public function it_can_get_bricks()
     {
-        $brickableOne = new Class extends Brickable {
+        $brickable = new Class extends Brickable {
             protected function setValidationRules(): array
             {
                 return [];
             }
         };
-        $brickableTwo = new Class extends Brickable {
-            protected function setBrickModelClass(): string
-            {
-                return BrickModel::class;
-            }
-
-            protected function setValidationRules(): array
-            {
-                return [];
-            }
-        };
-        config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
+        config()->set('brickables.registered', [get_class($brickable)]);
         $page = factory(Page::class)->create();
-        $page->addBricks([[get_class($brickableOne), []], [get_class($brickableTwo), []]]);
+        $page->addBricks([[get_class($brickable), []], [get_class($brickable), []]]);
         $this->assertCount(2, $page->getBricks());
-        $this->assertEquals(
-            Brick::class,
-            $page->getBricks()->where('brickable_type', get_class($brickableOne))->first()->getMorphClass()
-        );
-        $this->assertEquals(
-            BrickModel::class,
-            $page->getBricks()->where('brickable_type', get_class($brickableTwo))->first()->getMorphClass()
-        );
         $this->assertEmpty(Brick::all()->diff($page->getBricks()));
     }
 

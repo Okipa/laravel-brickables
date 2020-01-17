@@ -4,6 +4,7 @@ namespace Okipa\LaravelBrickables\Tests\Unit;
 
 use Illuminate\Support\Facades\Route;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
+use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Models\Brick;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
 use Okipa\LaravelBrickables\Tests\Models\BrickModel;
@@ -12,7 +13,7 @@ use Okipa\LaravelBrickables\Tests\Models\Page;
 class BrickableTest extends BrickableTestCase
 {
     /** @test */
-    public function brickable_can_set_and_returns_model()
+    public function it_can_set_and_returns_model()
     {
         $brickable = new Class extends Brickable {
             public function setBrickModelClass(): string
@@ -29,7 +30,7 @@ class BrickableTest extends BrickableTestCase
     }
 
     /** @test */
-    public function brickable_can_set_and_returns_label()
+    public function it_can_set_and_returns_label()
     {
         $brickable = new Class extends Brickable {
             public function setLabel(): string
@@ -46,7 +47,7 @@ class BrickableTest extends BrickableTestCase
     }
 
     /** @test */
-    public function brickable_can_set_and_returns_brick_view_path()
+    public function it_can_set_and_returns_brick_view_path()
     {
         $brickable = new Class extends Brickable {
             public function setBrickViewPath(): string
@@ -63,7 +64,7 @@ class BrickableTest extends BrickableTestCase
     }
 
     /** @test */
-    public function brickable_can_set_and_returns_form_view_path()
+    public function it_can_set_and_returns_form_view_path()
     {
         $brickable = new Class extends Brickable {
             public function setFormViewPath(): string
@@ -80,7 +81,7 @@ class BrickableTest extends BrickableTestCase
     }
 
     /** @test */
-    public function brickable_can_set_and_returns_store_route()
+    public function it_can_set_and_returns_store_route()
     {
         Route::post('dummy/store', function () {
         })->name('dummy.store');
@@ -99,7 +100,7 @@ class BrickableTest extends BrickableTestCase
     }
 
     /** @test */
-    public function brickable_can_set_and_returns_edit_route()
+    public function it_can_set_and_returns_edit_route()
     {
         Route::get('dummy/edit/{brick}', function () {
         })->name('dummy.edit');
@@ -121,7 +122,7 @@ class BrickableTest extends BrickableTestCase
     }
 
     /** @test */
-    public function brickable_can_set_and_returns_update_route()
+    public function it_can_set_and_returns_update_route()
     {
         Route::put('dummy/update/{brick}', function () {
         })->name('dummy.update');
@@ -143,7 +144,7 @@ class BrickableTest extends BrickableTestCase
     }
 
     /** @test */
-    public function brickable_can_set_and_returns_destroy_route()
+    public function it_can_set_and_returns_destroy_route()
     {
         Route::delete('dummy/destroy/{brick}', function () {
         })->name('dummy.destroy');
@@ -165,7 +166,7 @@ class BrickableTest extends BrickableTestCase
     }
 
     /** @test */
-    public function brickable_can_set_and_returns_move_up_route()
+    public function it_can_set_and_returns_move_up_route()
     {
         Route::post('dummy/move/up/{brick}', function () {
             //
@@ -188,7 +189,7 @@ class BrickableTest extends BrickableTestCase
     }
 
     /** @test */
-    public function brickable_can_set_and_returns_move_down_route()
+    public function it_can_set_and_returns_move_down_route()
     {
         Route::post('dummy/move/down/{brick}', function () {
             //
@@ -211,7 +212,7 @@ class BrickableTest extends BrickableTestCase
     }
 
     /** @test */
-    public function brickable_can_set_and_returns_validation_rules()
+    public function it_can_set_and_returns_validation_rules()
     {
         $brickable = new Class extends Brickable {
             protected function setValidationRules(): array
@@ -223,7 +224,7 @@ class BrickableTest extends BrickableTestCase
     }
 
     /** @test */
-    public function brickable_can_get_validated_keys()
+    public function it_can_get_validated_keys()
     {
         $brickable = new Class extends Brickable {
             protected function setValidationRules(): array

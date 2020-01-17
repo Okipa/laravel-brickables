@@ -4,6 +4,7 @@ namespace Okipa\LaravelBrickables\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
 
 class BricksController extends Controller
@@ -67,7 +68,7 @@ class BricksController extends Controller
      */
     public function edit(Brick $brick, Request $request)
     {
-        $brick = $this->castToRelatedBrickModel($brick);
+        $brick = Brickables::castBrick($brick);
         /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $model */
         $model = $brick->model;
         /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
@@ -78,21 +79,6 @@ class BricksController extends Controller
     }
 
     /**
-     * Cast given brick to its brickable brick model.
-     *
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     *
-     * @return Brick
-     */
-    protected function castToRelatedBrickModel(Brick $brick): Brick
-    {
-        /** @var \Okipa\LaravelBrickables\Models\Brick $model */
-        $model = $brick->brickable->getBrickModel();
-
-        return $model->findOrFail($brick->id);
-    }
-
-    /**
      * @param \Okipa\LaravelBrickables\Models\Brick $brick
      * @param \Illuminate\Http\Request $request
      *
@@ -100,7 +86,7 @@ class BricksController extends Controller
      */
     public function update(Brick $brick, Request $request)
     {
-        $brick = $this->castToRelatedBrickModel($brick);
+        $brick = Brickables::castBrick($brick);
         $request->validate($brick->brickable->getValidationRules());
         $brick->data = $request->only($brick->brickable->getValidatedKeys());
         $brick->save();
@@ -132,7 +118,7 @@ class BricksController extends Controller
      */
     public function destroy(Brick $brick, Request $request)
     {
-        $brick = $this->castToRelatedBrickModel($brick);
+        $brick = Brickables::castBrick($brick);
         $brickClone = clone $brick;
         $brick->delete();
 
@@ -162,7 +148,7 @@ class BricksController extends Controller
      */
     public function moveUp(Brick $brick, Request $request)
     {
-        $brick = $this->castToRelatedBrickModel($brick);
+        $brick = Brickables::castBrick($brick);
         $brick->moveOrderUp();
 
         return $this->sendBrickMovedResponse($request, $brick->fresh());
@@ -188,7 +174,7 @@ class BricksController extends Controller
      */
     public function moveDown(Brick $brick, Request $request)
     {
-        $brick = $this->castToRelatedBrickModel($brick);
+        $brick = Brickables::castBrick($brick);
         $brick->moveOrderDown();
 
         return $this->sendBrickMovedResponse($request, $brick->fresh());

@@ -10,6 +10,7 @@ use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Controllers\DispatchController;
 use Okipa\LaravelBrickables\Middleware\CRUDBrickable;
+use Okipa\LaravelBrickables\Models\Brick;
 
 class Brickables implements Htmlable
 {
@@ -83,5 +84,42 @@ class Brickables implements Htmlable
             Route::post('brick/move/up/{brick}', [DispatchController::class, 'moveUp'])->name('brick.move.up');
             Route::post('brick/move/down/{brick}', [DispatchController::class, 'moveDown'])->name('brick.move.down');
         });
+    }
+
+    /**
+     * Cast given brick to its brickable-related brick model.
+     *
+     * @param \Okipa\LaravelBrickables\Models\Brick $brick
+     *
+     * @return \Okipa\LaravelBrickables\Models\Brick
+     */
+    public function castBrick(Brick $brick): Brick
+    {
+        return $this->castBricks(collect()->push($brick))->first();
+    }
+
+    /**
+     * Cast given bricks to their brickable-related brick model.
+     *
+     * @param \Illuminate\Support\Collection $bricks
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function castBricks(Collection $bricks): Collection
+    {
+        $casted = new Collection;
+        foreach ($bricks->pluck('brickable_type')->unique() as $brickableClass) {
+            /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
+            $brickable = app($brickableClass);
+            /** @var \Okipa\LaravelBrickables\Models\Brick $model */
+            $model = $brickable->getBrickModel();
+            $brickableBricksDataArray = $bricks->where('brickable_type', $brickableClass)->map(function ($brick) {
+                return $brick->getAttributes();
+            })->toArray();
+            $castedBricks = $model->hydrate($brickableBricksDataArray);
+            $casted->push($castedBricks);
+        }
+
+        return $casted->flatten();
     }
 }
