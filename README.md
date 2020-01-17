@@ -252,11 +252,25 @@ $brick = $page->getFirstBrick(OneTextColumn::class);
 $brickable = $brick->brickable;
 ```
 
+### Manage model content bricks
+
+Use the ready-to-use admin panel to manage related-model content bricks:
+
+```blade
+{{ Brickables::adminPanel($page) }}
+```
+
+Customize the admin panel views by [publishing them](#views).
+
+**:bulb: Tips**
+
+* Add a javascript confirmation request to intercept the content bricks delete action, otherwise, the removal action will be directly executed without asking the user agreement.
+
 ### Create your own brickable
 
-Create a new class that extends class in your `app/vendor/Brickables` directory:
+Create a new brickable class that extends class in your `app/vendor/Brickables` directory.
 
-Override any method from the `Brickable` abstract it extends to customize the brickable behaviour. 
+In your brickable class, you can override any method from the extended abstract `Brickable` to customize the brickable behaviour. 
 
 ```php
 <?php
@@ -265,22 +279,12 @@ namespace App\Vendor\LaravelBrickables\Brickables;
 
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 
-class MyBrickable extends Brickable
+class MyNewBrickable extends Brickable
 {
-    /**
-     * @inheritDoc
-     */
-    public function setLabel(): string
+    /** @inheritDoc */
+    protected function setValidationRules(): array
     {
-        return __('My brickable');
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setViewPath(): string
-    {
-        return 'laravel-brickables::brickables.my-brickable';
+        return ['text' => ['required', 'string']];
     }
 }
 ```
@@ -294,70 +298,109 @@ return [
 
     'registered' => [
         // other brickables declarations ...
-        App\Vendor\LaravelBrickables\Brickables\MyBrickable::class,
+        App\Vendor\LaravelBrickables\Brickables\MyNewBrickable::class,
     ],
 ];
 
 ```
 
-Finally, create a view that will host your brickable HTML. If you published the package views, you should place it in the `ressources/views/vendor/laravel-brickables` directory.
+Finally, create the brick view in the `ressources/views/vendor/laravel-brickables/my-new-brickable` directory (you can customize the views paths in your `MyNewBrickable` class if you want):
+* the `brick` view will be used to display your brickable.
+* the `form` view will contain the form inputs that will be used to CRUD your brickable.
 
-Your brickable is now ready to associate to Eloquent models.
+Check the existing brickables to see how they are implemented.
 
-### Manage model content bricks
+Your brickable is now ready to be associated to Eloquent models.
 
-Use the ready-to-use admin panel to manage related-model content bricks:
+### Empower brickables with extra abilities
 
-```blade
-{{ Brickables::adminPanel($page) }}
-```
+To add abilities to your brickables, you will have to implement the additional treatments in the brickable-related brick model and bricks controller.
 
-Customize the admin panel views by [publishing them](#views).
+Let's add the ability to manage images in our `MyNewBrickable` from the previous example.
 
-You also can customize the admin panel operations (CRUD, moving, ...) by [defining your own routes and controller](#routes).
-
-**:bulb: Tips**
-
-* Add a javascript confirmation request to intercept the content bricks delete action, otherwise, the removal action will be directly executed without asking the user agreement.
-* In case of views customization, delete the untouched ones after the views publication in order to get them automatically updated in case of package upgrade.
-
-### Empower bricks with extra abilities
-
-Add abilities to your bricks, like adding image management for example.
-
-Create your own `Brick` class extending the `Okipa\LaravelBrickables\Models\Brick` one.
+First create a `MyNewBrickableBrick` model that will extend the `Okipa\LaravelBrickables\Models\Brick` one.
 
 ```php
 <?php
 
 namespace App;
 
-class Brick extends Okipa\LaravelBrickables\Models\Brick implements Spatie\MediaLibrary\HasMedia\HasMedia
+use Okipa\LaravelBrickables\Models\Brick;
+use Spatie\MediaLibrary\HasMedia\HasMedia;
+use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+
+class MyNewBrickableBrick extends Brick implements HasMedia
 {
-    // example of image management feature addition with the spatie/laravel-medialibrary package
-    use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+    // image management example with the spatie/laravel-medialibrary package
+    use HasMediaTrait;
     
     // ...
 }
 ```
 
-Then, set your custom `Brick` model namespace in the package config file.
+Then, create a `MyNewBrickableBricksController` model that will extend the `Okipa\LaravelBrickables\Controllers\BricksController` one.
 
 ```php
 <?php
 
-return [
+namespace App\Http\Controllers;
 
-    /*
-     * The fully qualified class name of the brick model.
-     */
-    'brickModel' => App\Brick::class,
-  
-    // ...  
-];
+use Okipa\LaravelBrickables\Controllers\BricksController;
+
+class MyNewBrickableBricksController extends BricksController
+{
+
+    // ...    
+
+    /** @inheritDoc */
+    public function update(Brick $brick, Request $request)
+    {
+        $response = parent::update($request);
+        // image management example with the spatie/laravel-medialibrary package
+        if ($request->file('image')) {
+            $brick->addMediaFromRequest('image')->toMediaCollection('bricks');
+        }
+
+        return $response;
+    }
+
+    // ...
+
+}
 ```
 
-That's it, your `Brick` model will now be used by the package.
+Finally, set your `MyNewBrickableBrick` model and your `MyNewBrickableBricksController` namespaces in your `MyNewBrickable` brickable class.
+
+```php
+<?php
+
+namespace App\Vendor\LaravelBrickables\Brickables;
+
+use App\MyNewBrickableBrick;
+use App\Http\Controllers\MyNewBrickableBricksController;
+use Okipa\LaravelBrickables\Abstracts\Brickable;
+
+class MyNewBrickable extends Brickable
+{
+
+    // ...
+    
+    /** @inheritDoc */
+    protected function setBrickModelClass(): string
+    {
+        return MyNewBrickableBrick::class;
+    }
+
+    protected function setBricksControllerClass(): string
+    {
+        return MyNewBrickableBricksController::class;
+    }
+
+    // ...
+}
+```
+
+That's it, your custom model and controller will now be used by the brickable.
 
 ## Testing
 
