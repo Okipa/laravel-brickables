@@ -58,6 +58,7 @@ Display the model-related bricks admin panel in your views:
 * [Installation](#installation)
 * [Configuration](#configuration)
 * [Views](#views)
+* [Translations](#translations)
 * [Implementation](#implementation)
   * [Models](#models)
   * [Routes](#routes)
@@ -113,6 +114,12 @@ Publish the package views to customize them if necessary:
 php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=views
 ```
 
+## Translations
+
+All displayed labels or sentences are translatable.
+
+See how to translate them on the Laravel official documentation : https://laravel.com/docs/localization#using-translation-strings-as-keys.
+
 ## Implementation
 
 ### Models
@@ -144,12 +151,6 @@ Brickables::routes();
 These routes are consuming the `Okipa\LaravelBrickables\Controllers\BricksController` controller by default.
 
 To customize the admin panel actions, check the [Empower bricks with extra abilities](#empower-brickables-with-extra-abilities) part.
-
-### Translations
-
-All displayed labels or sentences are translatable.
-
-See how to translate them on the Laravel official documentation : https://laravel.com/docs/localization#using-translation-strings-as-keys
 
 ## How to
 
