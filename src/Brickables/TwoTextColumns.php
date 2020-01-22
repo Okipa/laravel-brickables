@@ -12,8 +12,8 @@ class TwoTextColumns extends Brickable
     protected function setStoreValidationRules(): array
     {
         return [
-            'left_text' => ['required', 'string'],
-            'right_text' => ['required', 'string'],
+            'text_left' => ['required', 'string'],
+            'text_right' => ['required', 'string'],
         ];
     }
 
@@ -23,8 +23,8 @@ class TwoTextColumns extends Brickable
     protected function setUpdateValidationRules(): array
     {
         return [
-            'left_text' => ['required', 'string'],
-            'right_text' => ['required', 'string'],
+            'text_left' => ['required', 'string'],
+            'text_right' => ['required', 'string'],
         ];
     }
 }

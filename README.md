@@ -33,7 +33,7 @@ $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
 // or associate several content bricks at once
 $page->addBricks([
     [OneTextColumn::class, ['text' => 'Text']],
-    [TwoTextColumns::class, ['left_text' => 'Left text', 'right_text' => 'Right text']]
+    [TwoTextColumns::class, ['text_left' => 'Left text', 'text_right' => 'Right text']]
 ]);
 ```
 
@@ -169,7 +169,7 @@ You also can associate several content bricks at once:
 $page = Page::find(1);
 $bricks = $page->addBricks([
     [OneTextColumn::class, ['text' => 'Text']],
-    [TwoTextColumns::class, ['left_text' => 'Left text', 'right_text' => 'Right text']]
+    [TwoTextColumns::class, ['text_left' => 'Left text', 'text_right' => 'Right text']]
 ]);
 ```
 
