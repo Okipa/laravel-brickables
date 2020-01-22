@@ -1,3 +1,4 @@
+@yield('prepend')
 <div class="card">
     <div class="card-header">
         <h2 class="m-0">
@@ -27,4 +28,4 @@
         </form>
     </div>
 </div>
-
+@yield('append')
