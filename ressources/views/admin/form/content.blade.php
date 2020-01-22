@@ -1,7 +1,13 @@
 <div class="card">
-    @if(View::hasSection('title'))
-        @yield('title')
-    @endif
+    <div class="card-header">
+        <h2 class="m-0">
+            @if(View::hasSection('title'))
+                @yield('title')
+            @else
+                @lang('Brick data')
+            @endif
+        </h2>
+    </div>
     <div class="card-body">
         <form method="POST"
               action="{{ $brick ? $brickable->getUpdateRoute($brick) : $brickable->getStoreRoute() }}"
