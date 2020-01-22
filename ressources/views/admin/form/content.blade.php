@@ -1,4 +1,7 @@
 <div class="card">
+    @if(View::hasSection('title'))
+        @yield('title')
+    @endif
     <div class="card-body">
         <form method="POST"
               action="{{ $brick ? $brickable->getUpdateRoute($brick) : $brickable->getStoreRoute() }}"
@@ -10,7 +13,11 @@
             <input type="hidden" name="brickable_type" value="{{ get_class($brickable) }}">
             <input type="hidden" name="admin_panel_url" value="{{ $adminPanelUrl }}">
             @yield('inputs')
-            @include('laravel-brickables::admin.form.actions')
+            @if(View::hasSection('actions'))
+                @yield('actions')
+            @else
+                @include('laravel-brickables::admin.form.actions')
+            @endif
         </form>
     </div>
 </div>
