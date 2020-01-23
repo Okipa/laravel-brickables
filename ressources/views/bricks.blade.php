@@ -1,5 +1,5 @@
 @foreach($model->getBricks() as $brick)
-    <div class="my-5">
+    <div class="{{ $loop->first ? 'mb-5' : ($loop->last ? 'mt-5' : 'my-5') }}">
         {{ $brick }}
     </div>
 @endforeach
