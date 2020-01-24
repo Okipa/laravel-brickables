@@ -4,8 +4,10 @@ namespace Okipa\LaravelBrickables\Tests\Unit;
 
 use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Facades\Brickables;
+use Okipa\LaravelBrickables\Models\Brick;
 use Okipa\LaravelBrickables\Tests\Brickables\Brickable;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
+use Okipa\LaravelBrickables\Tests\Models\HasBrickablesModel;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class BricksControllerTest extends BrickableTestCase
@@ -131,9 +133,13 @@ class BricksControllerTest extends BrickableTestCase
     {
         Brickables::routes();
         $page = factory(Page::class)->create();
+        $otherModel = (new HasBrickablesModel)->create();
         $brickOne = $page->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
+        $otherModel->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
         $brickTwo = $page->addBrick(OneTextColumn::class, ['text' => 'Text #2']);
+        $otherModel->addBrick(OneTextColumn::class, ['text' => 'Text #2']);
         $brickThree = $page->addBrick(OneTextColumn::class, ['text' => 'Text #3']);
+        $otherModel->addBrick(OneTextColumn::class, ['text' => 'Text #3']);
         $this->assertEquals(1, $brickOne->position);
         $this->assertEquals(2, $brickTwo->position);
         $this->assertEquals(3, $brickThree->position);
@@ -148,14 +154,14 @@ class BricksControllerTest extends BrickableTestCase
     public function move_down_action_moves_down_brick_and_redirects_to_admin_panel()
     {
         Brickables::routes();
-        $pageOne = factory(Page::class)->create();
-        $pageTwo = factory(Page::class)->create();
-        $brickOne = $pageOne->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
-        $pageTwo->addBrick(OneTextColumn::class, ['text' => 'Text #2']);
-        $brickTwo = $pageOne->addBrick(OneTextColumn::class, ['text' => 'Text #3']);
-        $pageTwo->addBrick(OneTextColumn::class, ['text' => 'Text #4']);
-        $brickThree = $pageOne->addBrick(OneTextColumn::class, ['text' => 'Text #5']);
-        $pageTwo->addBrick(OneTextColumn::class, ['text' => 'Text #6']);
+        $page = factory(Page::class)->create();
+        $otherModel = (new HasBrickablesModel)->create();
+        $brickOne = $page->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
+        $otherModel->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
+        $brickTwo = $page->addBrick(OneTextColumn::class, ['text' => 'Text #2']);
+        $otherModel->addBrick(OneTextColumn::class, ['text' => 'Text #2']);
+        $brickThree = $page->addBrick(OneTextColumn::class, ['text' => 'Text #3']);
+        $otherModel->addBrick(OneTextColumn::class, ['text' => 'Text #3']);
         $this->assertEquals(1, $brickOne->position);
         $this->assertEquals(2, $brickTwo->position);
         $this->assertEquals(3, $brickThree->position);

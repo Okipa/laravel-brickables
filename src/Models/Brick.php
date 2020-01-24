@@ -67,6 +67,6 @@ class Brick extends Model implements Htmlable, Sortable
      */
     public function buildSortQuery()
     {
-        return static::query()->where('model_id', $this->model_id);
+        return static::query()->where('model_type', $this->model_type)->where('model_id', $this->model_id);
     }
 }
