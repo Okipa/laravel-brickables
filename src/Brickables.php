@@ -62,9 +62,7 @@ class Brickables implements Htmlable
         return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function toHtml()
     {
         return (string) $this->html;

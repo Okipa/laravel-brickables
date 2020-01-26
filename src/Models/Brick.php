@@ -44,9 +44,7 @@ class Brick extends Model implements Htmlable, Sortable
         return $this->morphTo();
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function toHtml(): string
     {
         return (string) view($this->brickable->getBrickViewPath(), ['brick' => $this]);

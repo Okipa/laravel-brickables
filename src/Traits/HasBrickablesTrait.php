@@ -12,9 +12,7 @@ use Okipa\LaravelBrickables\Models\Brick;
 
 trait HasBrickablesTrait
 {
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function addBricks(array $bricksData): Collection
     {
         $createdBricks = new Collection();
@@ -25,15 +23,15 @@ trait HasBrickablesTrait
         return $createdBricks;
     }
 
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     public function addBrick(string $brickableClass, array $data): Brick
     {
         $this->checkBrickableType($brickableClass);
         $this->checkBrickableIsRegistered($brickableClass);
+        $brick = $this->createBrick($brickableClass, $data);
+        $this->handleSingleBricks($brickableClass, $brick);
 
-        return $this->createBrick($brickableClass, $data);
+        return $brick;
     }
 
     /**
@@ -83,8 +81,53 @@ trait HasBrickablesTrait
     }
 
     /**
-     * @inheritDoc
+     * @param string $brickableClass
+     * @param \Okipa\LaravelBrickables\Models\Brick $brick
+     *
+     * @return void
+     * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
+     * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      */
+    protected function handleSingleBricks(string $brickableClass, Brick $brick): void
+    {
+        if (in_array($brickableClass, $this->hasSingleBrick ?: [])) {
+            $this->clearBricksExcept($brickableClass, collect()->push($brick));
+        }
+    }
+
+    /** @inheritDoc */
+    public function clearBricksExcept(string $brickableClass, Collection $excludeBricks): void
+    {
+        $this->checkBrickableType($brickableClass);
+        $this->checkBrickableIsRegistered($brickableClass);
+        $this->getBricks($brickableClass)->reject(function (Brick $brick) use ($excludeBricks) {
+            return $excludeBricks->where($brick->getKeyName(), $brick->getKey())->count();
+        })->each->delete();
+    }
+
+    /** @inheritDoc */
+    public function getBricks(?string $brickableClass = null): Collection
+    {
+        /** @var \Okipa\LaravelBrickables\Models\Brick $bricksBaseModel */
+        $bricksBaseModel = app(config('brickables.bricks.model'));
+        $query = $bricksBaseModel->where('model_type', $this->getMorphClass())->where('model_id', $this->id);
+        if ($brickableClass) {
+            $query->where('brickable_type', $brickableClass);
+        }
+        $bricks = $query->ordered()->get();
+
+        return Brickables::castBricks($bricks);
+    }
+
+    /** @inheritDoc */
+    public function clearBricks(string $brickableClass): void
+    {
+        $this->checkBrickableType($brickableClass);
+        $this->checkBrickableIsRegistered($brickableClass);
+        $this->getBricks($brickableClass)->each->delete();
+    }
+
+    /** @inheritDoc */
     public function getFirstBrick(string $brickableClass): ?Brick
     {
         $this->checkBrickableType($brickableClass);
@@ -93,26 +136,7 @@ trait HasBrickablesTrait
         return $this->getBricks()->where('brickable_type', $brickableClass)->first();
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getBricks(): Collection
-    {
-        /** @var \Okipa\LaravelBrickables\Models\Brick $bricksBaseModel */
-        $bricksBaseModel = app(config('brickables.bricks.model'));
-        $bricks = $bricksBaseModel->where('model_type', $this->getMorphClass())
-            ->where('model_id', $this->id)
-            ->ordered()
-            ->get();
-
-        return Brickables::castBricks($bricks);
-    }
-
-    /**
-     * Get the model name readable for a human.
-     *
-     * @return string
-     */
+    /** @inheritDoc */
     public function getReadableClassName(): string
     {
         return __(ucfirst(Str::snake(class_basename($this), ' ')));

@@ -63,9 +63,10 @@ Display the model-related bricks admin panel in your views:
   * [Models](#models)
   * [Routes](#routes)
 * [How to](#how-to)
+  * [Define single brick brickables](#define-single-brick-brickables)
   * [Add content bricks](#add-content-bricks)
   * [Update a content brick](#update-a-content-brick)
-  * [Delete a content brick](#delete-a-content-brick)
+  * [Clear content bricks](#clear-content-bricks)
   * [Set content bricks order](#set-content-bricks-order)
   * [Retrieve content bricks](#retrieve-content-bricks)
   * [Query content bricks](#query-content-bricks)
@@ -154,6 +155,31 @@ To customize the admin panel actions, check the [Empower bricks with extra abili
 
 ## How to
 
+### Define single brick brickables
+
+In your Eloquent model, define brickables which will only hold one brick:
+
+```php
+
+use Illuminate\Database\Eloquent\Model;
+use Okipa\LaravelBrickables\Contracts\HasBrickables;
+use Okipa\LaravelBrickables\Traits\HasBrickablesTrait;
+
+class Page extends Model implements HasBrickables
+{
+	use HasBrickablesTrait;
+
+    protected $hasSingleBrick = [
+        OneTextColumn::class,
+        // ...
+    ];
+
+	// ...
+}
+```
+
+This model will only hold one brick for the `OneTextColumn` brickable: adding a new brick from this brickable type will clear all the others.
+
 ### Add content bricks
 
 Associate a single content brick to an Eloquent model:
@@ -183,12 +209,26 @@ $brick->data = ['text', 'Another text'];
 $brick->save();
 ```
 
-### Delete a content brick
+### Clear content bricks
 
 Just delete your content brick as you would fo for any other Eloquent model instance:
 
 ```php
 $brick->delete();
+```
+
+Clear all the content bricks from a given brickable type:
+
+```php
+$page = Page::find(1);
+$page->clearBricks(OneTextColumn::class);
+```
+
+Clear all the content bricks from a given brickable type except some bricks:
+
+```php
+$page = Page::find(1);
+$page->clearBricks(OneTextColumn::class, $oneTextColumnBricksCollection);
 ```
 
 ### Set content bricks order
@@ -210,7 +250,14 @@ $page = Page::find(1);
 $bricks = $page->getBricks();
 ```
 
-You also can get the first content brick which :
+Or get the content bricks from a brickable type:
+
+```php
+$page = Page::find(1);
+$bricks = $page->getBricks(OneTextColumn::class);
+```
+
+You also can get the first content brick from a brickable type:
 
 ```php
 $page = Page::find(1);

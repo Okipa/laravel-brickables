@@ -43,9 +43,11 @@ interface HasBrickables
     /**
      * Get the model associated bricks.
      *
+     * @param string|null $brickableClass
+     *
      * @return \Illuminate\Support\Collection
      */
-    public function getBricks(): Collection;
+    public function getBricks(?string $brickableClass = null): Collection;
 
     /**
      * Get the model name readable for a human.
@@ -53,4 +55,27 @@ interface HasBrickables
      * @return string
      */
     public function getReadableClassName(): string;
+
+    /**
+     * Clear all bricks from a given brickable type except excluded bricks.
+     *
+     * @param string $brickableClass
+     * @param \Illuminate\Support\Collection $excludeBricks
+     *
+     * @return void
+     * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
+     * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
+     */
+    public function clearBricksExcept(string $brickableClass, Collection $excludeBricks): void;
+
+    /**
+     * Clear all bricks from a given brickable type.
+     *
+     * @param string $brickableClass
+     *
+     * @return void
+     * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
+     * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
+     */
+    public function clearBricks(string $brickableClass): void;
 }

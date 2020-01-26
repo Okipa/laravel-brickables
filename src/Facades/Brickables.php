@@ -6,9 +6,7 @@ use Illuminate\Support\Facades\Facade;
 
 class Brickables extends Facade
 {
-    /**
-     * @inheritDoc
-     */
+    /** @inheritDoc */
     protected static function getFacadeAccessor()
     {
         return 'Brickables';
