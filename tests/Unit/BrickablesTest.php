@@ -17,7 +17,7 @@ class BrickablesTest extends BrickableTestCase
     /** @test */
     public function it_can_return_all_registered_brickables()
     {
-        $brickable = new Class extends Brickable {
+        $brickableOne = new Class extends Brickable {
             protected function setStoreValidationRules(): array
             {
                 return [];
@@ -28,10 +28,24 @@ class BrickablesTest extends BrickableTestCase
                 return [];
             }
         };
-        config()->set('brickables.registered', [get_class($brickable)]);
-        $brickables = Brickables::getAll();
-        $this->assertCount(count(config('brickables.registered')), $brickables);
-        $this->assertInstanceOf(Collection::class, $brickables);
+        $brickableTwo = new Class extends Brickable {
+            protected function setStoreValidationRules(): array
+            {
+                return [];
+            }
+
+            protected function setUpdateValidationRules(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
+        $registeredPageBrickables = Brickables::getAll(Page::class);
+        $registeredBrickables = Brickables::getAll(Page::class);
+        $this->assertCount(count(config('brickables.registered')), $registeredPageBrickables);
+        $this->assertCount(count(config('brickables.registered')), $registeredBrickables);
+        $this->assertInstanceOf(Collection::class, $registeredPageBrickables);
+        $this->assertInstanceOf(Collection::class, $registeredBrickables);
     }
 
     /** @test */
