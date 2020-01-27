@@ -102,6 +102,24 @@ class Brickables implements Htmlable
     }
 
     /**
+     * @param \Illuminate\Http\Request|null $request
+     *
+     * @return \Okipa\LaravelBrickables\Contracts\HasBrickables|null
+     */
+    public function getModelFromRequest(Request $request = null): ?HasBrickables
+    {
+        $request = $request ?: request();
+        if ($request->has('model_type') && $request->has('model_id')) {
+            return app($request->model_type)->find($request->model_id);
+        }
+        if ($request->has('brick')) {
+            return $this->castBrick($request->brick)->model;
+        }
+
+        return null;
+    }
+
+    /**
      * Cast given brick to its brickable-related brick model.
      *
      * @param \Okipa\LaravelBrickables\Models\Brick $brick
@@ -136,15 +154,5 @@ class Brickables implements Htmlable
         }
 
         return $casted->flatten();
-    }
-
-    public function getModelFromRequest(Request $request = null): ?HasBrickables
-    {
-        $request = $request ?: request();
-        if ($request->has('model_type') && $request->has('model_id')) {
-            return app($request->model_type)->find($request->model_id);
-        }
-
-        return null;
     }
 }

@@ -196,10 +196,32 @@ class BrickablesTest extends BrickableTestCase
     }
 
     /** @test */
-    public function it_can_get_model_from_current_url()
+    public function it_can_get_model_from_create_request()
     {
         $page = factory(Page::class)->create();
         $request = (new Request)->merge(['model_type' => $page->getMorphClass(), 'model_id' => $page->id]);
+        $model = Brickables::getModelFromRequest($request);
+        $this->assertTrue($page->is($model));
+    }
+
+    /** @test */
+    public function it_can_get_model_from_edit_request()
+    {
+        $brickable = new Class extends Brickable {
+            protected function setStoreValidationRules(): array
+            {
+                return [];
+            }
+
+            protected function setUpdateValidationRules(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickable)]);
+        $page = factory(Page::class)->create();
+        $brick = $page->addBrick(get_class($brickable), []);
+        $request = (new Request)->merge(['brick' => $brick]);
         $model = Brickables::getModelFromRequest($request);
         $this->assertTrue($page->is($model));
     }
