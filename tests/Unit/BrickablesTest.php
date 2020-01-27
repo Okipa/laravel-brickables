@@ -2,9 +2,9 @@
 
 namespace Okipa\LaravelBrickables\Tests\Unit;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
-use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
@@ -179,5 +179,14 @@ class BrickablesTest extends BrickableTestCase
         );
         $brick = Brickables::castBrick($brick);
         $this->assertInstanceOf(BrickModel::class, $brick->where('brickable_type', get_class($brickable))->first());
+    }
+
+    /** @test */
+    public function it_can_get_model_from_current_url()
+    {
+        $page = factory(Page::class)->create();
+        $request = (new Request)->merge(['model_type' => $page->getMorphClass(), 'model_id' => $page->id]);
+        $model = Brickables::getModelFromRequest($request);
+        $this->assertTrue($page->is($model));
     }
 }

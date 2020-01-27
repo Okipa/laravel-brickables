@@ -74,7 +74,8 @@ Display the model-related bricks admin panel in your views:
   * [Retrieve brickables](#retrieve-brickables)
   * [Manage model content bricks](#manage-model-content-bricks)
   * [Create your own brickable](#create-your-own-brickable)
-  * [Empower bricks with extra abilities](#empower-bricks-with-extra-abilities)
+  * [Empower bricks with extra abilities](#empower-brickables-with-extra-abilities)
+  * [Get Eloquent model from URL](#get-eloquent-model-from-url)
 * [Testing](#testing)
 * [Changelog](#changelog)
 * [Contributing](#contributing)
@@ -155,7 +156,7 @@ To customize the admin panel actions, you can add routes inside or outside from 
 
 ```php
 Brickables::routes(function(){
-    // inside the routes group: will benefit from the CRUDBrickable middleware/
+    // inside the routes group: will benefit from the CRUDBrickable middleware.
     Route::get('your/custom/route', [YourCustomBrickController::class, 'yourMethod'])->name('brick.custom.route');
 });
 // outside the route group: will not benefit from the CRUDBrickable middleware.
@@ -485,6 +486,17 @@ class MyNewBrickable extends Brickable
 ```
 
 That's it, your custom model and controller will now be used by the brickable.
+
+### Get Eloquent model from request
+
+It can be useful to retrieve the Eloquent model from the request, for navigation concerns, for example.
+
+This helper will be able to return the related model when navigating on the form views (brick creation and edition).
+
+```php
+// you can pass a custom request in the parameters. If none is given, the current request is used.
+$model = Brickables::getModelFromRequest();
+```
 
 ## Testing
 

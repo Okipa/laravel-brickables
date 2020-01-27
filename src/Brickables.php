@@ -4,6 +4,7 @@ namespace Okipa\LaravelBrickables;
 
 use Closure;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
@@ -135,5 +136,15 @@ class Brickables implements Htmlable
         }
 
         return $casted->flatten();
+    }
+
+    public function getModelFromRequest(Request $request = null): ?HasBrickables
+    {
+        $request = $request ?: request();
+        if ($request->has('model_type') && $request->has('model_id')) {
+            return app($request->model_type)->find($request->model_id);
+        }
+
+        return null;
     }
 }
