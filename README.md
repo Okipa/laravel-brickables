@@ -491,7 +491,7 @@ That's it, your custom model and controller will now be used by the brickable.
 
 It can be useful to retrieve the Eloquent model from the request, for navigation concerns, for example.
 
-This helper will be able to return the related model when navigating on the form views (brick creation and edition).
+This helper will be able to return the related model when navigating on the brickables form views (bricks creation and edition requests).
 
 ```php
 // you can pass a custom request in the parameters. If none is given, the current request is used.
