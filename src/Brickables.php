@@ -110,7 +110,10 @@ class Brickables implements Htmlable
     {
         $request = $request ?: request();
         if ($request->has('model_type') && $request->has('model_id')) {
-            return app($request->model_type)->find($request->model_id);
+            /** @var \Illuminate\Database\Eloquent\Model $model */
+            $model = app($request->model_type);
+
+            return $model->find($request->model_id);
         }
         if ($request->brick) {
             return $this->castBrick($request->brick)->model;
