@@ -4,7 +4,6 @@ namespace Okipa\LaravelBrickables\Tests\Unit;
 
 use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Facades\Brickables;
-use Okipa\LaravelBrickables\Models\Brick;
 use Okipa\LaravelBrickables\Tests\Brickables\Brickable;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
 use Okipa\LaravelBrickables\Tests\Models\HasBrickablesModel;

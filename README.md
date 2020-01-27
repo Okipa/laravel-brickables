@@ -151,7 +151,13 @@ Brickables::routes();
 
 These routes are consuming the `Okipa\LaravelBrickables\Controllers\BricksController` controller by default.
 
-To customize the admin panel actions, check the [Empower bricks with extra abilities](#empower-brickables-with-extra-abilities) part.
+To customize the admin panel actions, you can add routes to the built-in ones. Check the [Empower bricks with extra abilities](#empower-brickables-with-extra-abilities) part to get more information about the customization possibilities.
+
+```php
+Brickables::routes(function(){
+    Route::get('your/custom/route', [YourCustomBrickController::class, 'yourMethod'])->name('brick.custom.route');
+});
+```
 
 ## How to
 
