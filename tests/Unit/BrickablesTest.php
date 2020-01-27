@@ -4,16 +4,18 @@ namespace Okipa\LaravelBrickables\Tests\Unit;
 
 use Illuminate\Support\Collection;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
+use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
 use Okipa\LaravelBrickables\Tests\Models\BrickModel;
+use Okipa\LaravelBrickables\Tests\Models\HasBrickablesModel;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class BrickablesTest extends BrickableTestCase
 {
     /** @test */
-    public function it_returns_all_registered_brickables()
+    public function it_can_return_all_registered_brickables()
     {
         $brickable = new Class extends Brickable {
             protected function setStoreValidationRules(): array
@@ -30,6 +32,15 @@ class BrickablesTest extends BrickableTestCase
         $brickables = Brickables::getAll();
         $this->assertCount(count(config('brickables.registered')), $brickables);
         $this->assertInstanceOf(Collection::class, $brickables);
+    }
+
+    /** @test */
+    public function it_can_return_all_model_handlable_brickables()
+    {
+        $brickables = Brickables::getAll(HasBrickablesModel::class);
+        $model = (new HasBrickablesModel);
+        $this->assertCount(count($model->brickables['canOnlyHandle']), $brickables);
+        $this->assertInstanceOf($model->brickables['canOnlyHandle'][0], $brickables->first());
     }
 
     /** @test */

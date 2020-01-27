@@ -4,6 +4,7 @@ namespace Okipa\LaravelBrickables\Tests\Unit;
 
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Brickables\OneTextColumn;
+use Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException;
 use Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException;
 use Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException;
 use Okipa\LaravelBrickables\Models\Brick;
@@ -41,6 +42,24 @@ class HasBrickablesTest extends BrickableTestCase
         $page = factory(Page::class)->create();
         $this->expectException(NotRegisteredBrickableClassException::class);
         $page->addBrick(get_class($brickable), []);
+    }
+
+    public function it_cannot_add_not_handlable_brickable()
+    {
+        $brickable = new Class extends Brickable {
+            protected function setStoreValidationRules(): array
+            {
+                return [];
+            }
+
+            protected function setUpdateValidationRules(): array
+            {
+                return [];
+            }
+        };
+        $model = (new HasBrickablesModel)->create();
+        $model->addBrick(get_class($brickable));
+        $this->expectException(BrickableCannotBeHandledException::class);
     }
 
     /** @test */
@@ -92,13 +111,16 @@ class HasBrickablesTest extends BrickableTestCase
     }
 
     /** @test */
-    public function it_can_add_single_brick()
+    public function it_can_add_brick_with_limited_number_of_bricks_constraint()
     {
         $model = (new HasBrickablesModel)->create();
         $brickOne = $model->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
         $brickTwo = $model->addBrick(OneTextColumn::class, ['text' => 'Text #2']);
-        $this->assertFalse($brickOne->is(Brick::first()));
-        $this->assertTrue($brickTwo->is(Brick::first()));
+        $brickThree = $model->addBrick(OneTextColumn::class, ['text' => 'Text #2']);
+        $bricks = Brick::all();
+        $this->assertFalse($brickOne->is($bricks->first()));
+        $this->assertTrue($brickTwo->is($bricks->first()));
+        $this->assertTrue($brickThree->is($bricks->last()));
     }
 
     /** @test */

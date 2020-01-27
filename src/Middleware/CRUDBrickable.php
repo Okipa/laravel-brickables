@@ -4,7 +4,6 @@ namespace Okipa\LaravelBrickables\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -34,12 +33,18 @@ class CRUDBrickable
             if (! $request->model_id) {
                 abort(Response::HTTP_FORBIDDEN, 'The model_id value is missing from the request.');
             }
-            if ($request->brickable_type && ! (new $request->brickable_type) instanceof Brickable) {
-                abort(
-                    Response::HTTP_FORBIDDEN,
-                    'The ' . $request->brickable_type . ' class should extend ' . Brickable::class . '.'
-                );
-            }
+            rescue(
+                fn() => $request->brickable_type
+                    && (new $request->model_type)->checkBrickableType($request->brickable_type),
+                fn($exception) => abort(Response::HTTP_FORBIDDEN, $exception->getMessage()),
+                false
+            );
+            rescue(
+                fn() => $request->brickable_type
+                    && (new $request->model_type)->checkBrickableCanBeHandled($request->brickable_type),
+                fn($exception) => abort(Response::HTTP_FORBIDDEN, $exception->getMessage()),
+                false
+            );
         }
         if (! $request->admin_panel_url) {
             abort(Response::HTTP_FORBIDDEN, 'The admin_panel_url value is missing from the request.');

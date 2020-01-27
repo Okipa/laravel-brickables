@@ -5,6 +5,7 @@ namespace Okipa\LaravelBrickables\Traits;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
+use Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException;
 use Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException;
 use Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException;
 use Okipa\LaravelBrickables\Facades\Brickables;
@@ -24,22 +25,19 @@ trait HasBrickablesTrait
     }
 
     /** @inheritDoc */
-    public function addBrick(string $brickableClass, array $data): Brick
+    public function addBrick(string $brickableClass, array $data = []): Brick
     {
         $this->checkBrickableType($brickableClass);
         $this->checkBrickableIsRegistered($brickableClass);
+        $this->checkBrickableCanBeHandled($brickableClass);
         $brick = $this->createBrick($brickableClass, $data);
-        $this->handleSingleBricks($brickableClass, $brick);
+        $this->handleLimitedNumberOfBricks($brickableClass, $brick);
 
         return $brick;
     }
 
-    /**
-     * @param string $brickableClass
-     *
-     * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
-     */
-    protected function checkBrickableType(string $brickableClass): void
+    /** @inheritDoc */
+    public function checkBrickableType(string $brickableClass): void
     {
         if (! app($brickableClass) instanceof Brickable) {
             throw new InvalidBrickableClassException('The given ' . $brickableClass
@@ -57,6 +55,16 @@ trait HasBrickablesTrait
         if (! in_array($brickableClass, config('brickables.registered'))) {
             throw new NotRegisteredBrickableClassException('The given ' . $brickableClass
                 . ' brickable is not registered in the config(\'brickables.registered\') array.');
+        }
+    }
+
+    /** @inheritDoc */
+    public function checkBrickableCanBeHandled(string $brickableClass): void
+    {
+        $authorizedBrickables = data_get($this, 'brickables.canOnlyHandle');
+        if ($authorizedBrickables && ! in_array($brickableClass, $authorizedBrickables)) {
+            throw new BrickableCannotBeHandledException('The given ' . $brickableClass
+                . ' brickable cannot be handled by the ' . $this->getMorphClass() . ' Eloquent model.');
         }
     }
 
@@ -85,24 +93,15 @@ trait HasBrickablesTrait
      * @param \Okipa\LaravelBrickables\Models\Brick $brick
      *
      * @return void
-     * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
      * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      */
-    protected function handleSingleBricks(string $brickableClass, Brick $brick): void
+    protected function handleLimitedNumberOfBricks(string $brickableClass, Brick $brick): void
     {
-        if (in_array($brickableClass, $this->hasSingleBrick ?: [])) {
-            $this->clearBricksExcept($brickableClass, collect()->push($brick));
+        $limitedNumberOfBricks = data_get($this, 'brickables.limitedNumberOfBricks.' . $brickableClass);
+        if ($limitedNumberOfBricks) {
+            $except = $this->getBricks($brickableClass)->reverse()->take($limitedNumberOfBricks);
+            $this->clearBricksExcept($brickableClass, $except);
         }
-    }
-
-    /** @inheritDoc */
-    public function clearBricksExcept(string $brickableClass, Collection $excludeBricks): void
-    {
-        $this->checkBrickableType($brickableClass);
-        $this->checkBrickableIsRegistered($brickableClass);
-        $this->getBricks($brickableClass)->reject(function (Brick $brick) use ($excludeBricks) {
-            return $excludeBricks->where($brick->getKeyName(), $brick->getKey())->count();
-        })->each->delete();
     }
 
     /** @inheritDoc */
@@ -120,10 +119,18 @@ trait HasBrickablesTrait
     }
 
     /** @inheritDoc */
+    public function clearBricksExcept(string $brickableClass, Collection $excludeBricks): void
+    {
+        $this->checkBrickableType($brickableClass);
+        $this->getBricks($brickableClass)->reject(function (Brick $brick) use ($excludeBricks) {
+            return $excludeBricks->where($brick->getKeyName(), $brick->getKey())->count();
+        })->each->delete();
+    }
+
+    /** @inheritDoc */
     public function clearBricks(string $brickableClass): void
     {
         $this->checkBrickableType($brickableClass);
-        $this->checkBrickableIsRegistered($brickableClass);
         $this->getBricks($brickableClass)->each->delete();
     }
 
@@ -131,7 +138,6 @@ trait HasBrickablesTrait
     public function getFirstBrick(string $brickableClass): ?Brick
     {
         $this->checkBrickableType($brickableClass);
-        $this->checkBrickableIsRegistered($brickableClass);
 
         return $this->getBricks()->where('brickable_type', $brickableClass)->first();
     }

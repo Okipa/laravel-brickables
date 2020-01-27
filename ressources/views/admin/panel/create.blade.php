@@ -12,7 +12,7 @@
             <select class="custom-select{{ optional($errors ?? null)->has('brickable_type') ? ' is-invalid' : null }}"
                     name="brickable_type">
                 <option value="">@lang('validation.attributes.brickable_type')</option>
-                @foreach(Brickables::getAll() as $brickable)
+                @foreach(Brickables::getAll($model->getMorphClass()) as $brickable)
                     <option value="{{ get_class($brickable) }}">{{ $brickable->getLabel() }}</option>
                 @endforeach
             </select>

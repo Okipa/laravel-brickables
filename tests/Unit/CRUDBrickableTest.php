@@ -6,9 +6,11 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Facades\Route;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Brickables\OneTextColumn;
+use Okipa\LaravelBrickables\Brickables\TwoTextColumns;
 use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Middleware\CRUDBrickable;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
+use Okipa\LaravelBrickables\Tests\Models\HasBrickablesModel;
 use Okipa\LaravelBrickables\Tests\Models\ModelWithoutBrickables;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 
@@ -59,7 +61,25 @@ class CRUDBrickableTest extends BrickableTestCase
             'brickable_type' => Page::class,
         ])->assertForbidden();
         $this->assertEquals(
-            'The ' . Page::class . ' class should extend ' . Brickable::class . '.',
+            'The given ' . Page::class . ' brickable class should extend ' . Brickable::class . '.',
+            $response->exception->getMessage()
+        );
+    }
+
+    /** @test */
+    public function request_without_brick_with_brickable_that_cannot_be_handled_by_model_is_forbidden()
+    {
+        Route::get('/', function () {
+            //
+        })->middleware(CRUDBrickable::class);
+        $response = $this->call('GET', '/', [
+            'model_type' => HasBrickablesModel::class,
+            'model_id' => 1,
+            'brickable_type' => TwoTextColumns::class,
+        ])->assertForbidden();
+        $this->assertEquals(
+            'The given ' . TwoTextColumns::class . ' brickable cannot be handled by the ' . HasBrickablesModel::class
+            . ' Eloquent model.',
             $response->exception->getMessage()
         );
     }

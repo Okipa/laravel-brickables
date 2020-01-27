@@ -63,7 +63,7 @@ Display the model-related bricks admin panel in your views:
   * [Models](#models)
   * [Routes](#routes)
 * [How to](#how-to)
-  * [Define single brick brickables](#define-single-brick-brickables)
+  * [Define brickable contraints](#define-brickables-constraints)
   * [Add content bricks](#add-content-bricks)
   * [Update a content brick](#update-a-content-brick)
   * [Clear content bricks](#clear-content-bricks)
@@ -155,9 +155,12 @@ To customize the admin panel actions, check the [Empower bricks with extra abili
 
 ## How to
 
-### Define single brick brickables
+### Define brickables constraints
 
-In your Eloquent model, define brickables which will only hold one brick:
+In your Eloquent model, define constraints like:
+
+* The brickables list that your model can handle.
+* The limited number of bricks that can be handled per brickable. 
 
 ```php
 
@@ -169,16 +172,19 @@ class Page extends Model implements HasBrickables
 {
 	use HasBrickablesTrait;
 
-    protected $hasSingleBrick = [
-        OneTextColumn::class,
-        // ...
+    public $brickables = [
+        'canOnlyHandle' => [OneTextColumn::class], // by default all registered brickables can be handled.
+        'limitedNumberOfBricks' => [OneTextColumn::class => 1], // by default, there are no restrictions.
     ];
 
 	// ...
 }
 ```
 
-This model will only hold one brick for the `OneTextColumn` brickable: adding a new brick from this brickable type will clear all the others.
+In this example:
+
+* The model will only be able to handle the `OneTextColumn` brickable.
+* The model will hold only one brick for this brickable type: adding a new brick with from this type will remove the previously stored one.
 
 ### Add content bricks
 
@@ -293,6 +299,12 @@ Get all the registered brickables that can be associated to Eloquent models:
 
 ```php
 $registeredBrickables = Brickables::getAll();
+```
+
+Get all registered brickables that can be handled by a specific Eloquent model:
+
+```php
+$registeredBrickables = Brickables::getAll(Page::class);
 ```
 
 Retrieve a brickable from a brick instance:

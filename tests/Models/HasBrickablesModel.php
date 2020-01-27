@@ -11,7 +11,10 @@ class HasBrickablesModel extends Model implements HasBrickables
 {
     use HasBrickablesTrait;
 
-    protected $hasSingleBrick = [OneTextColumn::class];
+    public $brickables = [
+        'canOnlyHandle' => [OneTextColumn::class],
+        'limitedNumberOfBricks' => [OneTextColumn::class => 2],
+    ];
 
     /**
      * The database table used by the model.

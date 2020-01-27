@@ -26,6 +26,7 @@ interface HasBrickables
      * @return \Okipa\LaravelBrickables\Models\Brick
      * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
+     * @throws \Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException
      */
     public function addBrick(string $brickType, array $data): Brick;
 
@@ -36,7 +37,6 @@ interface HasBrickables
      *
      * @return \Okipa\LaravelBrickables\Models\Brick|null
      * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
-     * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
      */
     public function getFirstBrick(string $brickType): ?Brick;
 
@@ -63,7 +63,6 @@ interface HasBrickables
      * @param \Illuminate\Support\Collection $excludeBricks
      *
      * @return void
-     * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
      * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      */
     public function clearBricksExcept(string $brickableClass, Collection $excludeBricks): void;
@@ -74,8 +73,25 @@ interface HasBrickables
      * @param string $brickableClass
      *
      * @return void
-     * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
      * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      */
     public function clearBricks(string $brickableClass): void;
+
+    /**
+     * Check if the brickable type can be handled by the model.
+     *
+     * @param string $brickableClass
+     *
+     * @throws \Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException
+     */
+    public function checkBrickableCanBeHandled(string $brickableClass): void;
+
+    /**
+     * Check if the brickable type correctly extends the correct abstract class.
+     *
+     * @param string $brickableClass
+     *
+     * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
+     */
+    public function checkBrickableType(string $brickableClass): void;
 }

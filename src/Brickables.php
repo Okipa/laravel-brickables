@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelBrickables;
 
+use Closure;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Collection;
@@ -18,17 +19,24 @@ class Brickables implements Htmlable
     protected $html;
 
     /**
-     * Get the available brickables.
+     * Get the available brickables for an eloquent model.
+     *
+     * @param string|null $modelClass
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getAll(): Collection
+    public function getAll(string $modelClass = null): Collection
     {
         $brickables = new Collection;
         foreach (config('brickables.registered') as $brickableClass) {
-            /** @var Brickable $brickable */
-            $brickable = app($brickableClass);
-            $brickables->push($brickable);
+            $authorizedBrickables = $modelClass ? data_get((new $modelClass), 'brickables.canOnlyHandle') : null;
+            $canBeHandledByModel = $authorizedBrickables && in_array($brickableClass, $authorizedBrickables);
+            $shouldBeReturned = $canBeHandledByModel || ! $modelClass;
+            if ($shouldBeReturned) {
+                /** @var Brickable $brickable */
+                $brickable = app($brickableClass);
+                $brickables->push($brickable);
+            }
         }
 
         return $brickables;
@@ -70,10 +78,15 @@ class Brickables implements Htmlable
 
     /**
      * Register the brickables routes.
+     *
+     * @param \Closure|null $additionalRoutes
      */
-    public function routes(): void
+    public function routes(Closure $additionalRoutes = null): void
     {
-        Route::middleware([CRUDBrickable::class, SubstituteBindings::class])->group(function () {
+        Route::middleware([
+            CRUDBrickable::class,
+            SubstituteBindings::class,
+        ])->group(function () use ($additionalRoutes) {
             Route::get('brick/create', [DispatchController::class, 'create'])->name('brick.create');
             Route::post('brick/store', [DispatchController::class, 'store'])->name('brick.store');
             Route::get('brick/edit/{brick}', [DispatchController::class, 'edit'])->name('brick.edit');
@@ -81,6 +94,9 @@ class Brickables implements Htmlable
             Route::delete('brick/destroy/{brick}', [DispatchController::class, 'destroy'])->name('brick.destroy');
             Route::post('brick/move/up/{brick}', [DispatchController::class, 'moveUp'])->name('brick.move.up');
             Route::post('brick/move/down/{brick}', [DispatchController::class, 'moveDown'])->name('brick.move.down');
+            if ($additionalRoutes) {
+                $additionalRoutes();
+            }
         });
     }
 
