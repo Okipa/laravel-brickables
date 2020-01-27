@@ -90,12 +90,11 @@ trait HasBrickablesTrait
 
     /**
      * @param string $brickableClass
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
      *
      * @return void
      * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      */
-    protected function handleLimitedNumberOfBricks(string $brickableClass, Brick $brick): void
+    protected function handleLimitedNumberOfBricks(string $brickableClass): void
     {
         $limitedNumberOfBricks = data_get($this, 'brickables.limitedNumberOfBricks.' . $brickableClass);
         if ($limitedNumberOfBricks) {

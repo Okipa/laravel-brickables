@@ -30,7 +30,7 @@ class Brickables implements Htmlable
     {
         $brickables = new Collection;
         foreach (config('brickables.registered') as $brickableClass) {
-            $authorizedBrickables = data_get((new $modelClass), 'brickables.canOnlyHandle', []);
+            $authorizedBrickables = data_get(app($modelClass), 'brickables.canOnlyHandle', []);
             $canBeHandledByModel = empty($authorizedBrickables) ?: in_array($brickableClass, $authorizedBrickables);
             $shouldBeReturned = $canBeHandledByModel || ! $modelClass;
             if ($shouldBeReturned) {
