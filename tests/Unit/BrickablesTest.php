@@ -2,15 +2,18 @@
 
 namespace Okipa\LaravelBrickables\Tests\Unit;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
+use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
 use Okipa\LaravelBrickables\Tests\Models\BrickModel;
 use Okipa\LaravelBrickables\Tests\Models\HasBrickablesModel;
 use Okipa\LaravelBrickables\Tests\Models\Page;
+use Okipa\LaravelBrickables\Traits\HasBrickablesTrait;
 
 class BrickablesTest extends BrickableTestCase
 {
@@ -40,12 +43,8 @@ class BrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
-        $registeredPageBrickables = Brickables::getAll(Page::class);
-        $registeredBrickables = Brickables::getAll(Page::class);
+        $registeredPageBrickables = Brickables::getAll();
         $this->assertCount(count(config('brickables.registered')), $registeredPageBrickables);
-        $this->assertCount(count(config('brickables.registered')), $registeredBrickables);
-        $this->assertInstanceOf(Collection::class, $registeredPageBrickables);
-        $this->assertInstanceOf(Collection::class, $registeredBrickables);
     }
 
     /** @test */
@@ -55,6 +54,9 @@ class BrickablesTest extends BrickableTestCase
         $brickables = Brickables::getAdditionableTo($model);
         $this->assertCount(count($model->brickables['canOnlyHandle']), $brickables);
         $this->assertInstanceOf($model->brickables['canOnlyHandle'][0], $brickables->first());
+        $page = factory(Page::class)->create();
+        $pageBrickables = Brickables::getAdditionableTo($page);
+        $this->assertCount(count(config('brickables.registered')), $pageBrickables);
     }
 
     /** @test */

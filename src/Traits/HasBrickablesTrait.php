@@ -5,7 +5,6 @@ namespace Okipa\LaravelBrickables\Traits;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
-use Okipa\LaravelBrickables\Exceptions\BrickableCannotBeDeletedException;
 use Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException;
 use Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException;
 use Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException;
@@ -169,13 +168,23 @@ trait HasBrickablesTrait
     /** @inheritDoc */
     public function canAddBricksFrom(string $brickableClass): bool
     {
-        return $this->getBricks($brickableClass)->count() < $this->getMaxNumberOfBricksFor($brickableClass);
+        $maxNumberOfBricks = $this->getMaxNumberOfBricksFor($brickableClass);
+        if (! $maxNumberOfBricks) {
+            return true;
+        }
+
+        return $this->getBricks($brickableClass)->count() < $maxNumberOfBricks;
     }
 
     /** @inheritDoc */
     public function canDeleteBricksFrom(string $brickableClass): bool
     {
-        return $this->getBricks($brickableClass)->count() > $this->getMinNumberOfBricksFor($brickableClass);
+        $minNumberOfBricks = $this->getMinNumberOfBricksFor($brickableClass);
+        if (! $minNumberOfBricks) {
+            return true;
+        }
+
+        return $this->getBricks($brickableClass)->count() > $minNumberOfBricks;
     }
 
     /**
