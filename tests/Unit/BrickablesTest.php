@@ -51,8 +51,8 @@ class BrickablesTest extends BrickableTestCase
     /** @test */
     public function it_can_return_brickables_that_can_be_added_to_model()
     {
-        $brickables = Brickables::getAdditionableTo(HasBrickablesModel::class);
-        $model = (new HasBrickablesModel);
+        $model = (new HasBrickablesModel)->create();
+        $brickables = Brickables::getAdditionableTo($model);
         $this->assertCount(count($model->brickables['canOnlyHandle']), $brickables);
         $this->assertInstanceOf($model->brickables['canOnlyHandle'][0], $brickables->first());
     }

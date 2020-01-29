@@ -1,4 +1,4 @@
-@php($brickables = Brickables::getAdditionableTo($model->getMorphClass()))
+@php($brickables = Brickables::getAdditionableTo($model))
 @if($brickables->isNotEmpty())
     <form class="form-inline" role="form" method="GET" action="{{ route('brick.create') }}">
         <input type="hidden" name="model_id" value="{{ $model->id }}">

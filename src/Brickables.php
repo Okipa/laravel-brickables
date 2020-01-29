@@ -43,7 +43,7 @@ class Brickables implements Htmlable
      */
     public function displayAdminPanel(HasBrickables $model): self
     {
-        $this->html = view('laravel-brickables::admin.panel.layout', ['model' => $model]);
+        $this->html = view('laravel-brickables::admin.panel.layout', compact('model'));
 
         return $this;
     }
@@ -139,15 +139,13 @@ class Brickables implements Htmlable
     /**
      * Get all registered brickables that can be added to the given model.
      *
-     * @param string $modelClass
+     * @param \Okipa\LaravelBrickables\Contracts\HasBrickables $model
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getAdditionableTo(string $modelClass): Collection
+    public function getAdditionableTo(HasBrickables $model): Collection
     {
-        return $this->getAll()->filter(function ($brickable) use ($modelClass) {
-            /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $model */
-            $model = app($modelClass);
+        return $this->getAll()->filter(function ($brickable) use ($model) {
             $brickableClass = get_class($brickable);
 
             return $model->canHandle($brickableClass) && $model->canAddBricksFrom($brickableClass);
