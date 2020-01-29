@@ -67,4 +67,14 @@ class Brick extends Model implements Htmlable, Sortable
     {
         return static::query()->where('model_type', $this->model_type)->where('model_id', $this->model_id);
     }
+
+    /** @inheritDoc */
+    public function delete()
+    {
+        if ($this->model->canDeleteBricksFrom($this->brickable_type)) {
+            return parent::delete();
+        }
+
+        return false;
+    }
 }

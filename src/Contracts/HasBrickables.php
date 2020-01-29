@@ -14,6 +14,8 @@ interface HasBrickables
      *
      * @return \Illuminate\Support\Collection
      * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
+     * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
+     * @throws \Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException
      */
     public function addBricks(array $bricks): Collection;
 
@@ -33,12 +35,11 @@ interface HasBrickables
     /**
      * Get first brick from given brick type.
      *
-     * @param string $brickType
+     * @param string|null $brickableClass
      *
      * @return \Okipa\LaravelBrickables\Models\Brick|null
-     * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      */
-    public function getFirstBrick(string $brickType): ?Brick;
+    public function getFirstBrick(?string $brickableClass = null): ?Brick;
 
     /**
      * Get the model associated bricks.
@@ -63,19 +64,17 @@ interface HasBrickables
      * @param \Illuminate\Support\Collection $excludeBricks
      *
      * @return void
-     * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      */
     public function clearBricksExcept(string $brickableClass, Collection $excludeBricks): void;
 
     /**
      * Clear all bricks from a given brickable type.
      *
-     * @param string $brickableClass
+     * @param string|null $brickableClass
      *
      * @return void
-     * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      */
-    public function clearBricks(string $brickableClass): void;
+    public function clearBricks(?string $brickableClass = null): void;
 
     /**
      * Check if the brickable type can be handled by the model.
@@ -94,4 +93,31 @@ interface HasBrickables
      * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      */
     public function checkBrickableType(string $brickableClass): void;
+
+    /**
+     * Check if model can remove bricks from the given brickable type.
+     *
+     * @param string $brickableClass
+     *
+     * @return bool
+     */
+    public function canDeleteBricksFrom(string $brickableClass): bool;
+
+    /**
+     * Check if model can add bricks from the given brickable type.
+     *
+     * @param string $brickableClass
+     *
+     * @return bool
+     */
+    public function canAddBricksFrom(string $brickableClass): bool;
+
+    /**
+     * Check if the the model is allowed to handle the given brickable.
+     *
+     * @param string $brickableClass
+     *
+     * @return bool
+     */
+    public function canHandle(string $brickableClass): bool;
 }

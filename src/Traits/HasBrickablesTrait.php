@@ -5,6 +5,7 @@ namespace Okipa\LaravelBrickables\Traits;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
+use Okipa\LaravelBrickables\Exceptions\BrickableCannotBeDeletedException;
 use Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException;
 use Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException;
 use Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException;
@@ -18,7 +19,10 @@ trait HasBrickablesTrait
     {
         $createdBricks = new Collection();
         foreach ($bricksData as $brickData) {
-            $createdBricks->push($this->addBrick($brickData[0], $brickData[1]));
+            $brickableClass = $brickData[0];
+            $data = data_get($brickData, 1, []);
+            $brick = $this->addBrick($brickableClass, $data);
+            $createdBricks->push($brick);
         }
 
         return $createdBricks;
@@ -31,7 +35,7 @@ trait HasBrickablesTrait
         $this->checkBrickableIsRegistered($brickableClass);
         $this->checkBrickableCanBeHandled($brickableClass);
         $brick = $this->createBrick($brickableClass, $data);
-        $this->handleLimitedNumberOfBricks($brickableClass, $brick);
+        $this->handleMaxNumberOfBricks($brickableClass);
 
         return $brick;
     }
@@ -61,11 +65,21 @@ trait HasBrickablesTrait
     /** @inheritDoc */
     public function checkBrickableCanBeHandled(string $brickableClass): void
     {
-        $authorizedBrickables = data_get($this, 'brickables.canOnlyHandle');
-        if ($authorizedBrickables && ! in_array($brickableClass, $authorizedBrickables)) {
+        if (! $this->canHandle($brickableClass)) {
             throw new BrickableCannotBeHandledException('The given ' . $brickableClass
                 . ' brickable cannot be handled by the ' . $this->getMorphClass() . ' Eloquent model.');
         }
+    }
+
+    /** @inheritDoc */
+    public function canHandle(string $brickableClass): bool
+    {
+        $authorizedBrickables = data_get($this, 'brickables.canOnlyHandle');
+        if (! $authorizedBrickables) {
+            return true;
+        }
+
+        return in_array($brickableClass, $authorizedBrickables);
     }
 
     /**
@@ -92,15 +106,24 @@ trait HasBrickablesTrait
      * @param string $brickableClass
      *
      * @return void
-     * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      */
-    protected function handleLimitedNumberOfBricks(string $brickableClass): void
+    protected function handleMaxNumberOfBricks(string $brickableClass): void
     {
-        $limitedNumberOfBricks = data_get($this, 'brickables.limitedNumberOfBricks.' . $brickableClass);
-        if ($limitedNumberOfBricks) {
-            $except = $this->getBricks($brickableClass)->reverse()->take($limitedNumberOfBricks);
+        $maxNumberOfBricks = $this->getMaxNumberOfBricksFor($brickableClass);
+        if ($maxNumberOfBricks) {
+            $except = $this->getBricks($brickableClass)->reverse()->take($maxNumberOfBricks);
             $this->clearBricksExcept($brickableClass, $except);
         }
+    }
+
+    /**
+     * @param string $brickableClass
+     *
+     * @return int
+     */
+    protected function getMaxNumberOfBricksFor(string $brickableClass): int
+    {
+        return (int) data_get($this, 'brickables.numberOfBricks.' . $brickableClass . '.max', 0);
     }
 
     /** @inheritDoc */
@@ -120,30 +143,48 @@ trait HasBrickablesTrait
     /** @inheritDoc */
     public function clearBricksExcept(string $brickableClass, Collection $excludeBricks): void
     {
-        $this->checkBrickableType($brickableClass);
         $this->getBricks($brickableClass)->reject(function (Brick $brick) use ($excludeBricks) {
             return $excludeBricks->where($brick->getKeyName(), $brick->getKey())->count();
         })->each->delete();
     }
 
     /** @inheritDoc */
-    public function clearBricks(string $brickableClass): void
+    public function clearBricks(?string $brickableClass = null): void
     {
-        $this->checkBrickableType($brickableClass);
         $this->getBricks($brickableClass)->each->delete();
     }
 
     /** @inheritDoc */
-    public function getFirstBrick(string $brickableClass): ?Brick
+    public function getFirstBrick(?string $brickableClass = null): ?Brick
     {
-        $this->checkBrickableType($brickableClass);
-
-        return $this->getBricks()->where('brickable_type', $brickableClass)->first();
+        return $this->getBricks($brickableClass)->first();
     }
 
     /** @inheritDoc */
     public function getReadableClassName(): string
     {
         return __(ucfirst(Str::snake(class_basename($this), ' ')));
+    }
+
+    /** @inheritDoc */
+    public function canAddBricksFrom(string $brickableClass): bool
+    {
+        return $this->getBricks($brickableClass)->count() < $this->getMaxNumberOfBricksFor($brickableClass);
+    }
+
+    /** @inheritDoc */
+    public function canDeleteBricksFrom(string $brickableClass): bool
+    {
+        return $this->getBricks($brickableClass)->count() > $this->getMinNumberOfBricksFor($brickableClass);
+    }
+
+    /**
+     * @param string $brickableClass
+     *
+     * @return int
+     */
+    protected function getMinNumberOfBricksFor(string $brickableClass): int
+    {
+        return (int) data_get($this, 'brickables.numberOfBricks.' . $brickableClass . '.min', 0);
     }
 }

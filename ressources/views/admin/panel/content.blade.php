@@ -11,7 +11,9 @@
                         @include('laravel-brickables::admin.panel.move-up')
                         @include('laravel-brickables::admin.panel.move-down')
                         @include('laravel-brickables::admin.panel.edit')
-                        @include('laravel-brickables::admin.panel.destroy')
+                        @if($model->canDeleteBricksFrom($brick->brickable_type))
+                            @include('laravel-brickables::admin.panel.destroy')
+                        @endif
                     </div>
                 </div>
                 <div class="card-body">

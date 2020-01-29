@@ -49,16 +49,16 @@ class BrickablesTest extends BrickableTestCase
     }
 
     /** @test */
-    public function it_can_return_all_model_handlable_brickables()
+    public function it_can_return_brickables_that_can_be_added_to_model()
     {
-        $brickables = Brickables::getAll(HasBrickablesModel::class);
+        $brickables = Brickables::getAdditionableTo(HasBrickablesModel::class);
         $model = (new HasBrickablesModel);
         $this->assertCount(count($model->brickables['canOnlyHandle']), $brickables);
         $this->assertInstanceOf($model->brickables['canOnlyHandle'][0], $brickables->first());
     }
 
     /** @test */
-    public function it_displays_model_bricks_html()
+    public function it_can_display_model_bricks_html()
     {
         view()->addNamespace('laravel-brickables', 'tests/views');
         $brickable = new Class extends Brickable {
@@ -81,13 +81,13 @@ class BrickablesTest extends BrickableTestCase
         $page = factory(Page::class)->create();
         $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
         $this->assertEquals(
-            view('laravel-brickables::bricks', ['model' => $page])->toHtml(),
-            Brickables::bricks($page)->toHtml()
+            view('laravel-brickables::bricks', ['model' => $page, 'brickableClass' => get_class($brickable)])->toHtml(),
+            Brickables::displayBricks($page, get_class($brickable))->toHtml()
         );
     }
 
     /** @test */
-    public function it_displays_model_bricks_admin_panel_html()
+    public function it_can_display_model_bricks_admin_panel_html()
     {
         view()->addNamespace('laravel-brickables', 'tests/views');
         $brickable = new Class extends Brickable {
@@ -112,12 +112,12 @@ class BrickablesTest extends BrickableTestCase
         $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
         $this->assertEquals(
             view('laravel-brickables::admin.panel.layout', ['model' => $page])->toHtml(),
-            Brickables::adminPanel($page)->toHtml()
+            Brickables::displayAdminPanel($page)->toHtml()
         );
     }
 
     /** @test */
-    public function it_cast_bricks_to_their_brickable_related_brick_model()
+    public function it_can_cast_bricks_to_their_brickable_related_brick_model()
     {
         $brickableOne = new Class extends Brickable {
             protected function setStoreValidationRules(): array
@@ -165,7 +165,7 @@ class BrickablesTest extends BrickableTestCase
     }
 
     /** @test */
-    public function it_cast_brick_to_its_brickable_related_brick_model()
+    public function it_can_cast_brick_to_its_brickable_related_brick_model()
     {
         $brickable = new Class extends Brickable {
             protected function setBrickModelClass(): string

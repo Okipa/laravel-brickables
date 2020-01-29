@@ -20,39 +20,16 @@ class Brickables implements Htmlable
     protected $html;
 
     /**
-     * Get the available brickables for an eloquent model.
-     *
-     * @param string|null $modelClass
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function getAll(string $modelClass = null): Collection
-    {
-        $brickables = new Collection;
-        foreach (config('brickables.registered') as $brickableClass) {
-            $authorizedBrickables = data_get(app($modelClass), 'brickables.canOnlyHandle', []);
-            $canBeHandledByModel = empty($authorizedBrickables) ?: in_array($brickableClass, $authorizedBrickables);
-            $shouldBeReturned = $canBeHandledByModel || ! $modelClass;
-            if ($shouldBeReturned) {
-                /** @var Brickable $brickable */
-                $brickable = app($brickableClass);
-                $brickables->push($brickable);
-            }
-        }
-
-        return $brickables;
-    }
-
-    /**
      * Display all the model-related content bricks html at once.
      *
      * @param \Okipa\LaravelBrickables\Contracts\HasBrickables $model
+     * @param string|null $brickableClass
      *
      * @return $this
      */
-    public function bricks(HasBrickables $model): self
+    public function displayBricks(HasBrickables $model, ?string $brickableClass = null): self
     {
-        $this->html = view('laravel-brickables::bricks', ['model' => $model]);
+        $this->html = view('laravel-brickables::bricks', compact('model', 'brickableClass'));
 
         return $this;
     }
@@ -64,7 +41,7 @@ class Brickables implements Htmlable
      *
      * @return $this
      */
-    public function adminPanel(HasBrickables $model): self
+    public function displayAdminPanel(HasBrickables $model): self
     {
         $this->html = view('laravel-brickables::admin.panel.layout', ['model' => $model]);
 
@@ -157,5 +134,40 @@ class Brickables implements Htmlable
         }
 
         return $casted->flatten();
+    }
+
+    /**
+     * Get all registered brickables that can be added to the given model.
+     *
+     * @param string $modelClass
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getAdditionableTo(string $modelClass): Collection
+    {
+        return $this->getAll()->filter(function ($brickable) use ($modelClass) {
+            /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $model */
+            $model = app($modelClass);
+            $brickableClass = get_class($brickable);
+
+            return $model->canHandle($brickableClass) && $model->canAddBricksFrom($brickableClass);
+        });
+    }
+
+    /**
+     * Get all registered brickables.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getAll(): Collection
+    {
+        $brickables = new Collection;
+        foreach (config('brickables.registered') as $brickableClass) {
+            /** @var Brickable $brickable */
+            $brickable = app($brickableClass);
+            $brickables->push($brickable);
+        }
+
+        return $brickables;
     }
 }

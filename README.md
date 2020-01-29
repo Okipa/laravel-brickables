@@ -41,7 +41,7 @@ Display bricks in your views:
 
 ```blade
 {{-- all at once --}}
-{{ Brickables::bricks($page) }}
+{{ Brickables::displayBricks($page) }}
 
 {{-- or one by one --}}
 {{ $page->getFirstBrick(OneTextColumn::class) }}
@@ -50,7 +50,7 @@ Display bricks in your views:
 Display the model-related bricks admin panel in your views:
 
 ```blade
-{{ Brickables::adminPanel($page) }}
+{{ Brickables::displayAdminPanel($page) }}
 ```
 
 ## Table of contents
@@ -157,7 +157,6 @@ To customize the admin panel actions, you can add routes inside or outside from 
 ```php
 Brickables::routes(function(){
     // inside the routes group: will benefit from the CRUDBrickable middleware.
-    Route::get('your/custom/route', [YourCustomBrickController::class, 'yourMethod'])->name('brick.custom.route');
 });
 // outside the route group: will not benefit from the CRUDBrickable middleware.
 ```
@@ -168,10 +167,11 @@ Check the [Empower bricks with extra abilities](#empower-brickables-with-extra-a
 
 ### Define brickables constraints
 
-In your Eloquent model, define constraints like:
+In your Eloquent model, define constraints:
 
 * The brickables list that your model can handle.
-* The limited number of bricks that can be handled per brickable. 
+* Make sure to always keep a min number of bricks for a brickable.
+* Make sure to only hold a max number of bricks for a brickable.
 
 ```php
 
@@ -185,7 +185,7 @@ class Page extends Model implements HasBrickables
 
     public $brickables = [
         'canOnlyHandle' => [OneTextColumn::class], // by default all registered brickables can be handled.
-        'limitedNumberOfBricks' => [OneTextColumn::class => 1], // by default, there are no restrictions.
+        'numberOfBricks' => [OneTextColumn::class => ['min' => 1, 'max' => 3]], // by default, there are no number restrictions.
     ];
 
 	// ...
@@ -194,22 +194,21 @@ class Page extends Model implements HasBrickables
 
 In this example:
 
-* The model will only be able to handle the `OneTextColumn` brickable.
-* The model will hold only one brick for this brickable type: adding a new brick with from this type will remove the previously stored one.
+* The model will only be allowed to handle the `OneTextColumn` brickable.
+* Clearing all bricks from this brickable type for this model will keep the one with the highest position.
+* Adding a 4th brick from this brickable type will remove the one with the lowest position.
 
 ### Add content bricks
 
 Associate a single content brick to an Eloquent model:
 
 ```php
-$page = Page::find(1);
 $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
 ```
 
 You also can associate several content bricks at once:
 
 ```php
-$page = Page::find(1);
 $bricks = $page->addBricks([
     [OneTextColumn::class, ['text' => 'Text']],
     [TwoTextColumns::class, ['text_left' => 'Left text', 'text_right' => 'Right text']]
@@ -221,12 +220,12 @@ $bricks = $page->addBricks([
 Just update your content brick as you would fo for any other Eloquent model instance:
 
 ```php
-// as data are store in json, you'll have to process this way
-$brick->data = ['text', 'Another text'];
+// as data are store in json, so you will have to process this way
+$brick->data = ['text' => 'Another text'];
 $brick->save();
 ```
 
-### Clear content bricks
+### Remove content bricks
 
 Just delete your content brick as you would fo for any other Eloquent model instance:
 
@@ -234,23 +233,27 @@ Just delete your content brick as you would fo for any other Eloquent model inst
 $brick->delete();
 ```
 
-Clear all the content bricks from a given brickable type:
+Clear all the content bricks associated to an Eloquent model, or only those with a specific brickable type:
 
 ```php
-$page = Page::find(1);
+$page->clearBricks();
+
 $page->clearBricks(OneTextColumn::class);
 ```
 
 Clear all the content bricks from a given brickable type except some bricks:
 
 ```php
-$page = Page::find(1);
-$page->clearBricks(OneTextColumn::class, $oneTextColumnBricksCollection);
+$page->clearBricksExcept(OneTextColumn::class, $bricksCollection);
 ```
+
+**Note**
+
+* According to the [number of bricks constraints](#define-brickables-constraints) defined in the Eloquent model, these methods could be brought to keep the min number of bricks instead of removing the targeted brick(s).
 
 ### Set content bricks order
 
-By default all bricks are ordered by their creation order (from the oldest to the newest).
+By default all bricks are ordered by their creation order (last created at the end).
 
 The `Brick` model uses the `spatie/eloquent-sortable` package to handle the content bricks positioning.
 
@@ -260,24 +263,19 @@ You may note that the bricks order management is already handled in the provided
 
 ### Retrieve content bricks
 
-Retrieve the content bricks associated to an Eloquent model:
+Retrieve all the content bricks associated to an Eloquent model, or only those with a specific brickable type:
 
 ```php
-$page = Page::find(1);
 $bricks = $page->getBricks();
-```
 
-Or get the content bricks from a brickable type:
-
-```php
-$page = Page::find(1);
 $bricks = $page->getBricks(OneTextColumn::class);
 ```
 
-You also can get the first content brick from a brickable type:
+Get the first content brick associated to an Eloquent model, or the one with a specific brickable type:
 
 ```php
-$page = Page::find(1);
+$brick = $page->getFirstBrick();
+
 $brick = $page->getFirstBrick(OneTextColumn::class);
 ```
 
@@ -286,8 +284,7 @@ $brick = $page->getFirstBrick(OneTextColumn::class);
 As brickables can specify the model they use, you should query content bricks and then cast them to their respective models:
 
 ```php
-$bricks = Brick::all();
-$bricks = Brickables::castBricks($bricks);
+$bricks = Brickables::castBricks(Brick::all());
 ```
 
 ### Display content bricks
@@ -298,32 +295,32 @@ Display a single content brick in your view:
 {{ $page->getFirstBrick(OneTextColumn::class) }}
 ```
 
-Or display all the model-related content bricks:
+Or display all the content bricks associated to an Eloquent model, with a brickable constraint or not:
 
 ```blade
-{{ Brickables::bricks($page) }}
+{{ Brickables::displayBricks($page) }}
+
+{{ Brickables::displayBricks($page, OneTextColumn::class) }}
 ```
 
 ### Retrieve brickables
 
-Get all the registered brickables that can be associated to Eloquent models:
+Get all the registered brickables:
 
 ```php
 $registeredBrickables = Brickables::getAll();
 ```
 
-Get all registered brickables that can be handled by a specific Eloquent model:
+Get all the brickables that can be added to an Eloquent model:
 
 ```php
-$registeredBrickables = Brickables::getAll(Page::class);
+$additionableBrickables = Brickables::getAdditionableTo($page);
 ```
 
 Retrieve a brickable from a brick instance:
 
 ```php
-$page = Page::find(1);
-$brick = $page->getFirstBrick(OneTextColumn::class);
-$brickable = $brick->brickable;
+$brickable = $page->getFirstBrick(OneTextColumn::class)->brickable;
 ```
 
 ### Manage model content bricks
@@ -331,7 +328,7 @@ $brickable = $brick->brickable;
 Use the ready-to-use admin panel to manage related-model content bricks:
 
 ```blade
-{{ Brickables::adminPanel($page) }}
+{{ Brickables::displayAdminPanel($page) }}
 ```
 
 Customize the admin panel views by [publishing them](#views).
@@ -385,6 +382,7 @@ return [
 ```
 
 Finally, create the brick view in the `ressources/views/vendor/laravel-brickables/my-new-brickable` directory (you can customize the views paths in your `MyNewBrickable` class if you want):
+
 * the `brick` view will be used to display your brickable.
 * the `form` view will contain the form inputs that will be used to CRUD your brickable.
 

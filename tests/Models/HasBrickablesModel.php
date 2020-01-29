@@ -13,7 +13,7 @@ class HasBrickablesModel extends Model implements HasBrickables
 
     public $brickables = [
         'canOnlyHandle' => [OneTextColumn::class],
-        'limitedNumberOfBricks' => [OneTextColumn::class => 2],
+        'numberOfBricks' => [OneTextColumn::class => ['min' => 1, 'max' => 3]],
     ];
 
     /**

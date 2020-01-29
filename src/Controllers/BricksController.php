@@ -32,6 +32,7 @@ class BricksController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
+     * @throws \Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException
      */
     public function store(Request $request)
     {
