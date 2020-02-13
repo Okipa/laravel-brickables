@@ -34,15 +34,23 @@ class CRUDBrickable
                 abort(Response::HTTP_FORBIDDEN, 'The model_id value is missing from the request.');
             }
             rescue(
-                fn() => $request->brickable_type
-                    && (new $request->model_type)->checkBrickableType($request->brickable_type),
-                fn($exception) => abort(Response::HTTP_FORBIDDEN, $exception->getMessage()),
+                function () use ($request) {
+                    return $request->brickable_type
+                        && (new $request->model_type)->checkBrickableType($request->brickable_type);
+                },
+                function ($exception) {
+                    return abort(Response::HTTP_FORBIDDEN, $exception->getMessage());
+                },
                 false
             );
             rescue(
-                fn() => $request->brickable_type
-                    && (new $request->model_type)->checkBrickableCanBeHandled($request->brickable_type),
-                fn($exception) => abort(Response::HTTP_FORBIDDEN, $exception->getMessage()),
+                function () use ($request) {
+                    return $request->brickable_type
+                        && (new $request->model_type)->checkBrickableCanBeHandled($request->brickable_type);
+                },
+                function ($exception) {
+                    return abort(Response::HTTP_FORBIDDEN, $exception->getMessage());
+                },
                 false
             );
         }
