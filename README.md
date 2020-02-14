@@ -12,7 +12,6 @@ This package allows you to associate content bricks to Eloquent models and provi
 
 This package is shipped with pre-built brickables. You can use them as is, but you definitely should consider them as examples: customizing them or create new ones has been designed to be simple as hell ! :fire:
 
-
 ## Compatibility
 
 | Laravel version | PHP version | Package version |
