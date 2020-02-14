@@ -1,0 +1,77 @@
+{
+    "name": "okipa/laravel-brickables",
+    "description": "Page content bricks management made easy.",
+    "keywords": [
+        "okipa",
+        "laravel-brickables",
+        "brickables",
+        "brickable",
+        "bricks",
+        "brick",
+        "blocks",
+        "block",
+        "content",
+        "management",
+        "manage",
+        "admin",
+        "display",
+        "html"
+    ],
+    "homepage": "https://github.com/okipa/laravel-brickables",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Arthur LORENT",
+            "email": "arthur.lorent@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "illuminate/support": "~5.8.0||^6.0",
+        "spatie/eloquent-sortable": "^3.0"
+    },
+    "require-dev": {
+        "fzaninotto/faker": "^1.9",
+        "nunomaduro/larastan": "^0.4.3||^0.5",
+        "orchestra/testbench": "^3.8.0||^4.0",
+        "phpmd/phpmd": "^2.8",
+        "squizlabs/php_codesniffer": "^3.5",
+        "phpunit/phpunit": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Okipa\\LaravelBrickables\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Okipa\\LaravelBrickables\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": [
+            "vendor/bin/phpcbf",
+            "vendor/bin/phpcs",
+            "vendor/bin/phpmd config,src text phpmd.xml",
+            "vendor/bin/phpstan analyse",
+            "vendor/bin/phpunit"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Okipa\\LaravelBrickables\\BrickablesServiceProvider"
+            ],
+            "aliases": {
+                "Brickables": "Okipa\\LaravelBrickables\\Facades\\Brickables"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
