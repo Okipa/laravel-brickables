@@ -14,7 +14,7 @@ This package is shipped with pre-built brickables. You can use them as is, but y
 
 ## Compatibility
 
-| Laravel version | PHP version | Package version |
+| Laravel | PHP | Package |
 |---|---|---|
 | ^5.8 | ^7.2 | ^1.0 |
 
