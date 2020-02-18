@@ -42,27 +42,28 @@ jobs:
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
           composer update --prefer-dist --no-interaction --no-suggest
 
-      - name: PHP Code Sniffer
-        run: vendor/bin/phpcs
-
-      - name: PHP Mess Detector
-        run: vendor/bin/phpmd config,src text phpmd.xml
-
-      - name: PHP Static Analysis Tool
-        if: matrix.php == '7.4' && matrix.laravel == '6.*'
-        run: vendor/bin/phpstan analyse
+      # lower php and laravel versions
 
       - name: PHPUnit
         if: matrix.php != '7.4' || matrix.laravel != '6.*'
         run: vendor/bin/phpunit
 
-      - name: PHPUnit + code coverage
+      # last php and laravel versions
+
+      - name: Code analysis
+        if: matrix.php == '7.4' && matrix.laravel == '6.*'
+        run: |
+          vendor/bin/phpcs
+          vendor/bin/phpmd config,src text phpmd.xml
+          vendor/bin/phpstan analyse
+
+      - name: PHPUnit + Code coverage
         if: matrix.php == '7.4' && matrix.laravel == '6.*'
         run: |
           mkdir -p build/logs
           vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
 
-      - name: Upload coverage to Coveralls
+      - name: Code coverage upload to Coveralls
         if: matrix.php == '7.4' && matrix.laravel == '6.*'
         env:
           COVERALLS_RUN_LOCALLY: 1
