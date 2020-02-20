@@ -150,7 +150,7 @@ class BrickablesTest extends BrickableTestCase
         };
         config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
         $page = factory(Page::class)->create();
-        $page->addBricks([[get_class($brickableOne), []], [get_class($brickableTwo), []]]);
+        $page->addBricks([[get_class($brickableOne)], [get_class($brickableTwo)]]);
         $bricks = Brick::all();
         $this->assertEquals(
             Brick::class,
@@ -164,6 +164,46 @@ class BrickablesTest extends BrickableTestCase
         $this->assertCount(2, $bricks);
         $this->assertInstanceOf(Brick::class, $bricks->where('brickable_type', get_class($brickableOne))->first());
         $this->assertInstanceOf(BrickModel::class, $bricks->where('brickable_type', get_class($brickableTwo))->first());
+    }
+
+    /** @test */
+    public function it_can_cast_bricks_and_return_them_in_correct_order()
+    {
+        $brickableOne = new Class extends Brickable {
+            protected function setStoreValidationRules(): array
+            {
+                return [];
+            }
+
+            protected function setUpdateValidationRules(): array
+            {
+                return [];
+            }
+        };
+        $brickableTwo = new Class extends Brickable {
+            protected function setBrickModelClass(): string
+            {
+                return BrickModel::class;
+            }
+
+            protected function setStoreValidationRules(): array
+            {
+                return [];
+            }
+
+            protected function setUpdateValidationRules(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
+        $page = factory(Page::class)->create();
+        $brickOne = $page->addBrick(get_class($brickableOne));
+        $brickTwo = $page->addBrick(get_class($brickableTwo));
+        Brick::swapOrder($brickOne, $brickTwo);
+        $bricks = Brickables::castBricks(Brick::all());
+        $this->assertEquals(1, $bricks->where('id', 2)->first()->position);
+        $this->assertEquals(2, $bricks->where('id', 1)->first()->position);
     }
 
     /** @test */

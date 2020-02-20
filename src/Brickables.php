@@ -119,6 +119,9 @@ class Brickables implements Htmlable
      */
     public function castBricks(Collection $bricks): Collection
     {
+        if ($bricks->isEmpty()) {
+            return $bricks;
+        }
         $casted = new Collection;
         foreach ($bricks->pluck('brickable_type')->unique() as $brickableClass) {
             /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
@@ -132,7 +135,7 @@ class Brickables implements Htmlable
             $casted->push($castedBricks);
         }
 
-        return $casted->flatten();
+        return $casted->flatten()->sortBy($model->sortable['order_column_name']);
     }
 
     /**
