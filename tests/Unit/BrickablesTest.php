@@ -2,18 +2,14 @@
 
 namespace Okipa\LaravelBrickables\Tests\Unit;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
-use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
 use Okipa\LaravelBrickables\Tests\Models\BrickModel;
 use Okipa\LaravelBrickables\Tests\Models\HasBrickablesModel;
 use Okipa\LaravelBrickables\Tests\Models\Page;
-use Okipa\LaravelBrickables\Traits\HasBrickablesTrait;
 
 class BrickablesTest extends BrickableTestCase
 {
@@ -198,12 +194,12 @@ class BrickablesTest extends BrickableTestCase
         };
         config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
         $page = factory(Page::class)->create();
-        $brickOne = $page->addBrick(get_class($brickableOne));
-        $brickTwo = $page->addBrick(get_class($brickableTwo));
-        Brick::swapOrder($brickOne, $brickTwo);
+        $page->addBrick(get_class($brickableOne));
+        $page->addBrick(get_class($brickableTwo));
+        $page->addBrick(get_class($brickableOne));
+        $page->addBrick(get_class($brickableTwo));
         $bricks = Brickables::castBricks(Brick::all());
-        $this->assertEquals(1, $bricks->where('id', 2)->first()->position);
-        $this->assertEquals(2, $bricks->where('id', 1)->first()->position);
+        $this->assertEquals(['1', '2', '3', '4'], $bricks->pluck('position')->toArray());
     }
 
     /** @test */
