@@ -132,11 +132,10 @@ class Brickables implements Htmlable
                 return $brick->getAttributes();
             })->toArray();
             $castedBricks = $model->hydrate($brickableBricksDataArray);
-            $castedBricks = $castedBricks->sortBy($model->sortable['order_column_name']);
             $casted->push($castedBricks);
         }
 
-        return $casted->flatten();
+        return $casted->flatten()->sortBy(app(Brick::class)->sortable['order_column_name']);
     }
 
     /**

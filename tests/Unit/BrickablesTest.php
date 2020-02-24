@@ -202,8 +202,8 @@ class BrickablesTest extends BrickableTestCase
         $brickTwo = $page->addBrick(get_class($brickableTwo));
         Brick::swapOrder($brickOne, $brickTwo);
         $bricks = Brickables::castBricks(Brick::all());
-        $this->assertEquals(1, $bricks->where('id', 2)->first()->position);
-        $this->assertEquals(2, $bricks->where('id', 1)->first()->position);
+
+        $this->assertEquals([1,2], $bricks->pluck('position')->toArray());
     }
 
     /** @test */
