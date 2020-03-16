@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.1.0](https://github.com/Okipa/laravel-brickables/compare/1.0.2...1.1.0)
+
+2020-03-16
+
+* Added Laravel 7 support.
+
 ## [1.0.2](https://github.com/Okipa/laravel-brickables/compare/1.0.1...1.0.2)
 
 2020-02-24
