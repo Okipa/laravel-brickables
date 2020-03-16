@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelBrickables\Tests\Unit;
 
+use Illuminate\Support\Arr;
 use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Tests\Brickables\Brickable;
@@ -68,7 +69,7 @@ class BricksControllerTest extends BrickableTestCase
         ])->assertRedirect('admin-panel');
         $brick = $page->getFirstBrick(OneTextColumn::class);
         $brick->data = json_encode($brick->data);
-        $this->assertDatabaseHas('bricks', $brick->toArray());
+        $this->assertDatabaseHas('bricks', Arr::except($brick->toArray(), ['created_at', 'updated_at']));
     }
 
     /** @test */
@@ -110,7 +111,7 @@ class BricksControllerTest extends BrickableTestCase
             'text' => 'New text',
         ])->assertRedirect('admin-panel');
         $brick->refresh()->data = json_encode(['text' => 'New text']);
-        $this->assertDatabaseHas('bricks', $brick->toArray());
+        $this->assertDatabaseHas('bricks', Arr::except($brick->toArray(), ['created_at', 'updated_at']));
     }
 
     /** @test */
