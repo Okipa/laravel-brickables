@@ -379,7 +379,7 @@ return [
 
 ```
 
-Finally, create the brick view in the `ressources/views/vendor/laravel-brickables/my-new-brickable` directory (you can customize the views paths in your `MyNewBrickable` class if you want):
+Finally, create the brick view in the `resources/views/vendor/laravel-brickables/my-new-brickable` directory (you can customize the views paths in your `MyNewBrickable` class if you want):
 
 * the `brick` view will be used to display your brickable.
 * the `form` view will contain the form inputs that will be used to CRUD your brickable.

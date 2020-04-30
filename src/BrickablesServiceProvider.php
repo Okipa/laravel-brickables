@@ -15,16 +15,13 @@ class BrickablesServiceProvider extends ServiceProvider
      */
     public function boot(Filesystem $filesystem)
     {
-        $this->loadViewsFrom(__DIR__ . '/../ressources/views', 'laravel-brickables');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'laravel-brickables');
         $this->publishes([
             __DIR__ . '/../config/brickables.php' => config_path('brickables.php'),
         ], 'config');
         $this->publishes([
-            __DIR__ . '/../ressources/views' => resource_path('views/vendor/laravel-brickables'),
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/laravel-brickables'),
         ], 'views');
-        $this->publishes([
-            __DIR__ . '/../ressources/lang' => resource_path('lang/vendor/laravel-brickables'),
-        ]);
         $this->publishes([
             __DIR__
             . '/../database/migrations/create_bricks_table.php.stub' => $this->getMigrationFileName($filesystem),
