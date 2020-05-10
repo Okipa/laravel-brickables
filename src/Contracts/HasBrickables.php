@@ -56,5 +56,5 @@ interface HasBrickables
 
     public function canAddBricksFrom(string $brickableClass): bool;
 
-    public function isAllowedToHandle(string $brickableClass): bool;
+    public function canHandle(string $brickableClass): bool;
 }

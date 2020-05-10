@@ -133,7 +133,7 @@ class Brickables implements Htmlable
         return $this->getAll()->filter(function ($brickable) use ($model) {
             $brickableClass = get_class($brickable);
 
-            return $model->isAllowedToHandle($brickableClass) && $model->canAddBricksFrom($brickableClass);
+            return $model->canHandle($brickableClass) && $model->canAddBricksFrom($brickableClass);
         });
     }
 

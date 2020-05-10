@@ -75,8 +75,8 @@ class HasBrickablesTest extends BrickableTestCase
                 'canOnlyHandle' => [OneTextColumn::class],
             ];
         };
-        $this->assertTrue($model->isAllowedToHandle(OneTextColumn::class));
-        $this->assertFalse($model->isAllowedToHandle(TwoTextColumns::class));
+        $this->assertTrue($model->canHandle(OneTextColumn::class));
+        $this->assertFalse($model->canHandle(TwoTextColumns::class));
     }
 
     /** @test */

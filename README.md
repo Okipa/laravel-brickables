@@ -62,7 +62,7 @@ Display the model-related bricks admin panel in your views:
   * [Models](#models)
   * [Routes](#routes)
 * [How to](#how-to)
-  * [Define brick contraints for model](#define-brick-constraints-for-model)
+  * [Define brick constraints for model](#define-brick-constraints-for-model)
   * [Add content bricks](#add-content-bricks)
   * [Update a content brick](#update-a-content-brick)
   * [Remove content bricks](#remove-content-bricks)

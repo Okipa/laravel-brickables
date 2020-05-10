@@ -87,13 +87,13 @@ trait HasBrickablesTrait
      */
     public function checkBrickableCanBeHandled(string $brickableClass): void
     {
-        if (! $this->isAllowedToHandle($brickableClass)) {
+        if (! $this->canHandle($brickableClass)) {
             throw new BrickableCannotBeHandledException('The given ' . $brickableClass
                 . ' brickable cannot be handled by the ' . $this->getMorphClass() . ' Eloquent model.');
         }
     }
 
-    public function isAllowedToHandle(string $brickableClass): bool
+    public function canHandle(string $brickableClass): bool
     {
         $authorizedBrickables = data_get($this, 'brickables.canOnlyHandle');
         if (! $authorizedBrickables) {
