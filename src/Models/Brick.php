@@ -20,7 +20,7 @@ class Brick extends Model implements Htmlable, Sortable
      *
      * @var array
      */
-    public $sortable = ['order_column_name' => 'position', 'sort_when_creating' => true];
+    public array $sortable = ['order_column_name' => 'position', 'sort_when_creating' => true];
 
     /**
      * The database table used by the model.
