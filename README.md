@@ -438,7 +438,7 @@ You have the possibility to define a css and js resource to customize each brick
  
 In addition, this package embeds a smart resource management system : it determines which brickables are actually displayed on the view and only loads the necessary resources.
 
-To benefit from this feature, make sure you followed you have implemented the `@brickablesCss` and the `@brickablesJs` directive as precised in [installation](#installation) part.
+To benefit from this feature, make sure you followed you have implemented the `@brickablesCss` and the `@brickablesJs` directives as precised in [installation](#installation) part.
  
 Then, define which resources your brickables are using:
 
@@ -465,12 +465,12 @@ class MyNewBrickable extends Brickable
 }
 ```
 
-Finally, use the `@brickablesCompute` directive under the last brickable display in the view:
+Finally, use the `@brickableResourcesCompute` directive under the last brickable display in the view:
 
 ```blade
     {{ $page->getFirstBrick(OneTextColumn::class) }}
     {{ Brickables::displayBricks($page, TwoTextColumns::class) }}
-    @brickablesCompute
+    @brickableResourcesCompute
 ```
 
 ### Empower brickables with extra abilities
@@ -487,13 +487,13 @@ First create a `MyNewBrickableBrick` model that will extend the `Okipa\LaravelBr
 namespace App;
 
 use Okipa\LaravelBrickables\Models\Brick;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 class MyNewBrickableBrick extends Brick implements HasMedia
 {
     // image management example with the spatie/laravel-medialibrary package
-    use HasMediaTrait;
+    use InteractsWithMedia;
     
     // ...
 }
