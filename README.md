@@ -99,7 +99,7 @@ php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesService
 php artisan migrate
 ```
 
-Finally, to benefit from smart loading of css and js resources, add these directives to your blade layout as showed in the example bellow:
+Finally, to benefit from smart loading of css and js resources, add these directives to your blade layout as shown in the example bellow:
 
 ```blade
 <html>
