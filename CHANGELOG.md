@@ -4,9 +4,9 @@
 
 2020-03-16
 
+* Added css and js brickable resources smart management.
 * Dropped support for PHP versions under 7.4.
 * Dropped support for Laravel versions under 6.0.
-* Added javascript and css smart management with the `@brickables` blade directive.
 
 ## [1.1.0](https://github.com/Okipa/laravel-brickables/compare/1.0.2...1.1.0)
 
