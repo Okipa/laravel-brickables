@@ -4,7 +4,7 @@
 
 2020-04-10
 
-* Added CSS and JS brickable resources smart management.
+* Added CSS and JS brickable resources management.
 * Migrated to PHP7.4 and dropped earlier versions support.
 * Dropped support for Laravel versions under 6.0.
 
