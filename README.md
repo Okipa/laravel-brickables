@@ -10,7 +10,7 @@
 
 This package allows you to associate content bricks to Eloquent models and provides a full and customizable admin panel to manage them.
 
-This package is shipped with a few pre-built brickables. You can use them as is but you definitely should consider them as examples: customizing them or create new ones has been designed to be simple as hell ! :fire:
+This package is shipped with few pre-built brickables. You can use them as is but you definitely should consider them as examples: customizing them or create new ones has been designed to be simple as hell ! :fire:
 
 ## Compatibility
 
@@ -95,6 +95,7 @@ Then, publish and run the database migrations:
 
 ```bash
 php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=migrations
+
 php artisan migrate
 ```
 
