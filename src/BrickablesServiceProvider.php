@@ -33,7 +33,7 @@ class BrickablesServiceProvider extends ServiceProvider
         Blade::directive('brickablesJs', function () {
             return "<?php echo view('laravel-brickables::resources.js')->toHtml(); ?>";
         });
-        Blade::directive('brickablesCompute', function () {
+        Blade::directive('brickableResourcesCompute', function () {
             return "<?php echo view('laravel-brickables::resources.compute')->toHtml(); ?>";
         });
     }
