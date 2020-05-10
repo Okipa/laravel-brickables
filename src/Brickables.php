@@ -25,19 +25,25 @@ class Brickables implements Htmlable
         $this->displayed[] = $brickable;
     }
 
+    public function getCssResourcesToLoad(): Collection
+    {
+        return $this->getDisplayed()
+            ->map(fn(Brickable $brickable) => $brickable->getCssResourcePath())
+            ->unique()
+            ->filter();
+    }
+
     protected function getDisplayed()
     {
         return collect($this->displayed)->unique();
     }
 
-    public function getCssResourcesToLoad(): Collection
-    {
-        return $this->getDisplayed()->map(fn(Brickable $brickable) => $brickable->getCssResourcePath())->unique()->filter();
-    }
-
     public function getJsResourcesToLoad(): Collection
     {
-        return $this->getDisplayed()->map(fn(Brickable $brickable) => $brickable->getJsResourcePath())->unique()->filter();
+        return $this->getDisplayed()
+            ->map(fn(Brickable $brickable) => $brickable->getJsResourcePath())
+            ->unique()
+            ->filter();
     }
 
     public function displayBricks(HasBrickables $model, ?string $brickableClass = null): self
