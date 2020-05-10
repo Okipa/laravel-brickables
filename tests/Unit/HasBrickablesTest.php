@@ -71,12 +71,12 @@ class HasBrickablesTest extends BrickableTestCase
         $model = new Class extends Model implements HasBrickables {
             use HasBrickablesTrait;
 
-            public $brickables = [
+            public array $brickables = [
                 'canOnlyHandle' => [OneTextColumn::class],
             ];
         };
-        $this->assertTrue($model->canHandle(OneTextColumn::class));
-        $this->assertFalse($model->canHandle(TwoTextColumns::class));
+        $this->assertTrue($model->isAllowedToHandle(OneTextColumn::class));
+        $this->assertFalse($model->isAllowedToHandle(TwoTextColumns::class));
     }
 
     /** @test */

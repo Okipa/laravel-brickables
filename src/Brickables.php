@@ -16,17 +16,30 @@ use Okipa\LaravelBrickables\Models\Brick;
 
 class Brickables implements Htmlable
 {
-    /** @property string $html */
-    protected $html;
+    protected string $html;
 
-    /**
-     * Display all the model-related content bricks html at once.
-     *
-     * @param \Okipa\LaravelBrickables\Contracts\HasBrickables $model
-     * @param string|null $brickableClass
-     *
-     * @return $this
-     */
+    protected array $displayed = [];
+
+    public function addToDisplayed(Brickable $brickable)
+    {
+        $this->displayed[] = $brickable;
+    }
+
+    protected function getDisplayed()
+    {
+        return collect($this->displayed)->unique();
+    }
+
+    public function getCssResourcesToLoad(): Collection
+    {
+        return $this->getDisplayed()->map(fn(Brickable $brickable) => $brickable->getCssResourcePath())->unique()->filter();
+    }
+
+    public function getJsResourcesToLoad(): Collection
+    {
+        return $this->getDisplayed()->map(fn(Brickable $brickable) => $brickable->getJsResourcePath())->unique()->filter();
+    }
+
     public function displayBricks(HasBrickables $model, ?string $brickableClass = null): self
     {
         $this->html = view('laravel-brickables::bricks', compact('model', 'brickableClass'));
@@ -34,13 +47,6 @@ class Brickables implements Htmlable
         return $this;
     }
 
-    /**
-     * Display the model-related content bricks admin panel html.
-     *
-     * @param \Okipa\LaravelBrickables\Contracts\HasBrickables $model
-     *
-     * @return $this
-     */
     public function displayAdminPanel(HasBrickables $model): self
     {
         $this->html = view('laravel-brickables::admin.panel.layout', compact('model'));
@@ -48,17 +54,11 @@ class Brickables implements Htmlable
         return $this;
     }
 
-    /** @inheritDoc */
     public function toHtml()
     {
         return (string) $this->html;
     }
 
-    /**
-     * Register the brickables routes.
-     *
-     * @param \Closure|null $additionalRoutes
-     */
     public function routes(Closure $additionalRoutes = null): void
     {
         Route::middleware([
@@ -78,11 +78,6 @@ class Brickables implements Htmlable
         });
     }
 
-    /**
-     * @param \Illuminate\Http\Request|null $request
-     *
-     * @return \Okipa\LaravelBrickables\Contracts\HasBrickables|null
-     */
     public function getModelFromRequest(Request $request = null): ?HasBrickables
     {
         $request = $request ?: request();
@@ -98,25 +93,11 @@ class Brickables implements Htmlable
         return null;
     }
 
-    /**
-     * Cast given brick to its brickable-related brick model.
-     *
-     * @param \Okipa\LaravelBrickables\Models\Brick $brick
-     *
-     * @return \Okipa\LaravelBrickables\Models\Brick
-     */
     public function castBrick(Brick $brick): Brick
     {
         return $this->castBricks(collect()->push($brick))->first();
     }
 
-    /**
-     * Cast given bricks to their brickable-related brick model.
-     *
-     * @param \Illuminate\Support\Collection $bricks
-     *
-     * @return \Illuminate\Support\Collection
-     */
     public function castBricks(Collection $bricks): Collection
     {
         if ($bricks->isEmpty()) {
@@ -141,27 +122,15 @@ class Brickables implements Htmlable
         return $casted->flatten()->sortBy($orderColumnName);
     }
 
-    /**
-     * Get all registered brickables that can be added to the given model.
-     *
-     * @param \Okipa\LaravelBrickables\Contracts\HasBrickables $model
-     *
-     * @return \Illuminate\Support\Collection
-     */
     public function getAdditionableTo(HasBrickables $model): Collection
     {
         return $this->getAll()->filter(function ($brickable) use ($model) {
             $brickableClass = get_class($brickable);
 
-            return $model->canHandle($brickableClass) && $model->canAddBricksFrom($brickableClass);
+            return $model->isAllowedToHandle($brickableClass) && $model->canAddBricksFrom($brickableClass);
         });
     }
 
-    /**
-     * Get all registered brickables.
-     *
-     * @return \Illuminate\Support\Collection
-     */
     public function getAll(): Collection
     {
         $brickables = new Collection;

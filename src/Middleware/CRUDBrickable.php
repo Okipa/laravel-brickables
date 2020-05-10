@@ -35,9 +35,6 @@ class CRUDBrickable
         return $next($request);
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     */
     protected function checkModelTypeIsProvided(Request $request): void
     {
         if (! $request->model_type) {
@@ -45,9 +42,6 @@ class CRUDBrickable
         }
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     */
     protected function checkModelTypeIsInstanceOfHasBrickables(Request $request): void
     {
         if (! (new $request->model_type) instanceof HasBrickables) {
@@ -58,9 +52,6 @@ class CRUDBrickable
         }
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     */
     protected function checkModelIdIsProvided(Request $request): void
     {
         if (! $request->model_id) {
@@ -68,9 +59,6 @@ class CRUDBrickable
         }
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     */
     protected function checkBrickableTypeIsInstanceOfBrickable(Request $request): void
     {
         try {
@@ -82,9 +70,6 @@ class CRUDBrickable
         }
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     */
     protected function checkBrickableCanBeHandled(Request $request): void
     {
         try {
@@ -96,9 +81,6 @@ class CRUDBrickable
         }
     }
 
-    /**
-     * @param \Illuminate\Http\Request $request
-     */
     protected function checkAdminPanelUrlIsProvided(Request $request): void
     {
         if (! $request->admin_panel_url) {

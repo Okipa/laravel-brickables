@@ -19,7 +19,7 @@ class BrickTest extends BrickableTestCase
         $brickable = new Class extends Brickable {
             public function setBrickViewPath(): string
             {
-                return 'laravel-brickables::test-brick';
+                return 'laravel-brickables::brick-test';
             }
 
             protected function setStoreValidationRules(): array

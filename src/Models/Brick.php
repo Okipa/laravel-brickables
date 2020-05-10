@@ -3,8 +3,11 @@
 namespace Okipa\LaravelBrickables\Models;
 
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
+use Okipa\LaravelBrickables\Facades\Brickables;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
@@ -33,23 +36,18 @@ class Brick extends Model implements Htmlable, Sortable
      */
     protected $casts = ['data' => 'json'];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
-     */
-    public function model()
+    public function model(): MorphTo
     {
         return $this->morphTo();
     }
 
-    /** @inheritDoc */
     public function toHtml(): string
     {
+        Brickables::addToDisplayed($this->brickable);
+
         return (string) view($this->brickable->getBrickViewPath(), ['brick' => $this]);
     }
 
-    /**
-     * @return \Okipa\LaravelBrickables\Abstracts\Brickable
-     */
     public function getBrickableAttribute(): Brickable
     {
         return (new $this->brickable_type);
@@ -60,13 +58,12 @@ class Brick extends Model implements Htmlable, Sortable
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function buildSortQuery()
+    public function buildSortQuery(): Builder
     {
         return static::query()->where('model_type', $this->model_type)->where('model_id', $this->model_id);
     }
 
-    /** @inheritDoc */
-    public function delete()
+    public function delete(): ?bool
     {
         if ($this->model->canDeleteBricksFrom($this->brickable_type)) {
             return parent::delete();

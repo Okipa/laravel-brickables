@@ -9,7 +9,7 @@ class Brickable extends \Okipa\LaravelBrickables\Abstracts\Brickable
     /** @inheritDoc */
     public function setFormViewPath(): string
     {
-        return 'laravel-brickables::test-brick';
+        return 'laravel-brickables::brick-test';
     }
 
     /** @inheritDoc */

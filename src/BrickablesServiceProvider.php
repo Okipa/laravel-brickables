@@ -5,6 +5,7 @@ namespace Okipa\LaravelBrickables;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Blade;
 
 class BrickablesServiceProvider extends ServiceProvider
 {
@@ -26,6 +27,15 @@ class BrickablesServiceProvider extends ServiceProvider
             __DIR__
             . '/../database/migrations/create_bricks_table.php.stub' => $this->getMigrationFileName($filesystem),
         ], 'migrations');
+        Blade::directive('brickablesCss', function () {
+            return "<?php echo view('laravel-brickables::resources.css')->toHtml(); ?>";
+        });
+        Blade::directive('brickablesJs', function () {
+            return "<?php echo view('laravel-brickables::resources.js')->toHtml(); ?>";
+        });
+        Blade::directive('brickablesCompute', function () {
+            return "<?php echo view('laravel-brickables::resources.compute')->toHtml(); ?>";
+        });
     }
 
     /**

@@ -23,7 +23,7 @@
                 @endif
             </div>
         </div>
-        <button class="btn btn-primary" type="submit" title="@lang('Create')">
+        <button class="btn btn-primary" type="submit" title="@lang('Add')">
             <i class="fas fa-plus-circle fa-fw"></i> @lang('Add')
         </button>
     </form>

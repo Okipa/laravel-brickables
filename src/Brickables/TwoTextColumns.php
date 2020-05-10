@@ -6,7 +6,6 @@ use Okipa\LaravelBrickables\Abstracts\Brickable;
 
 class TwoTextColumns extends Brickable
 {
-    /** @inheritDoc */
     protected function setStoreValidationRules(): array
     {
         return [
@@ -15,7 +14,6 @@ class TwoTextColumns extends Brickable
         ];
     }
 
-    /** @inheritDoc */
     protected function setUpdateValidationRules(): array
     {
         return [
