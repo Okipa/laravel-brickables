@@ -8,7 +8,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/Okipa/laravel-brickables/badge.svg?branch=master)](https://coveralls.io/github/Okipa/laravel-brickables?branch=master)
 [![Quality Score](https://img.shields.io/scrutinizer/g/Okipa/laravel-brickables.svg?style=flat-square)](https://scrutinizer-ci.com/g/Okipa/laravel-brickables/?branch=master)
 
-This package allows you to associate content bricks to Eloquent models and provides a full and customizable admin panel to manage them.
+This package allows you to associate content bricks to Eloquent models and provides a fully customizable admin panel to manage them.
 
 This package is shipped with few pre-built brickables. You can use them as is but you definitely should consider them as examples: customizing them or create new ones has been designed to be simple as hell ! :fire:
 
