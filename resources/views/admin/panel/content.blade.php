@@ -21,5 +21,6 @@
                 </div>
             </div>
         @endforeach
+        @brickableResourcesCompute
     @endif
 </div>
