@@ -438,7 +438,7 @@ You have the possibility to define a css and js resource to customize each brick
  
 In addition, this package embeds a smart resource management system : it determines which brickables are actually displayed on the view and only loads the necessary resources.
 
-To benefit from this feature, make sure you followed you have implemented the `@brickablesCss` and the `@brickablesJs` directives as precised in [installation](#installation) part.
+To benefit from this feature, make sure you have implemented the `@brickablesCss` and the `@brickablesJs` directives as precised in the [installation](#installation) part.
  
 Then, define which resources your brickables are using:
 
