@@ -2,11 +2,14 @@
 
 ## [2.0.0](https://github.com/Okipa/laravel-brickables/compare/1.1.0...2.0.0)
 
-2020-04-10
+2020-07-11
 
-* Added brickable CSS and JS resources management.
+* Added brickables CSS and JS resources management.
+* Changed brick inputs validation workflow.
 * Migrated to PHP7.4 and dropped earlier versions support.
 * Dropped support for Laravel versions under 6.0.
+
+:point_right: [See the upgrade guide](/docs/upgrade-guides/from-v1-to-v2.md)
 
 ## [1.1.0](https://github.com/Okipa/laravel-brickables/compare/1.0.2...1.1.0)
 

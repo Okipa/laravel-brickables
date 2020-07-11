@@ -33,12 +33,12 @@ class HasBrickablesTest extends BrickableTestCase
     public function it_cannot_add_not_registered_brickable_class()
     {
         $brickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
@@ -51,12 +51,12 @@ class HasBrickablesTest extends BrickableTestCase
     public function it_cannot_add_not_handlable_brickable()
     {
         $brickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
@@ -83,12 +83,12 @@ class HasBrickablesTest extends BrickableTestCase
     public function it_can_add_brick()
     {
         $brickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
@@ -109,12 +109,12 @@ class HasBrickablesTest extends BrickableTestCase
             }
         };
         $brickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
@@ -145,12 +145,12 @@ class HasBrickablesTest extends BrickableTestCase
     public function it_can_add_bricks()
     {
         $brickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
@@ -166,12 +166,12 @@ class HasBrickablesTest extends BrickableTestCase
     public function it_can_can_get_bricks()
     {
         $brickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
@@ -187,23 +187,23 @@ class HasBrickablesTest extends BrickableTestCase
     public function it_can_can_get_bricks_from_brickable_type()
     {
         $brickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
         };
         $otherBrickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
@@ -220,23 +220,23 @@ class HasBrickablesTest extends BrickableTestCase
     public function it_can_can_get_brickable_types_bricks()
     {
         $brickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
         };
         $otherBrickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
@@ -254,23 +254,23 @@ class HasBrickablesTest extends BrickableTestCase
     public function it_can_return_first_brick()
     {
         $brickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
         };
         $otherBrickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
@@ -290,23 +290,23 @@ class HasBrickablesTest extends BrickableTestCase
     public function it_can_return_first_brick_from_brickable_type()
     {
         $brickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
         };
         $otherBrickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
@@ -332,23 +332,23 @@ class HasBrickablesTest extends BrickableTestCase
     public function it_can_clear_bricks()
     {
         $brickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
         };
         $otherBrickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
@@ -370,23 +370,23 @@ class HasBrickablesTest extends BrickableTestCase
     public function it_can_clear_bricks_from_brickable_type()
     {
         $brickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
         };
         $otherBrickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
@@ -409,23 +409,23 @@ class HasBrickablesTest extends BrickableTestCase
     public function it_can_clear_bricks_except()
     {
         $brickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
         };
         $otherBrickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }

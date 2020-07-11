@@ -8,7 +8,6 @@ use Orchestra\Testbench\TestCase;
 
 abstract class BrickableTestCase extends TestCase
 {
-    /** @inheritDoc */
     protected function getEnvironmentSetUp($app)
     {
         // Setup default database to use sqlite :memory:
@@ -20,19 +19,16 @@ abstract class BrickableTestCase extends TestCase
         ]);
     }
 
-    /** @inheritDoc */
     protected function getPackageProviders($app)
     {
         return [BrickablesServiceProvider::class];
     }
 
-    /** @inheritDoc */
     protected function getPackageAliases($app)
     {
         return ['Brickables' => Brickables::class];
     }
 
-    /** @inheritDoc */
     protected function setUp(): void
     {
         parent::setUp();

@@ -22,12 +22,12 @@ class BrickTest extends BrickableTestCase
                 return 'laravel-brickables::brick-test';
             }
 
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }

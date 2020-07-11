@@ -19,6 +19,10 @@ This package is shipped with few pre-built brickables. You can use them as is bu
 | ^6.0 | ^7.4 | ^2.0 |
 | ^5.8 | ^7.2 | ^1.0 |
 
+## Upgrade guide
+
+* [From V1 to V2](/docs/upgrade-guides/from-v1-to-v2.md)
+
 ## Usage
 
 Associate content bricks to Eloquent models:
@@ -193,9 +197,9 @@ To customize the admin panel actions, you can add routes inside or outside of th
 
 ```php
 Brickables::routes(function(){
-    // inside the routes group: will benefit from the CRUDBrickable middleware.
+    // inside the routes group: will benefit from the CRUDBrickable middleware: useful for admin panel additional routes.
 });
-// outside the route group: will not benefit from the CRUDBrickable middleware.
+// outside the route group: will not benefit from the CRUDBrickable middleware: for any other need.
 ```
 
 Check the [Empower bricks with extra abilities](#empower-brickables-with-extra-abilities) part to get more information about the customization possibilities.
@@ -288,11 +292,11 @@ $page->clearBricksExcept(OneTextColumn::class, $bricksCollection);
 
 **Note**
 
-* According to the [number of bricks constraints](#define-brickables-constraints) defined in the Eloquent model, these methods could be brought to keep the min number of bricks instead of removing the targeted brick(s).
+* According to the [number of bricks constraints](#define-brick-constraints-for-model) defined in the Eloquent model, these methods could be brought to keep the min number of bricks instead of removing the targeted brick(s).
 
 ### Set content bricks order
 
-By default all bricks are ordered by their creation order (last created at the end).
+By default, all bricks are ordered by their creation order (last created at the end).
 
 The `Brick` model uses the `spatie/eloquent-sortable` package to handle the content bricks positioning.
 
@@ -396,15 +400,21 @@ use Okipa\LaravelBrickables\Abstracts\Brickable;
 
 class MyNewBrickable extends Brickable
 {
-    protected function setStoreValidationRules(): array
+    public function validateStoreInputs(): array
     {
-        return ['text' => ['required', 'string']];
+        return request()->validate(['text' => ['required', 'string']]);
     }
 
-    protected function setUpdateValidationRules(): array
+    public function validateUpdateInputs(): array
     {
-        return ['text' => ['required', 'string']];
+        return request()->validate(['text' => ['required', 'string']]);
     }
+    
+    // alternative example: use a form request to validate your inputs and return the validated fields.
+    //public function validateStoreInputs(): array
+    //{
+    //    return (new MyNewBrickableStoreFormRequest)->validated();
+    //}
 }
 ```
 
@@ -416,7 +426,7 @@ Then, register it in your `config('brickables.registered')` array:
 return [
 
     'registered' => [
-        // other brickables declarations ...
+        // other brickables declarations...
         App\Vendor\LaravelBrickables\Brickables\MyNewBrickable::class,
     ],
 ];
@@ -532,25 +542,25 @@ class MyNewBrickableBricksController extends BricksController
 }
 ```
 
-Do not forget to add some image validation rules for this brickable:
+Do not forget to validate your form inputs:
 
 ```php
 class MyNewBrickable extends Brickable
 {
-    protected function setStoreValidationRules(): array
+    public function validateStoreInputs(): array
     {
-        return [
+        return request()->validate([
             'text' => ['required', 'string'],
             'image' => ['required', 'mimetypes:image/jpeg,image/png', 'dimensions:min_width=240,min_height=160', 'max:5000'],
-        ];
+        ]);
     }
 
-    protected function setUpdateValidationRules(): array
+    public function validateUpdateInputs(): array
     {
-        return [
+        return request()->validate([
             'text' => ['required', 'string'],
             'image' => ['nullable', 'mimetypes:image/jpeg,image/png', 'dimensions:min_width=240,min_height=160', 'max:5000'],
-        ];
+        ]);
     }
 }
 ```

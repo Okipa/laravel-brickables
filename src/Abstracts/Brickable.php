@@ -18,10 +18,6 @@ abstract class Brickable
 
     protected string $brickViewPath;
 
-    protected array $storeValidationRules;
-
-    protected array $updateValidationRules;
-
     protected string $storeRouteName;
 
     protected string $editRouteName;
@@ -45,8 +41,6 @@ abstract class Brickable
         $this->brickViewPath = $this->setBrickViewPath();
         $this->label = $this->setLabel();
         $this->formViewPath = $this->setFormViewPath();
-        $this->storeValidationRules = $this->setStoreValidationRules();
-        $this->updateValidationRules = $this->setUpdateValidationRules();
         $this->storeRouteName = $this->setStoreRouteName();
         $this->editRouteName = $this->setEditRouteName();
         $this->updateRouteName = $this->setUpdateRouteName();
@@ -96,20 +90,6 @@ abstract class Brickable
     {
         return 'brick.move.down';
     }
-
-    public function getStoreValidationRules(): array
-    {
-        return $this->storeValidationRules;
-    }
-
-    abstract protected function setStoreValidationRules(): array;
-
-    public function getUpdateValidationRules(): array
-    {
-        return $this->updateValidationRules;
-    }
-
-    abstract protected function setUpdateValidationRules(): array;
 
     public function getFormViewPath(): string
     {
@@ -230,4 +210,8 @@ abstract class Brickable
     {
         return null;
     }
+
+    abstract public function validateStoreInputs(): array;
+
+    abstract public function validateUpdateInputs(): array;
 }
