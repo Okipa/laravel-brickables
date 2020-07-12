@@ -413,7 +413,7 @@ class MyNewBrickable extends Brickable
     // alternative example: use a form request to validate your inputs and return the validated fields.
     //public function validateStoreInputs(): array
     //{
-    //    return (new MyNewBrickableStoreFormRequest)->validated();
+    //    return app(MyNewBrickableStoreFormRequest::class)->validated();
     //}
 }
 ```
