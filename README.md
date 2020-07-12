@@ -475,7 +475,7 @@ class MyNewBrickable extends Brickable
 }
 ```
 
-Finally, use the `@brickableResourcesCompute` directive under the last brickable display in the view:
+Finally, use the `@brickableResourcesCompute` directive under the last displayed brick in the view:
 
 ```blade
     {{ $page->getFirstBrick(OneTextColumn::class) }}

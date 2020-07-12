@@ -8,13 +8,15 @@ Check how to benefit from the brand new [brickables resources smart management](
 
 ## New brick inputs validation workflow
 
-To give package users more latitude to execute their own validation workflow, the way the brick inputs were validated has been updated.
+To give package users more latitude to execute their own validation workflow, the way the brick inputs are validated has been updated.
 
 As so, the mandatory brickables `protected function setStoreValidationRules(): array` method does not exist anymore and has been replaced by the `public function validateStoreInputs(): array` one.
 
 Same story for the `protected function setUpdateValidationRules(): array`, that has been replaced by the `public function validateUpdateInputs(): array` one.
 
-You will ben able to validate your form inputs as you wish to:
+Make sure to update each brickable with these changes.
+
+You will then be able to validate your form inputs as you wish with:
 * Direct request validation: `return request()->validate([...])`
 * FormRequest validation `return (new BrickableStoreFormRequest)->validated()`
 * Custom validation workflow with validators: https://laravel.com/docs/validation#manually-creating-validators
