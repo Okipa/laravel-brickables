@@ -109,23 +109,21 @@ class Brickables implements Htmlable
         if ($bricks->isEmpty()) {
             return $bricks;
         }
-        $casted = new Collection;
+        $castedBricks = new Collection;
         foreach ($bricks->pluck('brickable_type')->unique() as $brickableClass) {
             /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
             $brickable = app($brickableClass);
-            /** @var \Okipa\LaravelBrickables\Models\Brick $model */
             $model = $brickable->getBrickModel();
-            $brickableBricksDataArray = $bricks->where('brickable_type', $brickableClass)->map(function ($brick) {
-                return $brick->getAttributes();
-            })->toArray();
-            $castedBricks = $model->hydrate($brickableBricksDataArray);
-            $casted->push($castedBricks);
+            $brickableRawBricks = $bricks->where('brickable_type', $brickableClass)
+                ->map(fn(Brick $brick) => $brick->getAttributes());
+            $brickableCastedBricks = $model->hydrate($brickableRawBricks->toArray());
+            $castedBricks->push($brickableCastedBricks);
         }
         /** @var \Okipa\LaravelBrickables\Models\Brick $brickModel */
         $brickModel = app(config('brickables.bricks.model'));
         $orderColumnName = $brickModel->sortable['order_column_name'];
 
-        return $casted->flatten()->sortBy($orderColumnName);
+        return $castedBricks->flatten()->sortBy($orderColumnName);
     }
 
     public function getAdditionableTo(HasBrickables $model): Collection
