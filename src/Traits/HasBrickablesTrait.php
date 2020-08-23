@@ -95,8 +95,9 @@ trait HasBrickablesTrait
 
     public function canHandle(string $brickableClass): bool
     {
-        $authorizedBrickables = data_get($this, 'brickables.canOnlyHandle');
-        if (! $authorizedBrickables) {
+        /** @var array $authorizedBrickables */
+        $authorizedBrickables = data_get($this, 'brickables.canOnlyHandle', []);
+        if (! count($authorizedBrickables)) {
             return true;
         }
 

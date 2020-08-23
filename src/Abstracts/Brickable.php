@@ -113,7 +113,7 @@ abstract class Brickable
 
     public function getLabel(): string
     {
-        return __($this->label);
+        return (string) __($this->label);
     }
 
     public function setLabel(): string

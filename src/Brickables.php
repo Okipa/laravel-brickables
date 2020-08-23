@@ -66,9 +66,12 @@ class Brickables
     {
         $request = $request ?: request();
         if ($request->has('model_type') && $request->has('model_id')) {
+            /** @var \Illuminate\Database\Eloquent\Model $model */
             $model = app($request->model_type);
+            /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $hasBrickablesModel */
+            $hasBrickablesModel = $model instanceof HasBrickables ? $model->find($request->model_id) : null;
 
-            return $model->find($request->model_id);
+            return $hasBrickablesModel;
         }
         if ($request->brick) {
             return $this->castBrick($request->brick)->model;
