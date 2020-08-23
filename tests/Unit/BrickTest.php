@@ -43,7 +43,7 @@ class BrickTest extends BrickableTestCase
     {
         $model = (new HasBrickablesModel)->create();
         $model->addBricks([[OneTextColumn::class], [OneTextColumn::class], [OneTextColumn::class]]);
-        $model->clearBricks(OneTextColumn::class);
+        $model->clearBricks([OneTextColumn::class]);
         $this->assertCount(1, Brick::all());
         $this->assertEquals(3, Brick::first()->position);
     }

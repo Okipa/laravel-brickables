@@ -4,10 +4,12 @@
 
 2020-07-11
 
-* Added brickables CSS and JS resources management.
+* Added Laravel 8 support
+* Dropped Laravel 5.8 and 6 support.
+* Added PHP 7.4 support.
+* Dropped PHP 7.2 and 7.3 support.
+* Added brickables CSS and JS resources smart management.
 * Changed brick inputs validation workflow.
-* Migrated to PHP7.4 and dropped earlier versions support.
-* Dropped support for Laravel versions under 6.0.
 
 :point_right: [See the upgrade guide](/docs/upgrade-guides/from-v1-to-v2.md)
 
@@ -21,7 +23,7 @@
 
 2020-02-24
 
-* Applied an additional fix for the the bricks order problem returned by the `Brickables::castBricks()` method.
+* Applied an additional fix for the bricks order problem returned by the `Brickables::castBricks()` method.
 
 ## [1.0.1](https://github.com/Okipa/laravel-brickables/compare/1.0.0...1.0.1)
 

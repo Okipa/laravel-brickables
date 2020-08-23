@@ -1,5 +1,5 @@
-@php($brickables = Brickables::getAdditionableTo($model))
-@if($brickables->isNotEmpty())
+@php($additionableBrickables = $model->getAdditionableBrickables())
+@if($additionableBrickables->isNotEmpty())
     <form class="form-inline" role="form" method="GET" action="{{ route('brick.create') }}">
         <input type="hidden" name="model_id" value="{{ $model->id }}">
         <input type="hidden" name="model_type" value="{{ get_class($model) }}">
@@ -14,7 +14,7 @@
                 <select class="custom-select{{ optional($errors ?? null)->has('brickable_type') ? ' is-invalid' : null }}"
                         name="brickable_type">
                     <option value="">@lang('validation.attributes.brickable_type')</option>
-                    @foreach($brickables as $brickable)
+                    @foreach($additionableBrickables as $brickable)
                         <option value="{{ get_class($brickable) }}">{{ $brickable->getLabel() }}</option>
                     @endforeach
                 </select>

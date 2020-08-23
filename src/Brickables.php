@@ -3,7 +3,6 @@
 namespace Okipa\LaravelBrickables;
 
 use Closure;
-use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Collection;
@@ -14,10 +13,8 @@ use Okipa\LaravelBrickables\Controllers\DispatchController;
 use Okipa\LaravelBrickables\Middleware\CRUDBrickable;
 use Okipa\LaravelBrickables\Models\Brick;
 
-class Brickables implements Htmlable
+class Brickables
 {
-    protected string $html;
-
     protected array $displayed = [];
 
     public function addToDisplayed(Brickable $brickable)
@@ -44,25 +41,6 @@ class Brickables implements Htmlable
             ->map(fn(Brickable $brickable) => $brickable->getJsResourcePath())
             ->unique()
             ->filter();
-    }
-
-    public function displayBricks(HasBrickables $model, ?string $brickableClass = null): self
-    {
-        $this->html = view('laravel-brickables::bricks', compact('model', 'brickableClass'));
-
-        return $this;
-    }
-
-    public function displayAdminPanel(HasBrickables $model): self
-    {
-        $this->html = view('laravel-brickables::admin.panel.layout', compact('model'));
-
-        return $this;
-    }
-
-    public function toHtml()
-    {
-        return (string) $this->html;
     }
 
     public function routes(Closure $additionalRoutes = null): void
@@ -124,26 +102,5 @@ class Brickables implements Htmlable
         $orderColumnName = $brickModel->sortable['order_column_name'];
 
         return $castedBricks->flatten()->sortBy($orderColumnName);
-    }
-
-    public function getAdditionableTo(HasBrickables $model): Collection
-    {
-        return $this->getAll()->filter(function ($brickable) use ($model) {
-            $brickableClass = get_class($brickable);
-
-            return $model->canHandle($brickableClass) && $model->canAddBricksFrom($brickableClass);
-        });
-    }
-
-    public function getAll(): Collection
-    {
-        $brickables = new Collection;
-        foreach (config('brickables.registered') as $brickableClass) {
-            /** @var Brickable $brickable */
-            $brickable = app($brickableClass);
-            $brickables->push($brickable);
-        }
-
-        return $brickables;
     }
 }

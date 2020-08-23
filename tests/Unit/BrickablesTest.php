@@ -9,82 +9,10 @@ use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
 use Okipa\LaravelBrickables\Tests\Models\BrickModel;
-use Okipa\LaravelBrickables\Tests\Models\HasBrickablesModel;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class BrickablesTest extends BrickableTestCase
 {
-    /** @test */
-    public function it_can_return_all_registered_brickables()
-    {
-        $brickableOne = new class extends Brickable {
-            public function validateStoreInputs(): array
-            {
-                return [];
-            }
-
-            public function validateUpdateInputs(): array
-            {
-                return [];
-            }
-        };
-        $brickableTwo = new class extends Brickable {
-            public function validateStoreInputs(): array
-            {
-                return [];
-            }
-
-            public function validateUpdateInputs(): array
-            {
-                return [];
-            }
-        };
-        config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
-        $registeredPageBrickables = Brickables::getAll();
-        $this->assertCount(count(config('brickables.registered')), $registeredPageBrickables);
-    }
-
-    /** @test */
-    public function it_can_return_brickables_that_can_be_added_to_model()
-    {
-        $model = (new HasBrickablesModel)->create();
-        $brickables = Brickables::getAdditionableTo($model);
-        $this->assertCount(count($model->brickables['canOnlyHandle']), $brickables);
-        $this->assertInstanceOf($model->brickables['canOnlyHandle'][0], $brickables->first());
-        $page = factory(Page::class)->create();
-        $pageBrickables = Brickables::getAdditionableTo($page);
-        $this->assertCount(count(config('brickables.registered')), $pageBrickables);
-    }
-
-    /** @test */
-    public function it_can_display_model_bricks_html()
-    {
-        view()->addNamespace('laravel-brickables', 'tests/views');
-        $brickable = new class extends Brickable {
-            public function setBrickViewPath(): string
-            {
-                return 'laravel-brickables::brick-test';
-            }
-
-            public function validateStoreInputs(): array
-            {
-                return [];
-            }
-
-            public function validateUpdateInputs(): array
-            {
-                return [];
-            }
-        };
-        config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
-        $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
-        $this->assertEquals(
-            view('laravel-brickables::bricks', ['model' => $page, 'brickableClass' => get_class($brickable)])->render(),
-            Brickables::displayBricks($page, get_class($brickable))->toHtml()
-        );
-    }
-
     /** @test */
     public function it_only_displays_once_css_resources()
     {
@@ -233,7 +161,7 @@ class BrickablesTest extends BrickableTestCase
         $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
         $this->assertEquals(
             view('laravel-brickables::admin.panel.layout', ['model' => $page])->render(),
-            Brickables::displayAdminPanel($page)->toHtml()
+            $page->displayAdminPanel()
         );
     }
 

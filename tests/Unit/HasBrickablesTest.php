@@ -10,6 +10,7 @@ use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException;
 use Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException;
 use Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException;
+use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
 use Okipa\LaravelBrickables\Tests\Models\HasBrickablesModel;
@@ -211,9 +212,9 @@ class HasBrickablesTest extends BrickableTestCase
         config()->set('brickables.registered', [get_class($brickable), get_class($otherBrickable)]);
         $page = factory(Page::class)->create();
         $page->addBricks([[get_class($brickable)], [get_class($otherBrickable)]]);
-        $this->assertCount(1, $page->getBricks(get_class($brickable)));
+        $this->assertCount(1, $page->getBricks([get_class($brickable)]));
         $this->assertEmpty(Brick::where('brickable_type', get_class($brickable))->get()
-            ->diff($page->getBricks(get_class($brickable))));
+            ->diff($page->getBricks([get_class($brickable)])));
     }
 
     /** @test */
@@ -244,10 +245,10 @@ class HasBrickablesTest extends BrickableTestCase
         config()->set('brickables.registered', [get_class($brickable), get_class($otherBrickable)]);
         $page = factory(Page::class)->create();
         $page->addBricks([[get_class($brickable)], [get_class($otherBrickable)]]);
-        $this->assertCount(1, $page->getBricks(get_class($brickable)));
+        $this->assertCount(1, $page->getBricks([get_class($brickable)]));
         $this->assertEmpty(Brick::where('brickable_type', get_class($brickable))
             ->get()
-            ->diff($page->getBricks(get_class($brickable))));
+            ->diff($page->getBricks([get_class($brickable)])));
     }
 
     /** @test */
@@ -399,7 +400,7 @@ class HasBrickablesTest extends BrickableTestCase
             [get_class($otherBrickable), ['text' => 'Text #3']],
         ]);
         $this->assertEquals(3, Brick::count());
-        $page->clearBricks(get_class($brickable));
+        $page->clearBricks([get_class($brickable)]);
         $bricks = Brick::all();
         $this->assertEquals(1, $bricks->count());
         $this->assertEquals(get_class($otherBrickable), $bricks->first()->brickable_type);
@@ -438,14 +439,11 @@ class HasBrickablesTest extends BrickableTestCase
             [get_class($otherBrickable), ['text' => 'Text #3']],
         ]);
         $this->assertEquals(3, Brick::count());
-        $page->clearBricksExcept(
-            get_class($brickable),
-            collect()->push(Brick::where('brickable_type', get_class($brickable))->first())
-        );
+        $bricksToKeep = Brick::where('brickable_type', get_class($brickable))->get();
+        $page->clearBricksExcept($bricksToKeep);
         $bricks = Brick::all();
-        $this->assertEquals(2, $bricks->count());
-        $this->assertEquals(get_class($brickable), $bricks->first()->brickable_type);
-        $this->assertEquals(get_class($otherBrickable), $bricks->last()->brickable_type);
+        $this->assertEquals($bricksToKeep->count(), $bricks->count());
+        $this->assertEquals($bricksToKeep, $bricks);
     }
 
     /** @test */
@@ -468,5 +466,110 @@ class HasBrickablesTest extends BrickableTestCase
         $this->assertTrue($model->canDeleteBricksFrom(OneTextColumn::class));
         Brick::first()->delete();
         $this->assertFalse($model->canDeleteBricksFrom(OneTextColumn::class));
+    }
+
+    /** @test */
+    public function it_can_return_all_registered_brickables()
+    {
+        $model = (new HasBrickablesModel)->create();
+        $brickableOne = new class extends Brickable {
+            public function validateStoreInputs(): array
+            {
+                return [];
+            }
+
+            public function validateUpdateInputs(): array
+            {
+                return [];
+            }
+        };
+        $brickableTwo = new class extends Brickable {
+            public function validateStoreInputs(): array
+            {
+                return [];
+            }
+
+            public function validateUpdateInputs(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
+        $registeredBrickables = $model->getRegisteredBrickables();
+        $this->assertCount(count(config('brickables.registered')), $registeredBrickables);
+    }
+
+    /** @test */
+    public function it_can_return_brickables_that_can_be_added_to_model()
+    {
+        $model = (new HasBrickablesModel)->create();
+        $additionableBbrickables = $model->getAdditionableBrickables();
+        $this->assertCount(count($model->brickables['canOnlyHandle']), $additionableBbrickables);
+        $this->assertInstanceOf($model->brickables['canOnlyHandle'][0], $additionableBbrickables->first());
+        $page = factory(Page::class)->create();
+        $pageAditionnableBrickables = $page->getAdditionableBrickables();
+        $this->assertCount(count(config('brickables.registered')), $pageAditionnableBrickables);
+    }
+
+    /** @test */
+    public function it_can_display_model_bricks_html()
+    {
+        view()->addNamespace('laravel-brickables', 'tests/views');
+        $brickable = new class extends Brickable {
+            public function setBrickViewPath(): string
+            {
+                return 'laravel-brickables::brick-test';
+            }
+
+            public function validateStoreInputs(): array
+            {
+                return [];
+            }
+
+            public function validateUpdateInputs(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickable)]);
+        $page = factory(Page::class)->create();
+        $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
+        $this->assertEquals(
+            view('laravel-brickables::bricks', [
+                'model' => $page,
+                'brickableClasses' => [get_class($brickable)],
+            ])->toHtml(),
+            $page->displayBricks([get_class($brickable)])
+        );
+    }
+
+    /** @test */
+    public function it_can_display_model_admin_panel_html()
+    {
+        Brickables::routes();
+        view()->addNamespace('laravel-brickables', 'tests/views');
+        $brickable = new class extends Brickable {
+            public function setBrickViewPath(): string
+            {
+                return 'laravel-brickables::brick-test';
+            }
+
+            public function validateStoreInputs(): array
+            {
+                return [];
+            }
+
+            public function validateUpdateInputs(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickable)]);
+        $page = factory(Page::class)->create();
+        $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
+        $this->assertEquals(
+            view('laravel-brickables::admin.panel.layout', ['model' => $page])->toHtml(),
+            $page->displayAdminPanel()
+        );
     }
 }

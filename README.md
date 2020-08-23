@@ -44,7 +44,7 @@ Display bricks in your views:
 
 ```blade
 {{-- all at once --}}
-{{ Brickables::displayBricks($page) }}
+{!! $page->displayBricks() !!}
 
 {{-- or one by one --}}
 {{ $page->getFirstBrick(OneTextColumn::class) }}
@@ -53,7 +53,7 @@ Display bricks in your views:
 Display the model-related bricks admin panel in your views:
 
 ```blade
-{{ Brickables::displayAdminPanel($page) }}
+{{ $page->displayAdminPanel() }}
 ```
 
 ## Table of contents
@@ -276,18 +276,18 @@ Just delete your content brick as you would fo for any other Eloquent model inst
 $brick->delete();
 ```
 
-Clear all the content bricks associated to an Eloquent model, or only those with a specific brickable type:
+Clear all the content bricks associated to an Eloquent model, or only those with specific brickable types:
 
 ```php
 $page->clearBricks();
 
-$page->clearBricks(OneTextColumn::class);
+$page->clearBricks([OneTextColumn::class]);
 ```
 
-Clear all the content bricks from a given brickable type except some bricks:
+Clear all the content bricks except specific ones:
 
 ```php
-$page->clearBricksExcept(OneTextColumn::class, $bricksCollection);
+$page->clearBricksExcept($bricksCollection);
 ```
 
 **Note**
@@ -324,7 +324,7 @@ $brick = $page->getFirstBrick(OneTextColumn::class);
 
 ### Query content bricks
 
-As brickables can specify the model they use, you should query content bricks and then cast them to their respective models:
+As each brickable can specify its own brick model, you should query content bricks and then cast them ito the model defined in their related brickable:
 
 ```php
 $rawBricks = Brick::where('model_type', Page::class)->where('model_id', 1)->where('brickable_type', OneTextColumn::class)->get();
@@ -342,13 +342,13 @@ Display a single content brick in your view:
 Or display all the content bricks associated to an Eloquent model:
 
 ```blade
-{{ Brickables::displayBricks($page) }}
+{{ $page->displayBricks() }}
 ```
 
-Or display all the content bricks from a given brickable class only:
+Or only display content bricks from given brickable types:
 
 ```blade
-{{ Brickables::displayBricks($page, OneTextColumn::class) }}
+{{ $page->displayBricks([OneTextColumn::class, TwoTextColumns::class]) }}
 ```
 
 ### Retrieve brickables
@@ -356,13 +356,13 @@ Or display all the content bricks from a given brickable class only:
 Get all the registered brickables:
 
 ```php
-$registeredBrickables = Brickables::getAll();
+$registeredBrickables = $page->getRegisteredBrickables();
 ```
 
 Get all the brickables that are allowed to be added to an Eloquent model:
 
 ```php
-$additionableBrickables = Brickables::getAdditionableTo($page);
+$additionableBrickables = $page->getAdditionableBrickables();
 ```
 
 Retrieve a brickable from a brick instance:
@@ -376,7 +376,7 @@ $brickable = $page->getFirstBrick(OneTextColumn::class)->brickable;
 Use the ready-to-use admin panel to manage related-model content bricks:
 
 ```blade
-{{ Brickables::displayAdminPanel($page) }}
+{{ $page->displayAdminPanel() }}
 ```
 
 Customize the admin panel views by [publishing them](#views).
@@ -479,7 +479,7 @@ Finally, use the `@brickableResourcesCompute` directive under the last displayed
 
 ```blade
     {{ $page->getFirstBrick(OneTextColumn::class) }}
-    {{ Brickables::displayBricks($page, TwoTextColumns::class) }}
+    {{ $page->displayBricks([TwoTextColumns::class]) }}
     @brickableResourcesCompute
 ```
 

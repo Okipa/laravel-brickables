@@ -103,12 +103,6 @@ trait HasBrickablesTrait
         return in_array($brickableClass, $authorizedBrickables);
     }
 
-    /**
-     * @param string $brickableClass
-     * @param array $data
-     *
-     * @return \Okipa\LaravelBrickables\Models\Brick
-     */
     protected function createBrick(string $brickableClass, array $data): Brick
     {
         /** @var Brickable $brickable */
@@ -123,73 +117,54 @@ trait HasBrickablesTrait
         return $brickModel;
     }
 
-    /**
-     * @param string $brickableClass
-     *
-     * @return void
-     */
     protected function handleMaxNumberOfBricks(string $brickableClass): void
     {
         $maxNumberOfBricks = $this->getMaxNumberOfBricksFor($brickableClass);
         if ($maxNumberOfBricks) {
-            $except = $this->getBricks($brickableClass)->reverse()->take($maxNumberOfBricks);
-            $this->clearBricksExcept($brickableClass, $except);
+            $except = $this->getBricks([$brickableClass])->reverse()->take($maxNumberOfBricks);
+            $this->clearBricksExcept($except);
         }
     }
 
-    /**
-     * @param string $brickableClass
-     *
-     * @return int
-     */
     protected function getMaxNumberOfBricksFor(string $brickableClass): int
     {
         return (int) data_get($this, 'brickables.numberOfBricks.' . $brickableClass . '.max', 0);
     }
 
-    public function getBricks(?string $brickableClass = null): Collection
+    public function getBricks(?array $brickableClasses = []): Collection
     {
         /** @var \Okipa\LaravelBrickables\Models\Brick $bricksBaseModel */
         $bricksBaseModel = app(config('brickables.bricks.model'));
         $query = $bricksBaseModel->where('model_type', $this->getMorphClass())->where('model_id', $this->id);
-        if ($brickableClass) {
-            $query->where('brickable_type', $brickableClass);
+        foreach ($brickableClasses as $index => $brickableClass) {
+            $query->{$index ? 'orWhere' : 'where'}('brickable_type', $brickableClass);
         }
         $bricks = $query->ordered()->get();
 
         return Brickables::castBricks($bricks);
     }
 
-    public function clearBricksExcept(string $brickableClass, Collection $excludeBricks): void
+    public function clearBricksExcept(Collection $excludeBricks): void
     {
-        $this->getBricks($brickableClass)->reject(function (Brick $brick) use ($excludeBricks) {
-            return $excludeBricks->where($brick->getKeyName(), $brick->getKey())->count();
-        })->each->delete();
+        $this->getBricks()
+            ->reject(fn(Brick $brick) => $excludeBricks->where($brick->getKeyName(), $brick->getKey())->count())
+            ->each
+            ->delete();
     }
 
-    public function clearBricks(?string $brickableClass = null): void
+    public function clearBricks(?array $brickableClasses = []): void
     {
-        $this->getBricks($brickableClass)->each->delete();
+        $this->getBricks($brickableClasses)->each->delete();
     }
 
     public function getFirstBrick(?string $brickableClass = null): ?Brick
     {
-        return $this->getBricks($brickableClass)->first();
+        return $this->getBricks(array_filter([$brickableClass]))->first();
     }
 
     public function getReadableClassName(): string
     {
         return __(ucfirst(Str::snake(class_basename($this), ' ')));
-    }
-
-    public function canAddBricksFrom(string $brickableClass): bool
-    {
-        $maxNumberOfBricks = $this->getMaxNumberOfBricksFor($brickableClass);
-        if (! $maxNumberOfBricks) {
-            return true;
-        }
-
-        return $this->getBricks($brickableClass)->count() < $maxNumberOfBricks;
     }
 
     public function canDeleteBricksFrom(string $brickableClass): bool
@@ -199,11 +174,55 @@ trait HasBrickablesTrait
             return true;
         }
 
-        return $this->getBricks($brickableClass)->count() > $minNumberOfBricks;
+        return $this->getBricks([$brickableClass])->count() > $minNumberOfBricks;
     }
 
     protected function getMinNumberOfBricksFor(string $brickableClass): int
     {
         return (int) data_get($this, 'brickables.numberOfBricks.' . $brickableClass . '.min', 0);
+    }
+
+    public function getAdditionableBrickables(): Collection
+    {
+        return $this->getRegisteredBrickables()->filter(function ($brickable) {
+            $brickableClass = get_class($brickable);
+
+            return $this->canHandle($brickableClass) && $this->canAddBricksFrom($brickableClass);
+        });
+    }
+
+    public function getRegisteredBrickables(): Collection
+    {
+        $brickables = new Collection;
+        foreach (config('brickables.registered') as $brickableClass) {
+            /** @var Brickable $brickable */
+            $brickable = app($brickableClass);
+            $brickables->push($brickable);
+        }
+
+        return $brickables;
+    }
+
+    public function canAddBricksFrom(string $brickableClass): bool
+    {
+        $maxNumberOfBricks = $this->getMaxNumberOfBricksFor($brickableClass);
+        if (! $maxNumberOfBricks) {
+            return true;
+        }
+
+        return $this->getBricks([$brickableClass])->count() < $maxNumberOfBricks;
+    }
+
+    public function displayBricks(?array $brickableClasses): string
+    {
+        return (string) view('laravel-brickables::bricks', [
+            'model' => $this,
+            'brickableClasses' => $brickableClasses,
+        ])->toHtml();
+    }
+
+    public function displayAdminPanel(): string
+    {
+        return (string) view('laravel-brickables::admin.panel.layout', ['model' => $this])->toHtml();
     }
 }
