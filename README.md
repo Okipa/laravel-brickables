@@ -16,7 +16,7 @@ This package is shipped with few pre-built brickables. You can use them as is bu
 
 | Laravel | PHP | Package |
 |---|---|---|
-| ^6.0 | ^7.4 | ^2.0 |
+| ^7.0 | ^7.4 | ^2.0 |
 | ^5.8 | ^7.2 | ^1.0 |
 
 ## Upgrade guide
