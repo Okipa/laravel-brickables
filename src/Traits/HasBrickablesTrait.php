@@ -214,7 +214,7 @@ trait HasBrickablesTrait
         return $this->getBricks([$brickableClass])->count() < $maxNumberOfBricks;
     }
 
-    public function displayBricks(?array $brickableClasses): string
+    public function displayBricks(array $brickableClasses = []): string
     {
         return (string) view('laravel-brickables::bricks', [
             'model' => $this,

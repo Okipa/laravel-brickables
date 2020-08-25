@@ -541,6 +541,13 @@ class HasBrickablesTest extends BrickableTestCase
             ])->toHtml(),
             $page->displayBricks([get_class($brickable)])
         );
+        $this->assertEquals(
+            view('laravel-brickables::bricks', [
+                'model' => $page,
+                'brickableClasses' => [],
+            ])->toHtml(),
+            $page->displayBricks()
+        );
     }
 
     /** @test */

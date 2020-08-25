@@ -68,7 +68,7 @@ interface HasBrickables
 
     public function canAddBricksFrom(string $brickableClass): bool;
 
-    public function displayBricks(?array $brickableClasses): string;
+    public function displayBricks(array $brickableClasses = []): string;
 
     public function displayAdminPanel(): string;
 }
