@@ -31,7 +31,7 @@ Make sure to update each brickable with these changes.
 
 You will then be able to validate your form inputs as you wish with:
 * Direct request validation: `return request()->validate([...])`
-* FormRequest validation `return (new BrickableStoreFormRequest)->validated()`
+* FormRequest validation `return app(BrickableStoreFormRequest::class)->validated()`
 * Custom validation workflow with validators: https://laravel.com/docs/validation#manually-creating-validators
 
 ## See all changes
