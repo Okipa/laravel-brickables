@@ -10,8 +10,8 @@ The signature of the following methods have changed. If you use those methods, y
 * `clearBricksExcept(string $brickableClass, Collection $excludeBricks): void` has been changed into `clearBricksExcept(Collection $excludeBricks): void`.
 
 The following methods have been transferred from the `Brickables` helper to the `HasBrickablesTrait`. As so, you should update your code accordingly:
-* `Brickables::displayBricks(HasBrickables $model, ?string $brickableClass = null)` should now be called as following: `$model->displayBricks(?array $brickableClasses)`
-* `Brickables::displayAdminPanel(HasBrickables $model)` should now be called as following: `$model->displayAdminPanel()`
+* `{{ Brickables::displayBricks(HasBrickables $model, ?string $brickableClass = null) }}` should now be called as following: `{!! $model->displayBricks(?array $brickableClasses) !!}`
+* `{{ Brickables::displayAdminPanel(HasBrickables $model) }}` should now be called as following: `{!! $model->displayAdminPanel() !!}`
 * `Brickables::getAdditionableTo(HasBrickables $model)` should now be called as following: `$model->getAdditionableBrickables()`
 * `Brickables::getAll()` should now be called as following: `$model->getRegisteredBrickables()`
 
