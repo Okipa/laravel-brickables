@@ -9,7 +9,8 @@
 * Added PHP 7.4 support.
 * Dropped PHP 7.2 and 7.3 support.
 * Added brickables CSS and JS resources smart management.
-* Changed brick inputs validation workflow.
+* Changed brick inputs validation workflow (breaking changes).
+* API changes (breaking changes).
 
 :point_right: [See the upgrade guide](/docs/upgrade-guides/from-v1-to-v2.md)
 
