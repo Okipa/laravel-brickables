@@ -100,16 +100,16 @@ class BricksControllerTest extends BrickableTestCase
     }
 
     /** @test */
-    public function update_action_updates_brick_and_redirects_to_admin_panel()
+    public function update_action_updates_brick_and_redirects_back()
     {
         Brickables::routes();
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
-        $this->call('POST', 'brick/update/' . $brick->id, [
+        $this->from('brick/edit/' . $brick->id)->call('POST', 'brick/update/' . $brick->id, [
             '_method' => 'PUT',
             'admin_panel_url' => 'admin-panel',
             'text' => 'New text',
-        ])->assertRedirect('admin-panel');
+        ])->assertRedirect('brick/edit/' . $brick->id);
         $brick->refresh()->data = json_encode(['text' => 'New text']);
         $this->assertDatabaseHas('bricks', Arr::except($brick->toArray(), ['created_at', 'updated_at']));
     }

@@ -104,9 +104,16 @@ class BricksController extends Controller
         //
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param \Okipa\LaravelBrickables\Models\Brick $brick
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     protected function sendBrickUpdatedResponse(Request $request, Brick $brick): RedirectResponse
     {
-        return redirect()->to($request->admin_panel_url)
+        return redirect()->back()
             ->with('success', __('The entry :model > :brickable has been updated.', [
                 'brickable' => $brick->brickable->getLabel(),
                 'model' => $brick->model->getReadableClassName(),
