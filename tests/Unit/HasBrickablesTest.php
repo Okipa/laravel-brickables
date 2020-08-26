@@ -74,7 +74,7 @@ class HasBrickablesTest extends BrickableTestCase
             use HasBrickablesTrait;
 
             public array $brickables = [
-                'canOnlyHandle' => [OneTextColumn::class],
+                'can_only_handle' => [OneTextColumn::class],
             ];
         };
         $this->assertTrue($model->canHandle(OneTextColumn::class));
@@ -538,8 +538,8 @@ class HasBrickablesTest extends BrickableTestCase
     {
         $model = (new HasOneBrickableWithConstraintsModel)->create();
         $additionableBbrickables = $model->getAdditionableBrickables();
-        $this->assertCount(count($model->brickables['canOnlyHandle']), $additionableBbrickables);
-        $this->assertInstanceOf($model->brickables['canOnlyHandle'][0], $additionableBbrickables->first());
+        $this->assertCount(count($model->brickables['can_only_handle']), $additionableBbrickables);
+        $this->assertInstanceOf($model->brickables['can_only_handle'][0], $additionableBbrickables->first());
         $page = factory(Page::class)->create();
         $pageAditionnableBrickables = $page->getAdditionableBrickables();
         $this->assertCount(count(config('brickables.registered')), $pageAditionnableBrickables);

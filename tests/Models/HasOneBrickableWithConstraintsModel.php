@@ -12,8 +12,8 @@ class HasOneBrickableWithConstraintsModel extends Model implements HasBrickables
     use HasBrickablesTrait;
 
     public array $brickables = [
-        'canOnlyHandle' => [OneTextColumn::class],
-        'numberOfBricks' => [OneTextColumn::class => ['min' => 1, 'max' => 3]],
+        'can_only_handle' => [OneTextColumn::class],
+        'number_of_bricks' => [OneTextColumn::class => ['min' => 1, 'max' => 3]],
     ];
 
     /**

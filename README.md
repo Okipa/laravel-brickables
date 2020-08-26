@@ -224,8 +224,8 @@ class Page extends Model implements HasBrickables
 	use HasBrickablesTrait;
 
     public array $brickables = [
-        'canOnlyHandle' => [OneTextColumn::class], // by default all registered brickables can be handled.
-        'numberOfBricks' => [OneTextColumn::class => ['min' => 1, 'max' => 3]], // by default, there are no number restrictions.
+        'can_only_handle' => [OneTextColumn::class], // by default all registered brickables can be handled.
+        'number_of_bricks' => [OneTextColumn::class => ['min' => 1, 'max' => 3]], // by default, there are no number restrictions.
     ];
 
 	// ...

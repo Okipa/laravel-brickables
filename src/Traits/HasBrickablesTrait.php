@@ -97,7 +97,7 @@ trait HasBrickablesTrait
     public function canHandle(string $brickableClass): bool
     {
         /** @var array $authorizedBrickables */
-        $authorizedBrickables = data_get($this, 'brickables.canOnlyHandle', []);
+        $authorizedBrickables = data_get($this, 'brickables.can_only_handle', []);
         if (! count($authorizedBrickables)) {
             return true;
         }
@@ -136,7 +136,7 @@ trait HasBrickablesTrait
 
     protected function getMaxNumberOfBricksFor(string $brickableClass): int
     {
-        return (int) data_get($this, 'brickables.numberOfBricks.' . $brickableClass . '.max', 0);
+        return (int) data_get($this, 'brickables.number_of_bricks.' . $brickableClass . '.max', 0);
     }
 
     public function getBricks(?array $brickableClasses = []): Collection
@@ -191,7 +191,7 @@ trait HasBrickablesTrait
 
     protected function getMinNumberOfBricksFor(string $brickableClass): int
     {
-        return (int) data_get($this, 'brickables.numberOfBricks.' . $brickableClass . '.min', 0);
+        return (int) data_get($this, 'brickables.number_of_bricks.' . $brickableClass . '.min', 0);
     }
 
     public function getAdditionableBrickables(): Collection

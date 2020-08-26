@@ -15,6 +15,10 @@ The following methods have been transferred from the `Brickables` helper to the 
 * In code, `Brickables::getAdditionableTo(HasBrickables $model)` should now be called as following: `$model->getAdditionableBrickables()`
 * In code, `Brickables::getAll()` should now be called as following: `$model->getRegisteredBrickables()`
 
+The following constraint keys have been renamed, make sure you report these changes:
+* `'canOnlyHandle'` has been renamed in `'can_only_handle'`
+* `'numberOfBricks'` has been renamed in `'number_of_bricks'`
+
 ## New brickables resources smart management
 
 Check how to benefit from the brand new [brickables resources smart management](../../README.md#define-brickable-css-and-js-resources).

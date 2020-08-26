@@ -13,7 +13,7 @@ class HasMultipleBrickablesWithConstraintsModel extends Model implements HasBric
     use HasBrickablesTrait;
 
     public array $brickables = [
-        'numberOfBricks' => [
+        'number_of_bricks' => [
             OneTextColumn::class => ['min' => 1, 'max' => 1],
             TwoTextColumns::class => ['max' => 1],
         ],
