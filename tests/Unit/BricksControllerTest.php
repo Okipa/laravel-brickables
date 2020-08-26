@@ -7,7 +7,7 @@ use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Tests\Brickables\Brickable;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
-use Okipa\LaravelBrickables\Tests\Models\HasBrickablesModel;
+use Okipa\LaravelBrickables\Tests\Models\HasOneBrickableWithConstraintsModel;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class BricksControllerTest extends BrickableTestCase
@@ -133,7 +133,7 @@ class BricksControllerTest extends BrickableTestCase
     {
         Brickables::routes();
         $page = factory(Page::class)->create();
-        $otherModel = (new HasBrickablesModel)->create();
+        $otherModel = (new HasOneBrickableWithConstraintsModel)->create();
         $brickOne = $page->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
         $otherModel->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
         $brickTwo = $page->addBrick(OneTextColumn::class, ['text' => 'Text #2']);
@@ -155,7 +155,7 @@ class BricksControllerTest extends BrickableTestCase
     {
         Brickables::routes();
         $page = factory(Page::class)->create();
-        $otherModel = (new HasBrickablesModel)->create();
+        $otherModel = (new HasOneBrickableWithConstraintsModel)->create();
         $brickOne = $page->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
         $otherModel->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
         $brickTwo = $page->addBrick(OneTextColumn::class, ['text' => 'Text #2']);

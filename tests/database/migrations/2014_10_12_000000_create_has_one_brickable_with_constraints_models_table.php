@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHasBrickablesModelsTable extends Migration
+class CreateHasOneBrickableWithConstraintsModelsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateHasBrickablesModelsTable extends Migration
      */
     public function up()
     {
-        Schema::create('has_brickables_models', function (Blueprint $table) {
+        Schema::create('has_one_brickable_with_constraints_models', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ class CreateHasBrickablesModelsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('has_brickables_models');
+        Schema::dropIfExists('has_one_brickable_with_constraints_models');
     }
 }

@@ -13,7 +13,8 @@ use Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException;
 use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
-use Okipa\LaravelBrickables\Tests\Models\HasBrickablesModel;
+use Okipa\LaravelBrickables\Tests\Models\HasMultipleBrickablesWithConstraintsModel;
+use Okipa\LaravelBrickables\Tests\Models\HasOneBrickableWithConstraintsModel;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 use Okipa\LaravelBrickables\Traits\HasBrickablesTrait;
 
@@ -62,7 +63,7 @@ class HasBrickablesTest extends BrickableTestCase
                 return [];
             }
         };
-        $model = (new HasBrickablesModel)->create();
+        $model = (new HasOneBrickableWithConstraintsModel)->create();
         $model->addBrick(get_class($brickable));
         $this->expectException(BrickableCannotBeHandledException::class);
     }
@@ -129,17 +130,47 @@ class HasBrickablesTest extends BrickableTestCase
     }
 
     /** @test */
-    public function it_can_add_brick_with_max_number_of_bricks_defined()
+    public function it_can_handle_max_number_of_brick_on_addition_and_auto_remove_olders()
     {
-        $model = (new HasBrickablesModel)->create();
-        $brickOne = $model->addBrick(OneTextColumn::class);
-        $brickTwo = $model->addBrick(OneTextColumn::class);
-        $model->addBrick(OneTextColumn::class);
-        $brickFour = $model->addBrick(OneTextColumn::class);
+        $model = (new HasMultipleBrickablesWithConstraintsModel)->create();
+        $brick1 = $model->addBrick(OneTextColumn::class);
+        $brick2 = $model->addBrick(TwoTextColumns::class);
+        $brick3 = $model->addBrick(OneTextColumn::class);
+        $brick4 = $model->addBrick(TwoTextColumns::class);
         $bricks = Brick::all();
-        $this->assertFalse($brickOne->is($bricks->first()));
-        $this->assertTrue($brickTwo->is($bricks->first()));
-        $this->assertTrue($brickFour->is($bricks->last()));
+        $this->assertFalse($brick1->is($bricks->get(0)));
+        $this->assertFalse($brick2->is($bricks->get(1)));
+        $this->assertTrue($brick3->is($bricks->get(0)));
+        $this->assertTrue($brick4->is($bricks->get(1)));
+    }
+
+    /** @test */
+    public function it_can_add_bricks_with_max_number_not_exceeded()
+    {
+        $brickable = new Class extends Brickable {
+            public function validateStoreInputs(): array
+            {
+                return [];
+            }
+
+            public function validateUpdateInputs(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [
+            OneTextColumn::class,
+            TwoTextColumns::class,
+            get_class($brickable)
+        ]);
+        $model = (new HasMultipleBrickablesWithConstraintsModel)->create();
+        $brick1 = $model->addBrick(OneTextColumn::class);
+        $brick2 = $model->addBrick(TwoTextColumns::class);
+        $brick3 = $model->addBrick(get_class($brickable));
+        $bricks = Brick::all();
+        $this->assertTrue($brick1->is($bricks->get(0)));
+        $this->assertTrue($brick2->is($bricks->get(1)));
+        $this->assertTrue($brick3->is($bricks->get(2)));
     }
 
     /** @test */
@@ -180,7 +211,7 @@ class HasBrickablesTest extends BrickableTestCase
         config()->set('brickables.registered', [get_class($brickable)]);
         $page = factory(Page::class)->create();
         $page->addBricks([[get_class($brickable), []], [get_class($brickable), []]]);
-        $this->assertCount(2, $page->getBricks());
+        $this->assertCount(2, Brick::all());
         $this->assertEmpty(Brick::all()->diff($page->getBricks()));
     }
 
@@ -326,7 +357,10 @@ class HasBrickablesTest extends BrickableTestCase
     /** @test */
     public function it_can_return_readable_class_name()
     {
-        $this->assertEquals('Has brickables model', (new HasBrickablesModel)->getReadableClassName());
+        $this->assertEquals(
+            'Has one brickable with constraints model',
+            (new HasOneBrickableWithConstraintsModel)->getReadableClassName()
+        );
     }
 
     /** @test */
@@ -449,7 +483,7 @@ class HasBrickablesTest extends BrickableTestCase
     /** @test */
     public function it_can_check_if_model_can_add_brick_for_brickable_type()
     {
-        $model = (new HasBrickablesModel)->create();
+        $model = (new HasOneBrickableWithConstraintsModel)->create();
         $model->addBricks([[OneTextColumn::class], [OneTextColumn::class], [OneTextColumn::class]]);
         $this->assertFalse($model->canAddBricksFrom(OneTextColumn::class));
         Brick::first()->delete();
@@ -459,7 +493,7 @@ class HasBrickablesTest extends BrickableTestCase
     /** @test */
     public function it_can_check_if_model_can_destroy_brick_for_brickable_type()
     {
-        $model = (new HasBrickablesModel)->create();
+        $model = (new HasOneBrickableWithConstraintsModel)->create();
         $model->addBricks([[OneTextColumn::class], [OneTextColumn::class], [OneTextColumn::class]]);
         $this->assertTrue($model->canDeleteBricksFrom(OneTextColumn::class));
         Brick::first()->delete();
@@ -471,7 +505,7 @@ class HasBrickablesTest extends BrickableTestCase
     /** @test */
     public function it_can_return_all_registered_brickables()
     {
-        $model = (new HasBrickablesModel)->create();
+        $model = (new HasOneBrickableWithConstraintsModel)->create();
         $brickableOne = new class extends Brickable {
             public function validateStoreInputs(): array
             {
@@ -502,7 +536,7 @@ class HasBrickablesTest extends BrickableTestCase
     /** @test */
     public function it_can_return_brickables_that_can_be_added_to_model()
     {
-        $model = (new HasBrickablesModel)->create();
+        $model = (new HasOneBrickableWithConstraintsModel)->create();
         $additionableBbrickables = $model->getAdditionableBrickables();
         $this->assertCount(count($model->brickables['canOnlyHandle']), $additionableBbrickables);
         $this->assertInstanceOf($model->brickables['canOnlyHandle'][0], $additionableBbrickables->first());

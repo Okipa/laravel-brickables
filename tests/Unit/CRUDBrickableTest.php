@@ -10,7 +10,7 @@ use Okipa\LaravelBrickables\Brickables\TwoTextColumns;
 use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Middleware\CRUDBrickable;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
-use Okipa\LaravelBrickables\Tests\Models\HasBrickablesModel;
+use Okipa\LaravelBrickables\Tests\Models\HasOneBrickableWithConstraintsModel;
 use Okipa\LaravelBrickables\Tests\Models\ModelWithoutBrickables;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 
@@ -73,12 +73,13 @@ class CRUDBrickableTest extends BrickableTestCase
             //
         })->middleware(CRUDBrickable::class);
         $response = $this->call('GET', '/', [
-            'model_type' => HasBrickablesModel::class,
+            'model_type' => HasOneBrickableWithConstraintsModel::class,
             'model_id' => 1,
             'brickable_type' => TwoTextColumns::class,
         ])->assertForbidden();
         $this->assertEquals(
-            'The given ' . TwoTextColumns::class . ' brickable cannot be handled by the ' . HasBrickablesModel::class
+            'The given ' . TwoTextColumns::class . ' brickable cannot be handled by the '
+            . HasOneBrickableWithConstraintsModel::class
             . ' Eloquent model.',
             $response->exception->getMessage()
         );

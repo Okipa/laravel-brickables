@@ -42,6 +42,7 @@ trait HasBrickablesTrait
      * @throws \Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException
      * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
+     * @throws \Exception
      */
     public function addBrick(string $brickableClass, array $data = []): Brick
     {
@@ -118,11 +119,17 @@ trait HasBrickablesTrait
         return $brickModel;
     }
 
+    /**
+     * @param string $brickableClass
+     *
+     * @throws \Exception
+     */
     protected function handleMaxNumberOfBricks(string $brickableClass): void
     {
         $maxNumberOfBricks = $this->getMaxNumberOfBricksFor($brickableClass);
-        if ($maxNumberOfBricks) {
-            $except = $this->getBricks([$brickableClass])->reverse()->take($maxNumberOfBricks);
+        $bricksFromGivenBrickableType = $this->getBricks([$brickableClass]);
+        if ($maxNumberOfBricks && $bricksFromGivenBrickableType->count() > $maxNumberOfBricks) {
+            $except = $bricksFromGivenBrickableType->reverse()->take($maxNumberOfBricks);
             $this->clearBricksExcept($except);
         }
     }
@@ -145,12 +152,16 @@ trait HasBrickablesTrait
         return Brickables::castBricks($bricks);
     }
 
-    public function clearBricksExcept(Collection $excludeBricks): void
+    /**
+     * @param \Illuminate\Support\Collection $excludedBricks
+     *
+     * @throws \Exception
+     */
+    public function clearBricksExcept(Collection $excludedBricks): void
     {
         $this->getBricks()
-            ->reject(fn(Brick $brick) => $excludeBricks->where($brick->getKeyName(), $brick->getKey())->count())
-            ->each
-            ->delete();
+            ->reject(fn(Brick $brick) => $excludedBricks->where($brick->getKeyName(), $brick->getKey())->count())
+            ->each(fn(Brick $brick) => $brick->delete());
     }
 
     public function clearBricks(?array $brickableClasses = []): void
