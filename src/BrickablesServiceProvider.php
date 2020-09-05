@@ -27,7 +27,7 @@ class BrickablesServiceProvider extends ServiceProvider
             __DIR__
             . '/../database/migrations/create_bricks_table.php.stub' => $this->getMigrationFileName($filesystem),
         ], 'migrations');
-        $this->declareDirectives();
+        $this->declareBladeDirectives();
     }
 
     /**
@@ -49,7 +49,7 @@ class BrickablesServiceProvider extends ServiceProvider
             ->first();
     }
 
-    protected function declareDirectives(): void
+    protected function declareBladeDirectives(): void
     {
         Blade::directive('brickablesCss', function () {
             return "<?php echo view('laravel-brickables::resources.css')->toHtml(); ?>";

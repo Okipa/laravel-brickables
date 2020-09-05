@@ -17,27 +17,27 @@ class Brickables
 {
     protected array $displayed = [];
 
-    public function addToDisplayed(Brickable $brickable)
+    public function isDisplayedOnPage(Brickable $brickable)
     {
         $this->displayed[] = $brickable;
     }
 
     public function getCssResourcesToLoad(): Collection
     {
-        return $this->getDisplayed()
+        return $this->getDisplayedOnPage()
             ->map(fn(Brickable $brickable) => $brickable->getCssResourcePath())
             ->unique()
             ->filter();
     }
 
-    protected function getDisplayed()
+    protected function getDisplayedOnPage(): Collection
     {
         return collect($this->displayed)->unique();
     }
 
     public function getJsResourcesToLoad(): Collection
     {
-        return $this->getDisplayed()
+        return $this->getDisplayedOnPage()
             ->map(fn(Brickable $brickable) => $brickable->getJsResourcePath())
             ->unique()
             ->filter();

@@ -1,11 +1,11 @@
 @push('brickables-css')
-    @foreach(Brickables::getCssResourcesToLoad() as $cssResourcePath)
-        <link rel="stylesheet" href="{{ $cssResourcePath }}" />
+    @foreach(Brickables::getCssResourcesToLoad() as $brickableCssResourcePath)
+        <link rel="stylesheet" href="{{ $brickableCssResourcePath }}" />
     @endforeach
 @endpush
 
 @push('brickables-js')
-    @foreach(Brickables::getJsResourcesToLoad() as $jsResourcePath)
-        <script type="text/javascript" src="{{ $jsResourcePath }}"></script>
+    @foreach(Brickables::getJsResourcesToLoad() as $brickableJsResourcePath)
+        <script type="text/javascript" src="{{ $brickableJsResourcePath }}"></script>
     @endforeach
 @endpush

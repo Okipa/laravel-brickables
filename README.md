@@ -103,9 +103,10 @@ php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesService
 php artisan migrate
 ```
 
-Finally, to benefit from smart loading of css and js resources, add these directives to your blade layout as shown in the example bellow:
+Finally, to benefit from [smart loading of brickables css and js resources](#define-brickable-css-and-js-resources), add these directives to your blade layout as shown in the example bellow:
 
 ```blade
+{{-- layout.blade.php --}}
 <html>
     <head>
         @brickablesCss
@@ -446,7 +447,7 @@ Your brickable is now ready to be associated to Eloquent models.
 
 You have the possibility to define a css and js resource to customize each brickable rendering.
  
-In addition, this package embeds a smart resource management system : it determines which brickables are actually displayed on the view and only loads the necessary resources.
+In addition, this package embeds a smart resource management system : it determines which brickables are actually displayed on the page and only loads the resources once, even if a brickable is used more than once on the page.
 
 To benefit from this feature, make sure you have implemented the `@brickablesCss` and the `@brickablesJs` directives as precised in the [installation](#installation) part.
  
@@ -478,10 +479,16 @@ class MyNewBrickable extends Brickable
 Finally, use the `@brickableResourcesCompute` directive under the last displayed brick in the page:
 
 ```blade
-    {{ $page->getFirstBrick(OneTextColumn::class) }}
-    {{ $page->displayBricks([TwoTextColumns::class]) }}
-    @brickableResourcesCompute
+    {{-- page.blade.php --}}
+    @extends('laravel-brickables::layout')
+    @section('content')
+        {{ $page->getFirstBrick(OneTextColumn::class) }}
+        {{ $page->displayBricks([TwoTextColumns::class]) }}
+        @brickableResourcesCompute
+    @endsection
 ```
+
+**:warning: Important:** Please note that you will always have to declare the `@brickableResourcesCompute` directive from a child view from the one which is declaring the `brickablesCss` and `@brickablesJs` directives. As you can see in our example, the `@brickableResourcesCompute` blade directive is called on the `page.blade.php` view, which is a child of `layout.blade.php` (where the `brickablesCss` and `@brickablesJs` are declared). This is the only way for this package to know which brickables are actually displayed on the page, in order to intelligently load the resources.
 
 ### Empower brickables with extra abilities
 
