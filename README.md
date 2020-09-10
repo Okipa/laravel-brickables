@@ -377,7 +377,7 @@ $brickable = $page->getFirstBrick(OneTextColumn::class)->brickable;
 Use the ready-to-use admin panel to manage related-model content bricks:
 
 ```blade
-{{ $page->displayAdminPanel() }}
+{!! $page->displayAdminPanel() !!}
 ```
 
 Customize the admin panel views by [publishing them](#views).
