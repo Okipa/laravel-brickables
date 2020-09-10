@@ -4,6 +4,7 @@ namespace Okipa\LaravelBrickables;
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class BrickablesServiceProvider extends ServiceProvider
@@ -13,7 +14,7 @@ class BrickablesServiceProvider extends ServiceProvider
      *
      * @param \Illuminate\Filesystem\Filesystem $filesystem
      */
-    public function boot(Filesystem $filesystem)
+    public function boot(Filesystem $filesystem): void
     {
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'laravel-brickables');
         $this->publishes([
@@ -26,6 +27,7 @@ class BrickablesServiceProvider extends ServiceProvider
             __DIR__
             . '/../database/migrations/create_bricks_table.php.stub' => $this->getMigrationFileName($filesystem),
         ], 'migrations');
+        $this->declareBladeDirectives();
     }
 
     /**
@@ -47,10 +49,23 @@ class BrickablesServiceProvider extends ServiceProvider
             ->first();
     }
 
+    protected function declareBladeDirectives(): void
+    {
+        Blade::directive('brickablesCss', function () {
+            return "<?php echo view('laravel-brickables::resources.css')->toHtml(); ?>";
+        });
+        Blade::directive('brickablesJs', function () {
+            return "<?php echo view('laravel-brickables::resources.js')->toHtml(); ?>";
+        });
+        Blade::directive('brickableResourcesCompute', function () {
+            return "<?php echo view('laravel-brickables::resources.compute')->toHtml(); ?>";
+        });
+    }
+
     /**
      * Register the application services.
      */
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/brickables.php', 'brickables');
         $this->app->bind('Brickables', Brickables::class);

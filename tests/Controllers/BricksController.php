@@ -3,11 +3,11 @@
 namespace Okipa\LaravelBrickables\Tests\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class BricksController extends \Okipa\LaravelBrickables\Controllers\BricksController
 {
-    /** @inheritDoc */
-    public function create(Request $request)
+    public function create(Request $request): View
     {
         $brick = null;
         /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */

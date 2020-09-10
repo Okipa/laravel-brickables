@@ -3,103 +3,154 @@
 namespace Okipa\LaravelBrickables\Tests\Unit;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
 use Okipa\LaravelBrickables\Tests\Models\BrickModel;
-use Okipa\LaravelBrickables\Tests\Models\HasBrickablesModel;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class BrickablesTest extends BrickableTestCase
 {
     /** @test */
-    public function it_can_return_all_registered_brickables()
+    public function it_only_displays_once_css_resources()
     {
-        $brickableOne = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+        view()->addNamespace('laravel-brickables', 'tests/views');
+        $brickableOne = new class extends Brickable {
+            public function setBrickViewPath(): string
+            {
+                return 'laravel-brickables::brick-test';
+            }
+
+            protected function setCssResourcePath(): string
+            {
+                return 'my/test/css/path/brickable-one.css';
+            }
+
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
         };
-        $brickableTwo = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+        $brickableTwo = new class extends Brickable {
+            public function setBrickViewPath(): string
+            {
+                return 'laravel-brickables::brick-test';
+            }
+
+            protected function setCssResourcePath(): string
+            {
+                return 'my/test/css/path/brickable-two.css';
+            }
+
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
         };
         config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
-        $registeredPageBrickables = Brickables::getAll();
-        $this->assertCount(count(config('brickables.registered')), $registeredPageBrickables);
-    }
-
-    /** @test */
-    public function it_can_return_brickables_that_can_be_added_to_model()
-    {
-        $model = (new HasBrickablesModel)->create();
-        $brickables = Brickables::getAdditionableTo($model);
-        $this->assertCount(count($model->brickables['canOnlyHandle']), $brickables);
-        $this->assertInstanceOf($model->brickables['canOnlyHandle'][0], $brickables->first());
         $page = factory(Page::class)->create();
-        $pageBrickables = Brickables::getAdditionableTo($page);
-        $this->assertCount(count(config('brickables.registered')), $pageBrickables);
+        $page->addBricks([
+            [get_class($brickableOne), ['custom' => 'first-brickable-one']],
+            [get_class($brickableTwo), ['custom' => 'first-brickable-two']],
+            [get_class($brickableOne), ['custom' => 'second-brickable-one']],
+            [get_class($brickableTwo), ['custom' => 'second-brickable-two']],
+        ]);
+        $html = view('laravel-brickables::page-test', compact('page', 'brickableOne', 'brickableTwo'))->toHtml();
+        $this->assertStringNotContainsString($html, 'javascript');
+        $headHtmlContent = Str::beforeLast(Str::after($html, '<head>'), '</head>');
+        $this->assertEquals(1, substr_count($headHtmlContent, 'my/test/css/path/brickable-one.css'));
+        $this->assertEquals(1, substr_count($headHtmlContent, 'my/test/css/path/brickable-two.css'));
     }
 
     /** @test */
-    public function it_can_display_model_bricks_html()
+    public function it_only_displays_once_js_resources()
     {
         view()->addNamespace('laravel-brickables', 'tests/views');
-        $brickable = new Class extends Brickable {
+        $brickableOne = new class extends Brickable {
             public function setBrickViewPath(): string
             {
-                return 'laravel-brickables::test-brick';
+                return 'laravel-brickables::brick-test';
             }
 
-            protected function setStoreValidationRules(): array
+            protected function setJsResourcePath(): string
+            {
+                return 'my/test/js/path/brickable-one.js';
+            }
+
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
         };
-        config()->set('brickables.registered', [get_class($brickable)]);
+        $brickableTwo = new class extends Brickable {
+            public function setBrickViewPath(): string
+            {
+                return 'laravel-brickables::brick-test';
+            }
+
+            protected function setJsResourcePath(): string
+            {
+                return 'my/test/js/path/brickable-two.js';
+            }
+
+            public function validateStoreInputs(): array
+            {
+                return [];
+            }
+
+            public function validateUpdateInputs(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
         $page = factory(Page::class)->create();
-        $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
-        $this->assertEquals(
-            view('laravel-brickables::bricks', ['model' => $page, 'brickableClass' => get_class($brickable)])->render(),
-            Brickables::displayBricks($page, get_class($brickable))->toHtml()
-        );
+        $page->addBricks([
+            [get_class($brickableOne), ['custom' => 'first-brickable-one']],
+            [get_class($brickableTwo), ['custom' => 'first-brickable-two']],
+            [get_class($brickableOne), ['custom' => 'second-brickable-one']],
+            [get_class($brickableTwo), ['custom' => 'second-brickable-two']],
+        ]);
+        $html = view('laravel-brickables::page-test', compact('page', 'brickableOne', 'brickableTwo'))->toHtml();
+        $bodyHtmlContent = Str::beforeLast(Str::after($html, '<body>'), '</body>');
+        $this->assertStringNotContainsString($html, 'css');
+        $this->assertEquals(1, substr_count($bodyHtmlContent, 'my/test/js/path/brickable-one.js'));
+        $this->assertEquals(1, substr_count($bodyHtmlContent, 'my/test/js/path/brickable-two.js'));
     }
 
     /** @test */
     public function it_can_display_model_bricks_admin_panel_html()
     {
         view()->addNamespace('laravel-brickables', 'tests/views');
-        $brickable = new Class extends Brickable {
+        $brickable = new class extends Brickable {
             public function setBrickViewPath(): string
             {
-                return 'laravel-brickables::test-brick';
+                return 'laravel-brickables::brick-test';
             }
 
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
@@ -110,36 +161,36 @@ class BrickablesTest extends BrickableTestCase
         $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
         $this->assertEquals(
             view('laravel-brickables::admin.panel.layout', ['model' => $page])->render(),
-            Brickables::displayAdminPanel($page)->toHtml()
+            $page->displayAdminPanel()
         );
     }
 
     /** @test */
     public function it_can_cast_bricks_to_their_brickable_related_brick_model()
     {
-        $brickableOne = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+        $brickableOne = new class extends Brickable {
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
         };
-        $brickableTwo = new Class extends Brickable {
+        $brickableTwo = new class extends Brickable {
             protected function setBrickModelClass(): string
             {
                 return BrickModel::class;
             }
 
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
@@ -165,29 +216,29 @@ class BrickablesTest extends BrickableTestCase
     /** @test */
     public function it_can_cast_bricks_and_return_them_in_correct_order()
     {
-        $brickableOne = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+        $brickableOne = new class extends Brickable {
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
         };
-        $brickableTwo = new Class extends Brickable {
+        $brickableTwo = new class extends Brickable {
             protected function setBrickModelClass(): string
             {
                 return BrickModel::class;
             }
 
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
@@ -205,18 +256,18 @@ class BrickablesTest extends BrickableTestCase
     /** @test */
     public function it_can_cast_brick_to_its_brickable_related_brick_model()
     {
-        $brickable = new Class extends Brickable {
+        $brickable = new class extends Brickable {
             protected function setBrickModelClass(): string
             {
                 return BrickModel::class;
             }
 
-            protected function setStoreValidationRules(): array
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }
@@ -245,13 +296,13 @@ class BrickablesTest extends BrickableTestCase
     /** @test */
     public function it_can_get_model_from_edit_request()
     {
-        $brickable = new Class extends Brickable {
-            protected function setStoreValidationRules(): array
+        $brickable = new class extends Brickable {
+            public function validateStoreInputs(): array
             {
                 return [];
             }
 
-            protected function setUpdateValidationRules(): array
+            public function validateUpdateInputs(): array
             {
                 return [];
             }

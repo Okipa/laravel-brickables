@@ -8,15 +8,20 @@
 [![Coverage Status](https://coveralls.io/repos/github/Okipa/laravel-brickables/badge.svg?branch=master)](https://coveralls.io/github/Okipa/laravel-brickables?branch=master)
 [![Quality Score](https://img.shields.io/scrutinizer/g/Okipa/laravel-brickables.svg?style=flat-square)](https://scrutinizer-ci.com/g/Okipa/laravel-brickables/?branch=master)
 
-This package allows you to associate content bricks to Eloquent models and provides a full and customizable admin panel to manage them.
+This package allows you to associate content bricks to Eloquent models and provides a fully customizable admin panel to manage them.
 
-This package is shipped with pre-built brickables. You can use them as is, but you definitely should consider them as examples: customizing them or create new ones has been designed to be simple as hell ! :fire:
+This package is shipped with few pre-built brickables. You can use them as is but you definitely should consider them as examples: customizing them or create new ones has been designed to be simple as hell ! :fire:
 
 ## Compatibility
 
 | Laravel | PHP | Package |
 |---|---|---|
+| ^7.0 | ^7.4 | ^2.0 |
 | ^5.8 | ^7.2 | ^1.0 |
+
+## Upgrade guide
+
+* [From V1 to V2](/docs/upgrade-guides/from-v1-to-v2.md)
 
 ## Usage
 
@@ -39,7 +44,7 @@ Display bricks in your views:
 
 ```blade
 {{-- all at once --}}
-{{ Brickables::displayBricks($page) }}
+{!! $page->displayBricks() !!}
 
 {{-- or one by one --}}
 {{ $page->getFirstBrick(OneTextColumn::class) }}
@@ -48,7 +53,7 @@ Display bricks in your views:
 Display the model-related bricks admin panel in your views:
 
 ```blade
-{{ Brickables::displayAdminPanel($page) }}
+{{ $page->displayAdminPanel() }}
 ```
 
 ## Table of contents
@@ -61,7 +66,7 @@ Display the model-related bricks admin panel in your views:
   * [Models](#models)
   * [Routes](#routes)
 * [How to](#how-to)
-  * [Define brickable contraints](#define-brickables-constraints)
+  * [Define brick constraints for model](#define-brick-constraints-for-model)
   * [Add content bricks](#add-content-bricks)
   * [Update a content brick](#update-a-content-brick)
   * [Remove content bricks](#remove-content-bricks)
@@ -72,6 +77,7 @@ Display the model-related bricks admin panel in your views:
   * [Retrieve brickables](#retrieve-brickables)
   * [Manage model content bricks](#manage-model-content-bricks)
   * [Create your own brickable](#create-your-own-brickable)
+  * [Define brickable css and js resources](#define-brickable-css-and-js-resources)
   * [Empower bricks with extra abilities](#empower-brickables-with-extra-abilities)
   * [Get Eloquent model from Request](#get-eloquent-model-from-request)
 * [Testing](#testing)
@@ -93,12 +99,28 @@ Then, publish and run the database migrations:
 
 ```bash
 php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=migrations
+
 php artisan migrate
+```
+
+Finally, to benefit from [smart loading of brickables css and js resources](#define-brickable-css-and-js-resources), add these directives to your blade layout as shown in the example bellow:
+
+```blade
+{{-- layout.blade.php --}}
+<html>
+    <head>
+        @brickablesCss
+    </head>
+    <body>
+        @yield('content')
+        @brickablesJs
+    </body>
+</html>
 ```
 
 ## Configuration
 
-Publish the package configuration file to customize it if necessary: 
+Publish the package configuration: 
 
 ```bash
 php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=config
@@ -108,7 +130,7 @@ php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesService
 
 ## Views
 
-Publish the package views to customize them if necessary: 
+Publish the package views: 
 
 ```bash
 php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=views
@@ -116,9 +138,32 @@ php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesService
 
 ## Translations
 
-All displayed labels or sentences are translatable.
+All words and sentences used in this package are translatable.
 
 See how to translate them on the Laravel official documentation : https://laravel.com/docs/localization#using-translation-strings-as-keys.
+
+Here is the list of the words and sentences available for translation by default:
+
+* `Content Bricks`
+* `No saved content brick.`
+* `Content`
+* `Left content`
+* `Right content`
+* `Brick data`
+* `Add`
+* `Edit`
+* `Update`
+* `Destroy`
+* `Cancel`
+* `Move up`
+* `Move down`
+* `The entry :model > :brickable has been created.`
+* `The entry :model > :brickable has been updated.`
+* `The entry :model > :brickable has been deleted.`
+
+You will also have to define the `validation.attributes.brickable_types` translation.
+
+Finally, you will have to translate each registered brickable label translation.
 
 ## Implementation
 
@@ -127,7 +172,6 @@ See how to translate them on the Laravel official documentation : https://larave
 Implement the `HasBrickables` interface and use the `HasBrickablesTrait` trait to any Eloquent model that you want to be able to be associated to content bricks to.
 
 ```php
-
 use Illuminate\Database\Eloquent\Model;
 use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Traits\HasBrickablesTrait;
@@ -150,7 +194,7 @@ Brickables::routes();
 
 These routes are consuming the `Okipa\LaravelBrickables\Controllers\BricksController` controller by default.
 
-To customize the admin panel actions, you can add routes inside or outside from the brickables route group.
+To customize the admin panel actions, you can add routes inside or outside of the brickables route group.
 
 ```php
 Brickables::routes(function(){
@@ -163,16 +207,15 @@ Check the [Empower bricks with extra abilities](#empower-brickables-with-extra-a
 
 ## How to
 
-### Define brickables constraints
+### Define brick constraints for model
 
-In your Eloquent model, define constraints:
+In your Eloquent model, you optionally can define constraints:
 
-* The brickables list that your model can handle.
-* Make sure to always keep a min number of bricks for a brickable.
-* Make sure to only hold a max number of bricks for a brickable.
+* Define the brickables that your model is being authorized to manage,
+* Define the minimum number of bricks of each brickable that the model must hold,
+* Define the maximum number of bricks of each brickable that the model can hold.
 
 ```php
-
 use Illuminate\Database\Eloquent\Model;
 use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Traits\HasBrickablesTrait;
@@ -181,9 +224,9 @@ class Page extends Model implements HasBrickables
 {
 	use HasBrickablesTrait;
 
-    public $brickables = [
-        'canOnlyHandle' => [OneTextColumn::class], // by default all registered brickables can be handled.
-        'numberOfBricks' => [OneTextColumn::class => ['min' => 1, 'max' => 3]], // by default, there are no number restrictions.
+    public array $brickables = [
+        'can_only_handle' => [OneTextColumn::class], // by default all registered brickables can be handled.
+        'number_of_bricks' => [OneTextColumn::class => ['min' => 1, 'max' => 3]], // by default, there are no number restrictions.
     ];
 
 	// ...
@@ -192,9 +235,12 @@ class Page extends Model implements HasBrickables
 
 In this example:
 
-* The model will only be allowed to handle the `OneTextColumn` brickable.
-* Clearing all bricks from this brickable type for this model will keep the one with the highest position.
-* Adding a 4th brick from this brickable type will remove the one with the lowest position.
+* The `Page` model will only be allowed to handle `OneTextColumn` bricks.
+* The admin panel will only offer to manage `OneTextColumn` bricks.
+* The admin panel will not offer to remove a `OneTextColumn` brick if there is only one left.
+* The admin panel will not offer to add more `OneTextColumn` bricks if 3 are already added.
+* Programmatically clearing all bricks for this model will keep the `OneTextColumn` one with the highest position.
+* Programmatically adding a 4th `OneTextColumn` brick will remove the one with the lowest position.
 
 ### Add content bricks
 
@@ -218,7 +264,7 @@ $bricks = $page->addBricks([
 Just update your content brick as you would fo for any other Eloquent model instance:
 
 ```php
-// as data are store in json, so you will have to process this way
+// as data are stored in json, you will have to process this way: https://github.com/laravel/framework/pull/15464#issuecomment-247642772.
 $brick->data = ['text' => 'Another text'];
 $brick->save();
 ```
@@ -231,27 +277,27 @@ Just delete your content brick as you would fo for any other Eloquent model inst
 $brick->delete();
 ```
 
-Clear all the content bricks associated to an Eloquent model, or only those with a specific brickable type:
+Clear all the content bricks associated to an Eloquent model, or only those with specific brickable types:
 
 ```php
 $page->clearBricks();
 
-$page->clearBricks(OneTextColumn::class);
+$page->clearBricks([OneTextColumn::class]);
 ```
 
-Clear all the content bricks from a given brickable type except some bricks:
+Clear all the content bricks except specific ones:
 
 ```php
-$page->clearBricksExcept(OneTextColumn::class, $bricksCollection);
+$page->clearBricksExcept($bricksCollection);
 ```
 
 **Note**
 
-* According to the [number of bricks constraints](#define-brickables-constraints) defined in the Eloquent model, these methods could be brought to keep the min number of bricks instead of removing the targeted brick(s).
+* According to the [number of bricks constraints](#define-brick-constraints-for-model) defined in the Eloquent model, these methods could be brought to keep the min number of bricks instead of removing the targeted brick(s).
 
 ### Set content bricks order
 
-By default all bricks are ordered by their creation order (last created at the end).
+By default, all bricks are ordered by their creation order (last created at the end).
 
 The `Brick` model uses the `spatie/eloquent-sortable` package to handle the content bricks positioning.
 
@@ -279,10 +325,11 @@ $brick = $page->getFirstBrick(OneTextColumn::class);
 
 ### Query content bricks
 
-As brickables can specify the model they use, you should query content bricks and then cast them to their respective models:
+As each brickable can specify its own brick model, you should query content bricks and then cast them ito the model defined in their related brickable:
 
 ```php
-$bricks = Brickables::castBricks(Brick::all());
+$rawBricks = Brick::where('model_type', Page::class)->where('model_id', 1)->where('brickable_type', OneTextColumn::class)->get();
+$bricks = Brickables::castBricks($rawBricks);
 ```
 
 ### Display content bricks
@@ -293,12 +340,16 @@ Display a single content brick in your view:
 {{ $page->getFirstBrick(OneTextColumn::class) }}
 ```
 
-Or display all the content bricks associated to an Eloquent model, with a brickable constraint or not:
+Or display all the content bricks associated to an Eloquent model:
 
 ```blade
-{{ Brickables::displayBricks($page) }}
+{!! $page->displayBricks() !!}
+```
 
-{{ Brickables::displayBricks($page, OneTextColumn::class) }}
+Or only display content bricks from given brickable types:
+
+```blade
+{!! $page->displayBricks([OneTextColumn::class, TwoTextColumns::class]) !!}
 ```
 
 ### Retrieve brickables
@@ -306,13 +357,13 @@ Or display all the content bricks associated to an Eloquent model, with a bricka
 Get all the registered brickables:
 
 ```php
-$registeredBrickables = Brickables::getAll();
+$registeredBrickables = $page->getRegisteredBrickables();
 ```
 
-Get all the brickables that can be added to an Eloquent model:
+Get all the brickables that are allowed to be added to an Eloquent model:
 
 ```php
-$additionableBrickables = Brickables::getAdditionableTo($page);
+$additionableBrickables = $page->getAdditionableBrickables();
 ```
 
 Retrieve a brickable from a brick instance:
@@ -326,14 +377,14 @@ $brickable = $page->getFirstBrick(OneTextColumn::class)->brickable;
 Use the ready-to-use admin panel to manage related-model content bricks:
 
 ```blade
-{{ Brickables::displayAdminPanel($page) }}
+{!! $page->displayAdminPanel() !!}
 ```
 
 Customize the admin panel views by [publishing them](#views).
 
 **:bulb: Tips**
 
-* Add a javascript confirmation request to intercept the content bricks delete action, otherwise, the removal action will be directly executed without asking the user agreement.
+* It is highly recommended adding a javascript confirmation request to intercept the content bricks delete action, otherwise the removal action will be directly executed without asking the user agreement.
 
 ### Create your own brickable
 
@@ -350,17 +401,21 @@ use Okipa\LaravelBrickables\Abstracts\Brickable;
 
 class MyNewBrickable extends Brickable
 {
-    /** @inheritDoc */
-    protected function setStoreValidationRules(): array
+    public function validateStoreInputs(): array
     {
-        return ['text' => ['required', 'string']];
+        return request()->validate(['text' => ['required', 'string']]);
     }
 
-    /** @inheritDoc */
-    protected function setUpdateValidationRules(): array
+    public function validateUpdateInputs(): array
     {
-        return ['text' => ['required', 'string']];
+        return request()->validate(['text' => ['required', 'string']]);
     }
+    
+    // alternative example: use a form request to validate your inputs and return the validated fields.
+    //public function validateStoreInputs(): array
+    //{
+    //    return app(MyNewBrickableStoreFormRequest::class)->validated();
+    //}
 }
 ```
 
@@ -372,29 +427,76 @@ Then, register it in your `config('brickables.registered')` array:
 return [
 
     'registered' => [
-        // other brickables declarations ...
+        // other brickables declarations...
         App\Vendor\LaravelBrickables\Brickables\MyNewBrickable::class,
     ],
 ];
 
 ```
 
-Finally, create the brick view in the `resources/views/vendor/laravel-brickables/my-new-brickable` directory (you can customize the views paths in your `MyNewBrickable` class if you want):
+Finally, create the brickable views in the `resources/views/vendor/laravel-brickables/my-new-brickable` directory (you can customize the view paths in your `MyNewBrickable` class):
 
-* the `brick` view will be used to display your brickable.
-* the `form` view will contain the form inputs that will be used to CRUD your brickable.
+* the `brick` view that will be used to display your `MyNewBrickable` brick in the front.
+* the `form` view which will embed the form inputs that will be used to CRUD your `MyNewBrickable` bricks in the admin panel.
 
-Check the existing brickables to see how they are implemented.
+You should see the existing brickables implementation to get familiar with their management.
 
 Your brickable is now ready to be associated to Eloquent models.
 
+### Define brickable css and js resources
+
+You have the possibility to define a css and js resource to customize each brickable rendering.
+ 
+In addition, this package embeds a smart resource management system : it determines which brickables are actually displayed on the page and only loads the resources once, even if a brickable is used more than once on the page.
+
+To benefit from this feature, make sure you have implemented the `@brickablesCss` and the `@brickablesJs` directives as precised in the [installation](#installation) part.
+ 
+Then, define which resources your brickables are using:
+
+```php
+<?php
+
+namespace App\Vendor\LaravelBrickables\Brickables;
+
+use Okipa\LaravelBrickables\Abstracts\Brickable;
+
+class MyNewBrickable extends Brickable
+{
+    // ...
+
+    protected function setCssResourcePath(): ?string
+    {
+        return mix('/css/brickables/my-new-brickable.css');
+    }
+
+    protected function setJsResourcePath(): ?string
+    {
+        return mix('/js/brickables/my-new-brickable.js');
+    }
+}
+```
+
+Finally, use the `@brickableResourcesCompute` directive under the last displayed brick in the page:
+
+```blade
+    {{-- page.blade.php --}}
+    @extends('laravel-brickables::layout')
+    @section('content')
+        {{ $page->getFirstBrick(OneTextColumn::class) }}
+        {{ $page->displayBricks([TwoTextColumns::class]) }}
+        @brickableResourcesCompute
+    @endsection
+```
+
+**:warning: Important:** Please note that you will always have to declare the `@brickableResourcesCompute` directive from a child view from the one which is declaring the `brickablesCss` and `@brickablesJs` directives. As you can see in our example, the `@brickableResourcesCompute` blade directive is called on the `page.blade.php` view, which is a child of `layout.blade.php` (where the `brickablesCss` and `@brickablesJs` are declared). This is the only way for this package to know which brickables are actually displayed on the page, in order to intelligently load the resources.
+
 ### Empower brickables with extra abilities
 
-To add abilities to your brickables, you will have to implement the additional treatments in the brickable-related brick model and bricks controller.
+To add abilities to your brickables, you will have to implement the additional treatments in the brickable-related brick model and brick controller.
 
 Let's add the ability to manage images in our `MyNewBrickable` from the previous example.
 
-First create a `MyNewBrickableBrick` model that will extend the `Okipa\LaravelBrickables\Models\Brick` one.
+First create a `MyNewBrickableBrick` model that will extend the `Okipa\LaravelBrickables\Models\Brick` one in order to give the image management ability to this brick.
 
 ```php
 <?php
@@ -402,19 +504,19 @@ First create a `MyNewBrickableBrick` model that will extend the `Okipa\LaravelBr
 namespace App;
 
 use Okipa\LaravelBrickables\Models\Brick;
-use Spatie\MediaLibrary\HasMedia\HasMedia;
-use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
 class MyNewBrickableBrick extends Brick implements HasMedia
 {
     // image management example with the spatie/laravel-medialibrary package
-    use HasMediaTrait;
+    use InteractsWithMedia;
     
     // ...
 }
 ```
 
-Then, create a `MyNewBrickableBricksController` model that will extend the `Okipa\LaravelBrickables\Controllers\BricksController` one.
+Then, create a `MyNewBrickableBricksController` model which will extend the `Okipa\LaravelBrickables\Controllers\BricksController` one where you will add the image management treatments.
 
 ```php
 <?php
@@ -428,14 +530,12 @@ class MyNewBrickableBricksController extends BricksController
 
     // ...    
 
-    /** @inheritDoc */
     protected function stored(Request $request, Brick $brick): void
     {
         // image management example with the spatie/laravel-medialibrary package
         $brick->addMediaFromRequest('image')->toMediaCollection('bricks');
     }
 
-    /** @inheritDoc */
     protected function updated(Request $request, Brick $brick): void
     {
         // image management example with the spatie/laravel-medialibrary package
@@ -449,7 +549,30 @@ class MyNewBrickableBricksController extends BricksController
 }
 ```
 
-Finally, set your `MyNewBrickableBrick` model and your `MyNewBrickableBricksController` namespaces in your `MyNewBrickable` brickable class.
+Do not forget to validate your form inputs:
+
+```php
+class MyNewBrickable extends Brickable
+{
+    public function validateStoreInputs(): array
+    {
+        return request()->validate([
+            'text' => ['required', 'string'],
+            'image' => ['required', 'mimetypes:image/jpeg,image/png', 'dimensions:min_width=240,min_height=160', 'max:5000'],
+        ]);
+    }
+
+    public function validateUpdateInputs(): array
+    {
+        return request()->validate([
+            'text' => ['required', 'string'],
+            'image' => ['nullable', 'mimetypes:image/jpeg,image/png', 'dimensions:min_width=240,min_height=160', 'max:5000'],
+        ]);
+    }
+}
+```
+
+Finally, tell you brickable to use your `MyNewBrickableBrick` model and your `MyNewBrickableBricksController` controller:
 
 ```php
 <?php
@@ -465,13 +588,11 @@ class MyNewBrickable extends Brickable
 
     // ...
     
-    /** @inheritDoc */
     protected function setBrickModelClass(): string
     {
         return MyNewBrickableBrick::class;
     }
 
-    /** @inheritDoc */
     protected function setBricksControllerClass(): string
     {
         return MyNewBrickableBricksController::class;
@@ -481,7 +602,7 @@ class MyNewBrickable extends Brickable
 }
 ```
 
-That's it, your custom model and controller will now be used by the brickable.
+That's it, your custom model and controller will now be used by the `MyNewBrickable` brickable.
 
 ### Get Eloquent model from request
 

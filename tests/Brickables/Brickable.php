@@ -6,25 +6,27 @@ use Okipa\LaravelBrickables\Tests\Controllers\BricksController;
 
 class Brickable extends \Okipa\LaravelBrickables\Abstracts\Brickable
 {
-    /** @inheritDoc */
     public function setFormViewPath(): string
     {
-        return 'laravel-brickables::test-brick';
+        return 'laravel-brickables::brick-test';
     }
 
-    /** @inheritDoc */
-    protected function setStoreValidationRules(): array
+    public function validateStoreInputs(): array
     {
-        return [];
+        return request()->validate([
+            'text_left' => ['required', 'string'],
+            'text_right' => ['required', 'string'],
+        ]);
     }
 
-    /** @inheritDoc */
-    protected function setUpdateValidationRules(): array
+    public function validateUpdateInputs(): array
     {
-        return [];
+        return request()->validate([
+            'text_left' => ['required', 'string'],
+            'text_right' => ['required', 'string'],
+        ]);
     }
 
-    /** @inheritDoc */
     protected function setBricksControllerClass(): string
     {
         return BricksController::class;

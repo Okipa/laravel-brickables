@@ -7,7 +7,7 @@ use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Tests\Brickables\Brickable;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
-use Okipa\LaravelBrickables\Tests\Models\HasBrickablesModel;
+use Okipa\LaravelBrickables\Tests\Models\HasOneBrickableWithConstraintsModel;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class BricksControllerTest extends BrickableTestCase
@@ -100,16 +100,16 @@ class BricksControllerTest extends BrickableTestCase
     }
 
     /** @test */
-    public function update_action_updates_brick_and_redirects_to_admin_panel()
+    public function update_action_updates_brick_and_redirects_back()
     {
         Brickables::routes();
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
-        $this->call('POST', 'brick/update/' . $brick->id, [
+        $this->from('brick/edit/' . $brick->id)->call('POST', 'brick/update/' . $brick->id, [
             '_method' => 'PUT',
             'admin_panel_url' => 'admin-panel',
             'text' => 'New text',
-        ])->assertRedirect('admin-panel');
+        ])->assertRedirect('brick/edit/' . $brick->id);
         $brick->refresh()->data = json_encode(['text' => 'New text']);
         $this->assertDatabaseHas('bricks', Arr::except($brick->toArray(), ['created_at', 'updated_at']));
     }
@@ -133,7 +133,7 @@ class BricksControllerTest extends BrickableTestCase
     {
         Brickables::routes();
         $page = factory(Page::class)->create();
-        $otherModel = (new HasBrickablesModel)->create();
+        $otherModel = (new HasOneBrickableWithConstraintsModel)->create();
         $brickOne = $page->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
         $otherModel->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
         $brickTwo = $page->addBrick(OneTextColumn::class, ['text' => 'Text #2']);
@@ -155,7 +155,7 @@ class BricksControllerTest extends BrickableTestCase
     {
         Brickables::routes();
         $page = factory(Page::class)->create();
-        $otherModel = (new HasBrickablesModel)->create();
+        $otherModel = (new HasOneBrickableWithConstraintsModel)->create();
         $brickOne = $page->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
         $otherModel->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
         $brickTwo = $page->addBrick(OneTextColumn::class, ['text' => 'Text #2']);

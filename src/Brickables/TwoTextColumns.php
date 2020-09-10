@@ -6,21 +6,19 @@ use Okipa\LaravelBrickables\Abstracts\Brickable;
 
 class TwoTextColumns extends Brickable
 {
-    /** @inheritDoc */
-    protected function setStoreValidationRules(): array
+    public function validateStoreInputs(): array
     {
-        return [
+        return request()->validate([
             'text_left' => ['required', 'string'],
             'text_right' => ['required', 'string'],
-        ];
+        ]);
     }
 
-    /** @inheritDoc */
-    protected function setUpdateValidationRules(): array
+    public function validateUpdateInputs(): array
     {
-        return [
+        return request()->validate([
             'text_left' => ['required', 'string'],
             'text_right' => ['required', 'string'],
-        ];
+        ]);
     }
 }

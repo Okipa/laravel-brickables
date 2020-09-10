@@ -3,8 +3,11 @@
 namespace Okipa\LaravelBrickables\Models;
 
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
+use Okipa\LaravelBrickables\Facades\Brickables;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
@@ -12,61 +15,35 @@ class Brick extends Model implements Htmlable, Sortable
 {
     use SortableTrait;
 
-    /**
-     * The spatie/eloquent-sortable trait configuration.
-     *
-     * @var array
-     */
-    public $sortable = ['order_column_name' => 'position', 'sort_when_creating' => true];
+    public array $sortable = ['order_column_name' => 'position', 'sort_when_creating' => true];
 
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
     protected $table = 'bricks';
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = ['data' => 'json'];
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
-     */
-    public function model()
+    public function model(): MorphTo
     {
         return $this->morphTo();
     }
 
-    /** @inheritDoc */
     public function toHtml(): string
     {
-        return (string) view($this->brickable->getBrickViewPath(), ['brick' => $this]);
+        Brickables::isDisplayedOnPage($this->brickable);
+
+        return (string) view($this->brickable->getBrickViewPath(), ['brick' => $this])->toHtml();
     }
 
-    /**
-     * @return \Okipa\LaravelBrickables\Abstracts\Brickable
-     */
     public function getBrickableAttribute(): Brickable
     {
         return (new $this->brickable_type);
     }
 
-    /**
-     * Build the sort query from the spatie/eloquent-sortable package.
-     *
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function buildSortQuery()
+    public function buildSortQuery(): Builder
     {
         return static::query()->where('model_type', $this->model_type)->where('model_id', $this->model_id);
     }
 
-    /** @inheritDoc */
-    public function delete()
+    public function delete(): ?bool
     {
         if ($this->model->canDeleteBricksFrom($this->brickable_type)) {
             return parent::delete();
