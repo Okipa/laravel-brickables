@@ -343,13 +343,13 @@ Display a single content brick in your view:
 Or display all the content bricks associated to an Eloquent model:
 
 ```blade
-{{ $page->displayBricks() }}
+{!! $page->displayBricks() !!}
 ```
 
 Or only display content bricks from given brickable types:
 
 ```blade
-{{ $page->displayBricks([OneTextColumn::class, TwoTextColumns::class]) }}
+{!! $page->displayBricks([OneTextColumn::class, TwoTextColumns::class]) !!}
 ```
 
 ### Retrieve brickables
