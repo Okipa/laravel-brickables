@@ -198,9 +198,9 @@ To customize the admin panel actions, you can add routes inside or outside of th
 
 ```php
 Brickables::routes(function(){
-    // inside the routes group: will benefit from the CRUDBrickable middleware: useful for admin panel additional routes.
+    // inside the routes group: will benefit from the CRUDBrickable middleware.
 });
-// outside the route group: will not benefit from the CRUDBrickable middleware: for any other need.
+// outside the route group: will not benefit from the CRUDBrickable middleware.
 ```
 
 Check the [Empower bricks with extra abilities](#empower-brickables-with-extra-abilities) part to get more information about the customization possibilities.
