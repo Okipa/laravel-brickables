@@ -33,6 +33,7 @@
         "spatie/eloquent-sortable": "^3.7"
     },
     "require-dev": {
+        "laravel/legacy-factories": "^1.0.4",
         "nunomaduro/larastan": "^0.6",
         "orchestra/testbench": "^5.0||^6.0",
         "phpmd/phpmd": "^2.8",
