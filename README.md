@@ -1,4 +1,4 @@
-![Laravel Brickables](docs/laravel-brickables.png)
+![Laravel Brickables](/docs/laravel-brickables.png)
 <p align="center">
     <a href="https://github.com/Okipa/laravel-brickables/releases" title="Latest Stable Version">
         <img src="https://img.shields.io/github/release/Okipa/laravel-brickables.svg?style=flat-square" alt="Latest Stable Version">
