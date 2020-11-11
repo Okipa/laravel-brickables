@@ -12,7 +12,7 @@ class DispatchController extends Controller
     /**
      * @param \Illuminate\Http\Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
     public function create(Request $request)
     {
@@ -29,13 +29,11 @@ class DispatchController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param \Okipa\LaravelBrickables\Models\Brick|null $brick
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return mixed
      */
     protected function dispatchRequest(string $action, Request $request, ?Brick $brick = null)
     {
-        /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
-        $brickable = $brick ? $brick->brickable : (new $request->brickable_type);
-        /** @var \Okipa\LaravelBrickables\Controllers\BricksController $bricksController */
+        $brickable = $brick->brickable ?? app($request->brickable_type);
         $bricksController = $brickable->getBricksController();
 
         return $bricksController->callAction($action, $brick ? compact('brick', 'request') : compact('request'));
@@ -44,7 +42,7 @@ class DispatchController extends Controller
     /**
      * @param \Illuminate\Http\Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -55,7 +53,7 @@ class DispatchController extends Controller
      * @param \Okipa\LaravelBrickables\Models\Brick $brick
      * @param \Illuminate\Http\Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function edit(Brick $brick, Request $request)
     {
@@ -66,7 +64,7 @@ class DispatchController extends Controller
      * @param \Okipa\LaravelBrickables\Models\Brick $brick
      * @param \Illuminate\Http\Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
     public function update(Brick $brick, Request $request)
     {
@@ -77,7 +75,7 @@ class DispatchController extends Controller
      * @param \Okipa\LaravelBrickables\Models\Brick $brick
      * @param \Illuminate\Http\Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
     public function destroy(Brick $brick, Request $request)
     {
@@ -88,7 +86,7 @@ class DispatchController extends Controller
      * @param \Okipa\LaravelBrickables\Models\Brick $brick
      * @param \Illuminate\Http\Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
     public function moveUp(Brick $brick, Request $request)
     {
@@ -99,7 +97,7 @@ class DispatchController extends Controller
      * @param \Okipa\LaravelBrickables\Models\Brick $brick
      * @param \Illuminate\Http\Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Http\JsonResponse
      */
     public function moveDown(Brick $brick, Request $request)
     {
