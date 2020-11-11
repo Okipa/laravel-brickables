@@ -5,6 +5,8 @@
 2020-11-11
 
 * Added PHP 8 support
+* Removed Scrutinizer analysis
+* Updated PHPCS checker and fixer norm to PSR-12
 
 ## [2.0.1](https://github.com/Okipa/laravel-brickables/compare/2.0.0...2.0.1)
 

@@ -8,7 +8,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Build status](https://github.com/Okipa/laravel-brickables/workflows/CI/badge.svg)](https://github.com/Okipa/laravel-brickables/actions)
 [![Coverage Status](https://coveralls.io/repos/github/Okipa/laravel-brickables/badge.svg?branch=master)](https://coveralls.io/github/Okipa/laravel-brickables?branch=master)
-[![Quality Score](https://img.shields.io/scrutinizer/g/Okipa/laravel-brickables.svg?style=flat-square)](https://scrutinizer-ci.com/g/Okipa/laravel-brickables/?branch=master)
 
 This package allows you to associate content bricks to Eloquent models and provides a fully customizable admin panel to manage them.
 
