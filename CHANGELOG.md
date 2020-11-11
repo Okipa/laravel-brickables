@@ -1,8 +1,14 @@
 # Changelog
 
+## [2.0.1](https://github.com/Okipa/laravel-brickables/compare/2.0.0...2.0.1)
+
+2020-09-30
+
+* Removed useless `type="text/javascript"` for script declarations in favor of W3C rules.
+
 ## [2.0.0](https://github.com/Okipa/laravel-brickables/compare/1.1.0...2.0.0)
 
-2020-07-11
+2020-09-10
 
 * Added Laravel 8 support
 * Dropped Laravel 5.8 and 6 support.
