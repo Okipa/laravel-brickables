@@ -1,9 +1,9 @@
 ![Laravel Brickables](docs/laravel-brickables.png)
 <p align="center">
     <a href="https://github.com/Okipa/laravel-brickables/releases" title="Latest Stable Version">
-        <img src="https://img.shields.io/github/release/okipa/laravel-brickables.svg?style=flat-square" alt="Latest Stable Version">
+        <img src="https://img.shields.io/github/release/Okipa/laravel-brickables.svg?style=flat-square" alt="Latest Stable Version">
     </a>
-    <a href="https://packagist.org/packages/okipa/laravel-brickables" title="Total Downloads">
+    <a href="https://packagist.org/packages/Okipa/laravel-brickables" title="Total Downloads">
         <img src="https://img.shields.io/packagist/dt/okipa/laravel-brickables.svg?style=flat-square" alt="Total Downloads">
     </a>
     <a href="https://github.com/Okipa/laravel-brickables/actions" title="Build Status">
