@@ -1,6 +1,4 @@
-![Laravel table](docs/laravel-brickables.png)
-
-# Page content bricks management made easy
+![Laravel Brickables](docs/laravel-brickables.png)
 
 [![Source Code](https://img.shields.io/badge/source-okipa/laravel--brickables-blue.svg)](https://github.com/Okipa/laravel-brickables)
 [![Latest Version](https://img.shields.io/github/release/okipa/laravel-brickables.svg?style=flat-square)](https://github.com/Okipa/laravel-brickables/releases)
