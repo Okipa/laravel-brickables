@@ -2,7 +2,7 @@
 
 ## [2.1.0](https://github.com/Okipa/laravel-brickables/compare/2.0.1...2.1.0)
 
-2020-11-11
+2020-11-14
 
 * Added PHP 8 support
 * Removed Scrutinizer analysis
