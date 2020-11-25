@@ -75,7 +75,7 @@ trait HasBrickablesTrait
      */
     protected function checkBrickableIsRegistered(string $brickableClass): void
     {
-        if (! in_array($brickableClass, config('brickables.registered'))) {
+        if (! in_array($brickableClass, config('brickables.registered'), true)) {
             throw new NotRegisteredBrickableClassException('The given ' . $brickableClass
                 . ' brickable is not registered in the config(\'brickables.registered\') array.');
         }
@@ -102,12 +102,12 @@ trait HasBrickablesTrait
             return true;
         }
 
-        return in_array($brickableClass, $authorizedBrickables);
+        return in_array($brickableClass, $authorizedBrickables, true);
     }
 
     protected function createBrick(string $brickableClass, array $data): Brick
     {
-        /** @var Brickable $brickable */
+        /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
         $brickable = app($brickableClass);
         $brickModel = $brickable->getBrickModel();
         $brickModel->model_type = $this->getMorphClass();
@@ -196,7 +196,7 @@ trait HasBrickablesTrait
 
     public function getAdditionableBrickables(): Collection
     {
-        return $this->getRegisteredBrickables()->filter(function ($brickable) {
+        return $this->getRegisteredBrickables()->filter(function (Brickable $brickable) {
             $brickableClass = get_class($brickable);
 
             return $this->canHandle($brickableClass) && $this->canAddBricksFrom($brickableClass);
@@ -205,9 +205,9 @@ trait HasBrickablesTrait
 
     public function getRegisteredBrickables(): Collection
     {
-        $brickables = new Collection;
+        $brickables = new Collection();
         foreach (config('brickables.registered') as $brickableClass) {
-            /** @var Brickable $brickable */
+            /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
             $brickable = app($brickableClass);
             $brickables->push($brickable);
         }

@@ -12,7 +12,7 @@ use Okipa\LaravelBrickables\Tests\Models\Page;
 class BrickTest extends BrickableTestCase
 {
     /** @test */
-    public function it_renders_html()
+    public function it_renders_html(): void
     {
         view()->addNamespace('laravel-brickables', 'tests/views');
         $brickable = new Class extends Brickable {
@@ -34,16 +34,16 @@ class BrickTest extends BrickableTestCase
         config()->set('brickables.registered', [get_class($brickable)]);
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
-        $this->assertEquals(view($brick->brickable->getBrickViewPath(), compact('brick')), $brick->toHtml());
+        self::assertEquals(view($brick->brickable->getBrickViewPath(), compact('brick')), $brick->toHtml());
     }
 
     /** @test */
-    public function it_can_delete_bricks_until_the_min_number_of_bricks()
+    public function it_can_delete_bricks_until_the_min_number_of_bricks(): void
     {
-        $model = (new HasOneBrickableWithConstraintsModel)->create();
+        $model = app(HasOneBrickableWithConstraintsModel::class)->create();
         $model->addBricks([[OneTextColumn::class], [OneTextColumn::class], [OneTextColumn::class]]);
         $model->clearBricks([OneTextColumn::class]);
-        $this->assertCount(1, Brick::all());
-        $this->assertEquals(3, Brick::first()->position);
+        self::assertCount(1, Brick::all());
+        self::assertEquals(3, Brick::first()->position);
     }
 }
