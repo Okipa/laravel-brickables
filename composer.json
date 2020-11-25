@@ -3,16 +3,13 @@
     "description": "Page content bricks management made easy.",
     "keywords": [
         "okipa",
-        "laravel-brickables",
+        "laravel",
+        "php",
         "brickables",
-        "brickable",
         "bricks",
-        "brick",
         "blocks",
-        "block",
         "content",
         "management",
-        "manage",
         "admin",
         "display",
         "html"
@@ -33,11 +30,12 @@
         "spatie/eloquent-sortable": "^3.7"
     },
     "require-dev": {
-        "laravel/legacy-factories": "^1.0.4",
+        "laravel/legacy-factories": "^1.1",
         "nunomaduro/larastan": "^0.6",
         "orchestra/testbench": "^5.0||^6.0",
         "phpmd/phpmd": "^2.8",
-        "squizlabs/php_codesniffer": "^3.5"
+        "squizlabs/php_codesniffer": "^3.5",
+        "ext-json": "*"
     },
     "autoload": {
         "psr-4": {

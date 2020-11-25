@@ -1,12 +1,21 @@
-# Page content bricks management made easy
-
-[![Source Code](https://img.shields.io/badge/source-okipa/laravel--brickables-blue.svg)](https://github.com/Okipa/laravel-brickables)
-[![Latest Version](https://img.shields.io/github/release/okipa/laravel-brickables.svg?style=flat-square)](https://github.com/Okipa/laravel-brickables/releases)
-[![Total Downloads](https://img.shields.io/packagist/dt/okipa/laravel-brickables.svg?style=flat-square)](https://packagist.org/packages/okipa/laravel-brickables)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Build status](https://github.com/Okipa/laravel-brickables/workflows/CI/badge.svg)](https://github.com/Okipa/laravel-brickables/actions)
-[![Coverage Status](https://coveralls.io/repos/github/Okipa/laravel-brickables/badge.svg?branch=master)](https://coveralls.io/github/Okipa/laravel-brickables?branch=master)
-[![Quality Score](https://img.shields.io/scrutinizer/g/Okipa/laravel-brickables.svg?style=flat-square)](https://scrutinizer-ci.com/g/Okipa/laravel-brickables/?branch=master)
+![Laravel Brickables](/docs/laravel-brickables.png)
+<p align="center">
+    <a href="https://github.com/Okipa/laravel-brickables/releases" title="Latest Stable Version">
+        <img src="https://img.shields.io/github/release/Okipa/laravel-brickables.svg?style=flat-square" alt="Latest Stable Version">
+    </a>
+    <a href="https://packagist.org/packages/Okipa/laravel-brickables" title="Total Downloads">
+        <img src="https://img.shields.io/packagist/dt/okipa/laravel-brickables.svg?style=flat-square" alt="Total Downloads">
+    </a>
+    <a href="https://github.com/Okipa/laravel-brickables/actions" title="Build Status">
+        <img src="https://github.com/Okipa/laravel-brickables/workflows/CI/badge.svg" alt="Build Status">
+    </a>
+    <a href="https://coveralls.io/github/Okipa/laravel-brickables?branch=master" title="Coverage Status">
+        <img src="https://coveralls.io/repos/github/Okipa/laravel-brickables/badge.svg?branch=master" alt="Coverage Status">
+    </a>
+    <a href="https://img.shields.io/badge/License-MIT-blue.svg" title="License: MIT">
+        <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT">
+    </a>
+</p>
 
 This package allows you to associate content bricks to Eloquent models and provides a fully customizable admin panel to manage them.
 

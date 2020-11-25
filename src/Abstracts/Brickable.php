@@ -183,12 +183,12 @@ abstract class Brickable
 
     public function getBrickModel(): Brick
     {
-        return (new $this->brickModelClass);
+        return app($this->brickModelClass);
     }
 
     public function getBricksController(): BricksController
     {
-        return (new $this->bricksControllerClass);
+        return app($this->bricksControllerClass);
     }
 
     public function getCssResourcePath(): ?string
