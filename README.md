@@ -1,10 +1,10 @@
 ![Laravel Brickables](/docs/laravel-brickables.png)
 <p align="center">
     <a href="https://github.com/Okipa/laravel-brickables/releases" title="Latest Stable Version">
-        <img src="https://img.shields.io/github/release/Okipa/laravel-brickables.svg?style=flat-square" alt="Latest Stable Version">
+        <img src="https://img.shields.io/github/release/Okipa/laravel-brickables.svg" alt="Latest Stable Version">
     </a>
     <a href="https://packagist.org/packages/Okipa/laravel-brickables" title="Total Downloads">
-        <img src="https://img.shields.io/packagist/dt/okipa/laravel-brickables.svg?style=flat-square" alt="Total Downloads">
+        <img src="https://img.shields.io/packagist/dt/okipa/laravel-brickables.svg" alt="Total Downloads">
     </a>
     <a href="https://github.com/Okipa/laravel-brickables/actions" title="Build Status">
         <img src="https://github.com/Okipa/laravel-brickables/workflows/CI/badge.svg" alt="Build Status">
@@ -12,14 +12,19 @@
     <a href="https://coveralls.io/github/Okipa/laravel-brickables?branch=master" title="Coverage Status">
         <img src="https://coveralls.io/repos/github/Okipa/laravel-brickables/badge.svg?branch=master" alt="Coverage Status">
     </a>
-    <a href="https://img.shields.io/badge/License-MIT-blue.svg" title="License: MIT">
+    <a href="/LICENSE.md" title="License: MIT">
         <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT">
     </a>
 </p>
 
 This package allows you to associate content bricks to Eloquent models and provides a fully customizable admin panel to manage them.
 
-This package is shipped with few pre-built brickables. You can use them as is but you definitely should consider them as examples: customizing them or create new ones has been designed to be simple as hell ! :fire:
+This package is shipped with few pre-built brickables. You can use them as is but you definitely should consider them as examples: customizing them or create new ones has been designed to be simple as hell! :fire:
+
+Found this package helpful? Please consider supporting my work!
+
+[![Donate](https://img.shields.io/badge/Buy_me_a-Ko--fi-ff5f5f.svg)](https://ko-fi.com/arthurlorent)
+[![Donate](https://img.shields.io/badge/Donate_on-PayPal-green.svg)](https://paypal.me/arthurlorent)
 
 ## Compatibility
 
