@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelBrickables\Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Facades\Route;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
@@ -16,6 +17,8 @@ use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class CRUDBrickableTest extends BrickableTestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function request_without_brick_without_model_type_is_forbidden(): void
     {

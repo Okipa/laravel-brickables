@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelBrickables\Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Facades\Brickables;
@@ -12,6 +13,8 @@ use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class BricksControllerTest extends BrickableTestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function create_action_without_brickable_type_returns_validation_error(): void
     {

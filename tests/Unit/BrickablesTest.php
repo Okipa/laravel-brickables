@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelBrickables\Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
@@ -13,6 +14,8 @@ use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class BrickablesTest extends BrickableTestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_only_displays_once_css_resources(): void
     {

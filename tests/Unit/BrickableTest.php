@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelBrickables\Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Route;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
@@ -10,6 +11,8 @@ use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class BrickableTest extends BrickableTestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_can_set_and_return_model(): void
     {
@@ -152,7 +155,7 @@ class BrickableTest extends BrickableTestCase
     /** @test */
     public function it_can_set_and_return_update_route(): void
     {
-        Route::put('dummy/update/{brick}', function () {
+        Route::put('dummy/update/{brick}', static function () {
         })->name('dummy.update');
         $brickable = new class extends Brickable {
             public function setUpdateRouteName(): string

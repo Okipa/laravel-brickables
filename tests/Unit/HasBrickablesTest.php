@@ -3,6 +3,8 @@
 namespace Okipa\LaravelBrickables\Tests\Unit;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Brickables\TwoTextColumns;
@@ -21,6 +23,8 @@ use Okipa\LaravelBrickables\Traits\HasBrickablesTrait;
 
 class HasBrickablesTest extends BrickableTestCase
 {
+    use RefreshDatabase;
+
     /** @test */
     public function it_cannot_add_invalid_brickable_class(): void
     {
@@ -480,6 +484,16 @@ class HasBrickablesTest extends BrickableTestCase
         $bricks = Brick::all();
         self::assertEquals($bricksToKeep->count(), $bricks->count());
         self::assertEquals($bricksToKeep, $bricks);
+    }
+
+    /** @test */
+    public function it_can_clear_bricks_until_the_min_number_of_bricks(): void
+    {
+        $model = app(HasOneConstrainedBrickableModel::class)->create();
+        $model->addBricks([[OneTextColumn::class], [OneTextColumn::class], [OneTextColumn::class]]);
+        $model->clearBricks([OneTextColumn::class]);
+        self::assertCount(1, Brick::all());
+        self::assertEquals(3, Brick::first()->position);
     }
 
     /** @test */
