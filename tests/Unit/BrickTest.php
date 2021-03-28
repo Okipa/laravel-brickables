@@ -6,13 +6,13 @@ use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Models\Brick;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
-use Okipa\LaravelBrickables\Tests\Models\HasOneBrickableWithConstraintsModel;
+use Okipa\LaravelBrickables\Tests\Models\HasOneConstrainedBrickableModel;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class BrickTest extends BrickableTestCase
 {
     /** @test */
-    public function it_renders_html(): void
+    public function it_can_render_html(): void
     {
         view()->addNamespace('laravel-brickables', 'tests/views');
         $brickable = new Class extends Brickable {
@@ -40,7 +40,7 @@ class BrickTest extends BrickableTestCase
     /** @test */
     public function it_can_delete_bricks_until_the_min_number_of_bricks(): void
     {
-        $model = app(HasOneBrickableWithConstraintsModel::class)->create();
+        $model = app(HasOneConstrainedBrickableModel::class)->create();
         $model->addBricks([[OneTextColumn::class], [OneTextColumn::class], [OneTextColumn::class]]);
         $model->clearBricks([OneTextColumn::class]);
         self::assertCount(1, Brick::all());

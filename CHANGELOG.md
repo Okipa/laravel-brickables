@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/Okipa/laravel-brickables/compare/2.1.0...2.2.0)
+
+2021-03-28
+
+* You can now disabled a brick management for an Eloquent model by setting the max number of bricks to `0`. This allows you to only disable one brick or more without having to list all allowed bricks in the `can_only_handle` model configuration.
+* Trying to (programmatically) add a brick to a model when the max number of bricks is already reached will now throw a `ModelHasReachedMaxNumberOfBricksException`. This behavior replaces the previous one, which automatically removed the oldest brick when a new brick was programmatically added to an Eloquent model which had reached the max number for this type of brick. 
+
 ## [2.1.0](https://github.com/Okipa/laravel-brickables/compare/2.0.1...2.1.0)
 
 2020-11-25

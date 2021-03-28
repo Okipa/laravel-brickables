@@ -8,7 +8,7 @@ use Okipa\LaravelBrickables\Brickables\TwoTextColumns;
 use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Traits\HasBrickablesTrait;
 
-class HasMultipleBrickablesWithConstraintsModel extends Model implements HasBrickables
+class HasMultipleConstrainedBrickablesModel extends Model implements HasBrickables
 {
     use HasBrickablesTrait;
 
@@ -19,10 +19,6 @@ class HasMultipleBrickablesWithConstraintsModel extends Model implements HasBric
         ],
     ];
 
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'has_multiple_brickables_with_constraints_models';
+    /** @var string */
+    protected $table = 'has_multiple_constrained_brickables_models';
 }

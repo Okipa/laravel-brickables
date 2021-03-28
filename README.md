@@ -239,8 +239,8 @@ class Page extends Model implements HasBrickables
 	use HasBrickablesTrait;
 
     public array $brickables = [
-        'can_only_handle' => [OneTextColumn::class], // by default all registered brickables can be handled.
-        'number_of_bricks' => [OneTextColumn::class => ['min' => 1, 'max' => 3]], // by default, there are no number restrictions.
+        'can_only_handle' => [OneTextColumn::class], // By default all registered brickables can be handled.
+        'number_of_bricks' => [OneTextColumn::class => ['min' => 1, 'max' => 3]], // By default, there are no number restrictions.
     ];
 
 	// ...
@@ -250,11 +250,13 @@ class Page extends Model implements HasBrickables
 In this example:
 
 * The `Page` model will only be allowed to handle `OneTextColumn` bricks.
-* The admin panel will only offer to manage `OneTextColumn` bricks.
-* The admin panel will not offer to remove a `OneTextColumn` brick if there is only one left.
-* The admin panel will not offer to add more `OneTextColumn` bricks if 3 are already added.
+* The admin panel will only allow to manage `OneTextColumn` bricks.
+* The admin panel will not allow to remove a `OneTextColumn` brick if there is only one left.
+* The admin panel will not allow to add more `OneTextColumn` bricks if 3 are already added.
 * Programmatically clearing all bricks for this model will keep the `OneTextColumn` one with the highest position.
-* Programmatically adding a 4th `OneTextColumn` brick will remove the one with the lowest position.
+* Programmatically adding a 4th `OneTextColumn` brick will thrown a `ModelHasReachedMaxNumberOfBricksException`.
+
+**Important note:** you can disable a brickable management for a model by setting its max number to `0`.
 
 ### Add content bricks
 
