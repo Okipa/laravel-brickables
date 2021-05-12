@@ -4,7 +4,6 @@ namespace Okipa\LaravelBrickables\Tests\Unit;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\DB;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Brickables\TwoTextColumns;
@@ -73,6 +72,7 @@ class HasBrickablesTest extends BrickableTestCase
         $this->expectException(BrickableCannotBeHandledException::class);
     }
 
+    /** @SuppressWarnings(PHPMD.UnusedLocalVariable) */
     public function it_can_check_if_model_can_handle_brickable(): void
     {
         $model = new class extends Model implements HasBrickables {
@@ -163,7 +163,10 @@ class HasBrickablesTest extends BrickableTestCase
         self::assertTrue($brick3->is($bricks->get(2)));
     }
 
-    /** @test */
+    /**
+     * @test
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function it_cant_add_bricks_with_max_number_defined_to_zero(): void
     {
         $model = new class extends HasMultipleConstrainedBrickablesModel {
@@ -557,13 +560,16 @@ class HasBrickablesTest extends BrickableTestCase
         self::assertCount(2, $additionableBbrickables);
     }
 
-    /** @test */
+    /**
+     * @test
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function it_can_return_brickables_that_can_be_added_to_model_with_one_disabled(): void
     {
         $model = new class extends HasMultipleConstrainedBrickablesModel {
             public array $brickables = [
                 'number_of_bricks' => [
-                    TwoTextColumns::class => ['max' => 0]
+                    TwoTextColumns::class => ['max' => 0],
                 ],
             ];
         };
@@ -574,13 +580,16 @@ class HasBrickablesTest extends BrickableTestCase
         self::assertInstanceOf(OneTextColumn::class, $additionableBbrickables->first());
     }
 
-    /** @test */
+    /**
+     * @test
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function it_can_return_brickables_that_can_be_added_to_model_with_one_at_reached_max_number(): void
     {
         $model = new class extends HasMultipleConstrainedBrickablesModel {
             public array $brickables = [
                 'number_of_bricks' => [
-                    OneTextColumn::class => ['min' => 1, 'max' => 1]
+                    OneTextColumn::class => ['min' => 1, 'max' => 1],
                 ],
             ];
         };
