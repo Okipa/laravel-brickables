@@ -29,6 +29,7 @@ abstract class BrickableTestCase extends TestCase
         return ['Brickables' => Brickables::class];
     }
 
+    /** @SuppressWarnings("Missing") */
     protected function setUp(): void
     {
         parent::setUp();
