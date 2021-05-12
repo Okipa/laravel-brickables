@@ -113,11 +113,10 @@ class BricksController extends Controller
      */
     protected function sendBrickUpdatedResponse(Request $request, Brick $brick): RedirectResponse
     {
-        return redirect()->back()
-            ->with('success', __('The entry :model > :brickable has been updated.', [
-                'brickable' => $brick->brickable->getLabel(),
-                'model' => $brick->model->getReadableClassName(),
-            ]));
+        return redirect()->back()->with('success', __('The entry :model > :brickable has been updated.', [
+            'brickable' => $brick->brickable->getLabel(),
+            'model' => $brick->model->getReadableClassName(),
+        ]));
     }
 
     public function destroy(Brick $brick, Request $request): RedirectResponse
