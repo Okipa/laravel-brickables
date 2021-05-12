@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.2.1](https://github.com/Okipa/laravel-brickables/compare/2.2.0...2.2.1)
+
+2021-05-12
+
+* Fixed URLs in action forms to allow brick models to embed other bricks (e.g. a container that contains tiles bricks).
+
 ## [2.2.0](https://github.com/Okipa/laravel-brickables/compare/2.1.0...2.2.0)
 
 2021-03-28
