@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException;
 use Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException;
+use Okipa\LaravelBrickables\Exceptions\ModelHasReachedMaxNumberOfBricksException;
 use Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException;
 use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
@@ -49,10 +50,9 @@ trait HasBrickablesTrait
         $this->checkBrickableTypeIsInstanceOfBrickable($brickableClass);
         $this->checkBrickableIsRegistered($brickableClass);
         $this->checkBrickableCanBeHandled($brickableClass);
-        $brick = $this->createBrick($brickableClass, $data);
-        $this->handleMaxNumberOfBricks($brickableClass);
+        $this->checkModelHasNotReachedMaxNumberOfBricks($brickableClass);
 
-        return $brick;
+        return $this->createBrick($brickableClass, $data);
     }
 
     /**
@@ -75,7 +75,7 @@ trait HasBrickablesTrait
      */
     protected function checkBrickableIsRegistered(string $brickableClass): void
     {
-        if (! in_array($brickableClass, config('brickables.registered'))) {
+        if (! in_array($brickableClass, config('brickables.registered'), true)) {
             throw new NotRegisteredBrickableClassException('The given ' . $brickableClass
                 . ' brickable is not registered in the config(\'brickables.registered\') array.');
         }
@@ -102,21 +102,7 @@ trait HasBrickablesTrait
             return true;
         }
 
-        return in_array($brickableClass, $authorizedBrickables);
-    }
-
-    protected function createBrick(string $brickableClass, array $data): Brick
-    {
-        /** @var Brickable $brickable */
-        $brickable = app($brickableClass);
-        $brickModel = $brickable->getBrickModel();
-        $brickModel->model_type = $this->getMorphClass();
-        $brickModel->model_id = $this->id;
-        $brickModel->brickable_type = $brickableClass;
-        $brickModel->data = $data;
-        $brickModel->save();
-
-        return $brickModel;
+        return in_array($brickableClass, $authorizedBrickables, true);
     }
 
     /**
@@ -124,19 +110,28 @@ trait HasBrickablesTrait
      *
      * @throws \Exception
      */
-    protected function handleMaxNumberOfBricks(string $brickableClass): void
+    protected function checkModelHasNotReachedMaxNumberOfBricks(string $brickableClass): void
     {
         $maxNumberOfBricks = $this->getMaxNumberOfBricksFor($brickableClass);
-        $bricksFromGivenBrickableType = $this->getBricks([$brickableClass]);
-        if ($maxNumberOfBricks && $bricksFromGivenBrickableType->count() > $maxNumberOfBricks) {
-            $except = $bricksFromGivenBrickableType->reverse()->take($maxNumberOfBricks);
-            $this->clearBricksExcept($except);
+        if (! isset($maxNumberOfBricks)) {
+            return;
+        }
+        $expectedNumberOfBricksAfterAddition = $this->getBricks([$brickableClass])->count() + 1;
+        if ($expectedNumberOfBricksAfterAddition > $maxNumberOfBricks) {
+            throw new ModelHasReachedMaxNumberOfBricksException('The ' . $this->getMorphClass()
+                . ' Eloquent model has reached reached its max allowed number of ' . $brickableClass
+                . ' bricks.');
         }
     }
 
-    protected function getMaxNumberOfBricksFor(string $brickableClass): int
+    protected function getMaxNumberOfBricksFor(string $brickableClass): ?int
     {
-        return (int) data_get($this, 'brickables.number_of_bricks.' . $brickableClass . '.max', 0);
+        $maxNumberOfBricks = data_get($this, 'brickables.number_of_bricks.' . $brickableClass . '.max');
+        if (! isset($maxNumberOfBricks)) {
+            return null;
+        }
+
+        return (int) $maxNumberOfBricks;
     }
 
     public function getBricks(?array $brickableClasses = []): Collection
@@ -150,6 +145,20 @@ trait HasBrickablesTrait
         $bricks = $query->ordered()->get();
 
         return Brickables::castBricks($bricks);
+    }
+
+    protected function createBrick(string $brickableClass, array $data): Brick
+    {
+        /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
+        $brickable = app($brickableClass);
+        $brickModel = $brickable->getBrickModel();
+        $brickModel->model_type = $this->getMorphClass();
+        $brickModel->model_id = $this->id;
+        $brickModel->brickable_type = $brickableClass;
+        $brickModel->data = $data;
+        $brickModel->save();
+
+        return $brickModel;
     }
 
     /**
@@ -196,18 +205,19 @@ trait HasBrickablesTrait
 
     public function getAdditionableBrickables(): Collection
     {
-        return $this->getRegisteredBrickables()->filter(function ($brickable) {
+        return $this->getRegisteredBrickables()->filter(function (Brickable $brickable) {
             $brickableClass = get_class($brickable);
 
-            return $this->canHandle($brickableClass) && $this->canAddBricksFrom($brickableClass);
+            return $this->canHandle($brickableClass)
+                && $this->canAddBricksFrom($brickableClass);
         });
     }
 
     public function getRegisteredBrickables(): Collection
     {
-        $brickables = new Collection;
+        $brickables = new Collection();
         foreach (config('brickables.registered') as $brickableClass) {
-            /** @var Brickable $brickable */
+            /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
             $brickable = app($brickableClass);
             $brickables->push($brickable);
         }
@@ -218,7 +228,7 @@ trait HasBrickablesTrait
     public function canAddBricksFrom(string $brickableClass): bool
     {
         $maxNumberOfBricks = $this->getMaxNumberOfBricksFor($brickableClass);
-        if (! $maxNumberOfBricks) {
+        if (! isset($maxNumberOfBricks)) {
             return true;
         }
 

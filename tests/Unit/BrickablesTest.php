@@ -2,6 +2,7 @@
 
 namespace Okipa\LaravelBrickables\Tests\Unit;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
@@ -13,8 +14,10 @@ use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class BrickablesTest extends BrickableTestCase
 {
+    use RefreshDatabase;
+
     /** @test */
-    public function it_only_displays_once_css_resources()
+    public function it_only_displays_once_css_resources(): void
     {
         view()->addNamespace('laravel-brickables', 'tests/views');
         $brickableOne = new class extends Brickable {
@@ -68,14 +71,14 @@ class BrickablesTest extends BrickableTestCase
             [get_class($brickableTwo), ['custom' => 'second-brickable-two']],
         ]);
         $html = view('laravel-brickables::page-test', compact('page', 'brickableOne', 'brickableTwo'))->toHtml();
-        $this->assertStringNotContainsString($html, 'javascript');
+        self::assertStringNotContainsString($html, 'javascript');
         $headHtmlContent = Str::beforeLast(Str::after($html, '<head>'), '</head>');
-        $this->assertEquals(1, substr_count($headHtmlContent, 'my/test/css/path/brickable-one.css'));
-        $this->assertEquals(1, substr_count($headHtmlContent, 'my/test/css/path/brickable-two.css'));
+        self::assertEquals(1, substr_count($headHtmlContent, 'my/test/css/path/brickable-one.css'));
+        self::assertEquals(1, substr_count($headHtmlContent, 'my/test/css/path/brickable-two.css'));
     }
 
     /** @test */
-    public function it_only_displays_once_js_resources()
+    public function it_only_displays_once_js_resources(): void
     {
         view()->addNamespace('laravel-brickables', 'tests/views');
         $brickableOne = new class extends Brickable {
@@ -130,13 +133,13 @@ class BrickablesTest extends BrickableTestCase
         ]);
         $html = view('laravel-brickables::page-test', compact('page', 'brickableOne', 'brickableTwo'))->toHtml();
         $bodyHtmlContent = Str::beforeLast(Str::after($html, '<body>'), '</body>');
-        $this->assertStringNotContainsString($html, 'css');
-        $this->assertEquals(1, substr_count($bodyHtmlContent, 'my/test/js/path/brickable-one.js'));
-        $this->assertEquals(1, substr_count($bodyHtmlContent, 'my/test/js/path/brickable-two.js'));
+        self::assertStringNotContainsString($html, 'css');
+        self::assertEquals(1, substr_count($bodyHtmlContent, 'my/test/js/path/brickable-one.js'));
+        self::assertEquals(1, substr_count($bodyHtmlContent, 'my/test/js/path/brickable-two.js'));
     }
 
     /** @test */
-    public function it_can_display_model_bricks_admin_panel_html()
+    public function it_can_display_model_bricks_admin_panel_html(): void
     {
         view()->addNamespace('laravel-brickables', 'tests/views');
         $brickable = new class extends Brickable {
@@ -159,14 +162,14 @@ class BrickablesTest extends BrickableTestCase
         Brickables::routes();
         $page = factory(Page::class)->create();
         $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
-        $this->assertEquals(
+        self::assertEquals(
             view('laravel-brickables::admin.panel.layout', ['model' => $page])->render(),
             $page->displayAdminPanel()
         );
     }
 
     /** @test */
-    public function it_can_cast_bricks_to_their_brickable_related_brick_model()
+    public function it_can_cast_bricks_to_their_brickable_related_brick_model(): void
     {
         $brickableOne = new class extends Brickable {
             public function validateStoreInputs(): array
@@ -199,22 +202,22 @@ class BrickablesTest extends BrickableTestCase
         $page = factory(Page::class)->create();
         $page->addBricks([[get_class($brickableOne)], [get_class($brickableTwo)]]);
         $bricks = Brick::all();
-        $this->assertEquals(
+        self::assertEquals(
             Brick::class,
             $bricks->where('brickable_type', get_class($brickableOne))->first()->getMorphClass()
         );
-        $this->assertEquals(
+        self::assertEquals(
             Brick::class,
             $bricks->where('brickable_type', get_class($brickableTwo))->first()->getMorphClass()
         );
         $bricks = Brickables::castBricks($bricks);
-        $this->assertCount(2, $bricks);
-        $this->assertInstanceOf(Brick::class, $bricks->where('brickable_type', get_class($brickableOne))->first());
-        $this->assertInstanceOf(BrickModel::class, $bricks->where('brickable_type', get_class($brickableTwo))->first());
+        self::assertCount(2, $bricks);
+        self::assertInstanceOf(Brick::class, $bricks->where('brickable_type', get_class($brickableOne))->first());
+        self::assertInstanceOf(BrickModel::class, $bricks->where('brickable_type', get_class($brickableTwo))->first());
     }
 
     /** @test */
-    public function it_can_cast_bricks_and_return_them_in_correct_order()
+    public function it_can_cast_bricks_and_return_them_in_correct_order(): void
     {
         $brickableOne = new class extends Brickable {
             public function validateStoreInputs(): array
@@ -250,11 +253,11 @@ class BrickablesTest extends BrickableTestCase
         $page->addBrick(get_class($brickableOne));
         $page->addBrick(get_class($brickableTwo));
         $bricks = Brickables::castBricks(Brick::all());
-        $this->assertEquals(['1', '2', '3', '4'], $bricks->pluck('position')->toArray());
+        self::assertEquals(['1', '2', '3', '4'], $bricks->pluck('position')->toArray());
     }
 
     /** @test */
-    public function it_can_cast_brick_to_its_brickable_related_brick_model()
+    public function it_can_cast_brick_to_its_brickable_related_brick_model(): void
     {
         $brickable = new class extends Brickable {
             protected function setBrickModelClass(): string
@@ -276,25 +279,25 @@ class BrickablesTest extends BrickableTestCase
         $page = factory(Page::class)->create();
         $page->addBricks([[get_class($brickable), []]]);
         $brick = Brick::first();
-        $this->assertEquals(
+        self::assertEquals(
             Brick::class,
             $brick->where('brickable_type', get_class($brickable))->first()->getMorphClass()
         );
         $brick = Brickables::castBrick($brick);
-        $this->assertInstanceOf(BrickModel::class, $brick->where('brickable_type', get_class($brickable))->first());
+        self::assertInstanceOf(BrickModel::class, $brick->where('brickable_type', get_class($brickable))->first());
     }
 
     /** @test */
-    public function it_can_get_model_from_create_request()
+    public function it_can_get_model_from_create_request(): void
     {
         $page = factory(Page::class)->create();
-        $request = (new Request)->merge(['model_type' => $page->getMorphClass(), 'model_id' => $page->id]);
+        $request = (new Request())->merge(['model_type' => $page->getMorphClass(), 'model_id' => $page->id]);
         $model = Brickables::getModelFromRequest($request);
-        $this->assertTrue($page->is($model));
+        self::assertTrue($page->is($model));
     }
 
     /** @test */
-    public function it_can_get_model_from_edit_request()
+    public function it_can_get_model_from_edit_request(): void
     {
         $brickable = new class extends Brickable {
             public function validateStoreInputs(): array
@@ -310,8 +313,8 @@ class BrickablesTest extends BrickableTestCase
         config()->set('brickables.registered', [get_class($brickable)]);
         $page = factory(Page::class)->create();
         $brick = $page->addBrick(get_class($brickable), []);
-        $request = (new Request)->merge(['brick' => $brick]);
+        $request = (new Request())->merge(['brick' => $brick]);
         $model = Brickables::getModelFromRequest($request);
-        $this->assertTrue($page->is($model));
+        self::assertTrue($page->is($model));
     }
 }

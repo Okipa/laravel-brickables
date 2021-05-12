@@ -90,7 +90,7 @@ class Brickables
         if ($bricks->isEmpty()) {
             return $bricks;
         }
-        $castedBricks = new Collection;
+        $castedBricks = new Collection();
         foreach ($bricks->pluck('brickable_type')->unique() as $brickableClass) {
             /** @var \Okipa\LaravelBrickables\Abstracts\Brickable $brickable */
             $brickable = app($brickableClass);

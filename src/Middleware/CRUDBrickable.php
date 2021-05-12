@@ -44,7 +44,7 @@ class CRUDBrickable
 
     protected function checkModelTypeIsInstanceOfHasBrickables(Request $request): void
     {
-        if (! (new $request->model_type) instanceof HasBrickables) {
+        if (! new $request->model_type() instanceof HasBrickables) {
             abort(
                 Response::HTTP_FORBIDDEN,
                 'The ' . $request->model_type . ' class should implement ' . HasBrickables::class . '.'
@@ -63,7 +63,7 @@ class CRUDBrickable
     {
         try {
             /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $model */
-            $model = (new $request->model_type);
+            $model = app($request->model_type);
             $model->checkBrickableTypeIsInstanceOfBrickable($request->brickable_type);
         } catch (Exception $exception) {
             abort(Response::HTTP_FORBIDDEN, $exception->getMessage());
@@ -73,8 +73,8 @@ class CRUDBrickable
     protected function checkBrickableCanBeHandled(Request $request): void
     {
         try {
-            /** @var HasBrickables $model */
-            $model = (new $request->model_type);
+            /** @var \Okipa\LaravelBrickables\Contracts\HasBrickables $model */
+            $model = app($request->model_type);
             $model->checkBrickableCanBeHandled($request->brickable_type);
         } catch (Exception $exception) {
             abort(Response::HTTP_FORBIDDEN, $exception->getMessage());

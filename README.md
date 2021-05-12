@@ -1,16 +1,30 @@
-# Page content bricks management made easy
-
-[![Source Code](https://img.shields.io/badge/source-okipa/laravel--brickables-blue.svg)](https://github.com/Okipa/laravel-brickables)
-[![Latest Version](https://img.shields.io/github/release/okipa/laravel-brickables.svg?style=flat-square)](https://github.com/Okipa/laravel-brickables/releases)
-[![Total Downloads](https://img.shields.io/packagist/dt/okipa/laravel-brickables.svg?style=flat-square)](https://packagist.org/packages/okipa/laravel-brickables)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Build status](https://github.com/Okipa/laravel-brickables/workflows/CI/badge.svg)](https://github.com/Okipa/laravel-brickables/actions)
-[![Coverage Status](https://coveralls.io/repos/github/Okipa/laravel-brickables/badge.svg?branch=master)](https://coveralls.io/github/Okipa/laravel-brickables?branch=master)
-[![Quality Score](https://img.shields.io/scrutinizer/g/Okipa/laravel-brickables.svg?style=flat-square)](https://scrutinizer-ci.com/g/Okipa/laravel-brickables/?branch=master)
+![Laravel Brickables](/docs/laravel-brickables.png)
+<p align="center">
+    <a href="https://github.com/Okipa/laravel-brickables/releases" title="Latest Stable Version">
+        <img src="https://img.shields.io/github/release/Okipa/laravel-brickables.svg" alt="Latest Stable Version">
+    </a>
+    <a href="https://packagist.org/packages/Okipa/laravel-brickables" title="Total Downloads">
+        <img src="https://img.shields.io/packagist/dt/okipa/laravel-brickables.svg" alt="Total Downloads">
+    </a>
+    <a href="https://github.com/Okipa/laravel-brickables/actions" title="Build Status">
+        <img src="https://github.com/Okipa/laravel-brickables/workflows/CI/badge.svg" alt="Build Status">
+    </a>
+    <a href="https://coveralls.io/github/Okipa/laravel-brickables?branch=master" title="Coverage Status">
+        <img src="https://coveralls.io/repos/github/Okipa/laravel-brickables/badge.svg?branch=master" alt="Coverage Status">
+    </a>
+    <a href="/LICENSE.md" title="License: MIT">
+        <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT">
+    </a>
+</p>
 
 This package allows you to associate content bricks to Eloquent models and provides a fully customizable admin panel to manage them.
 
-This package is shipped with few pre-built brickables. You can use them as is but you definitely should consider them as examples: customizing them or create new ones has been designed to be simple as hell ! :fire:
+This package is shipped with few pre-built brickables. You can use them as is but you definitely should consider them as examples: customizing them or create new ones has been designed to be simple as hell! :fire:
+
+Found this package helpful? Please consider supporting my work!
+
+[![Donate](https://img.shields.io/badge/Buy_me_a-Ko--fi-ff5f5f.svg)](https://ko-fi.com/arthurlorent)
+[![Donate](https://img.shields.io/badge/Donate_on-PayPal-green.svg)](https://paypal.me/arthurlorent)
 
 ## Compatibility
 
@@ -225,8 +239,8 @@ class Page extends Model implements HasBrickables
 	use HasBrickablesTrait;
 
     public array $brickables = [
-        'can_only_handle' => [OneTextColumn::class], // by default all registered brickables can be handled.
-        'number_of_bricks' => [OneTextColumn::class => ['min' => 1, 'max' => 3]], // by default, there are no number restrictions.
+        'can_only_handle' => [OneTextColumn::class], // By default all registered brickables can be handled.
+        'number_of_bricks' => [OneTextColumn::class => ['min' => 1, 'max' => 3]], // By default, there are no number restrictions.
     ];
 
 	// ...
@@ -236,11 +250,13 @@ class Page extends Model implements HasBrickables
 In this example:
 
 * The `Page` model will only be allowed to handle `OneTextColumn` bricks.
-* The admin panel will only offer to manage `OneTextColumn` bricks.
-* The admin panel will not offer to remove a `OneTextColumn` brick if there is only one left.
-* The admin panel will not offer to add more `OneTextColumn` bricks if 3 are already added.
+* The admin panel will only allow to manage `OneTextColumn` bricks.
+* The admin panel will not allow to remove a `OneTextColumn` brick if there is only one left.
+* The admin panel will not allow to add more `OneTextColumn` bricks if 3 are already added.
 * Programmatically clearing all bricks for this model will keep the `OneTextColumn` one with the highest position.
-* Programmatically adding a 4th `OneTextColumn` brick will remove the one with the lowest position.
+* Programmatically adding a 4th `OneTextColumn` brick will thrown a `ModelHasReachedMaxNumberOfBricksException`.
+
+**Important note:** you can disable a brickable management for a model by setting its max number to `0`.
 
 ### Add content bricks
 

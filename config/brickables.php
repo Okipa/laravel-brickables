@@ -18,7 +18,7 @@ return [
     'registered' => [
         Okipa\LaravelBrickables\Brickables\OneTextColumn::class,
         Okipa\LaravelBrickables\Brickables\TwoTextColumns::class,
-        // add your own brickables here ...
+        // Add additional brickables here ...
     ],
 
 ];
