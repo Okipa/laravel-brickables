@@ -525,8 +525,11 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class MyNewBrickableBrick extends Brick implements HasMedia
 {
-    // image management example with the spatie/laravel-medialibrary package
+    // Image management example with the spatie/laravel-medialibrary package.
     use InteractsWithMedia;
+    
+    // Optimize query by eager loading media relations.
+    protected $with = ['media'];
     
     // ...
 }

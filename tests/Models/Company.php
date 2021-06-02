@@ -6,13 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Traits\HasBrickablesTrait;
 
-class Page extends Model implements HasBrickables
+class Company extends Model
 {
-    use HasBrickablesTrait;
-
     /** @var string */
-    protected $table = 'pages';
+    protected $table = 'companies';
 
     /** @var array */
-    protected $fillable = ['slug'];
+    protected $fillable = ['name'];
 }

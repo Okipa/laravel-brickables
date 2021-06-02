@@ -1,6 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
+use Okipa\LaravelBrickables\Tests\Models\Company;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 
 /*
@@ -14,6 +15,6 @@ use Okipa\LaravelBrickables\Tests\Models\Page;
 |
 */
 
-$factory->define(Page::class, function (Faker $faker) {
-    return ['slug' => $faker->unique()->slug];
+$factory->define(Company::class, function (Faker $faker) {
+    return ['name' => $faker->unique()->company];
 });
