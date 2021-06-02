@@ -97,7 +97,9 @@ class Brickables
             $model = $brickable->getBrickModel();
             $brickableRawBricks = $bricks->where('brickable_type', $brickableClass)
                 ->map(fn(Brick $brick) => $brick->getAttributes());
-            $brickableCastedBricks = $model->hydrate($brickableRawBricks->toArray());
+            $modelEagerLoadedRelations = array_keys($model->newQuery()->getEagerLoads());
+            $brickableCastedBricks = $model->hydrate($brickableRawBricks->toArray())
+                ->map(fn(Brick $brick) => $brick->loadMissing($modelEagerLoadedRelations));
             $castedBricks->push($brickableCastedBricks);
         }
         /** @var \Okipa\LaravelBrickables\Models\Brick $brickModel */

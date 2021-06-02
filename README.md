@@ -44,10 +44,10 @@ Associate content bricks to Eloquent models:
 ```php
 $page = Page::find(1);
 
-// associate one content brick
+// Associate one content brick
 $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
 
-// or associate several content bricks at once
+// Or associate several content bricks at once
 $page->addBricks([
     [OneTextColumn::class, ['text' => 'Text']],
     [TwoTextColumns::class, ['text_left' => 'Left text', 'text_right' => 'Right text']]
@@ -212,9 +212,9 @@ To customize the admin panel actions, you can add routes inside or outside of th
 
 ```php
 Brickables::routes(function(){
-    // inside the routes group: will benefit from the CRUDBrickable middleware.
+    // Inside the routes group: will benefit from the CRUDBrickable middleware.
 });
-// outside the route group: will not benefit from the CRUDBrickable middleware.
+// Outside the route group: will not benefit from the CRUDBrickable middleware.
 ```
 
 Check the [Empower bricks with extra abilities](#empower-brickables-with-extra-abilities) part to get more information about the customization possibilities.
@@ -280,7 +280,7 @@ $bricks = $page->addBricks([
 Just update your content brick as you would fo for any other Eloquent model instance:
 
 ```php
-// as data are stored in json, you will have to process this way: https://github.com/laravel/framework/pull/15464#issuecomment-247642772.
+// As data are stored in json, you will have to process this way: https://github.com/laravel/framework/pull/15464#issuecomment-247642772.
 $brick->data = ['text' => 'Another text'];
 $brick->save();
 ```
@@ -427,7 +427,7 @@ class MyNewBrickable extends Brickable
         return request()->validate(['text' => ['required', 'string']]);
     }
     
-    // alternative example: use a form request to validate your inputs and return the validated fields.
+    // Alternative example: use a form request to validate your inputs and return the validated fields.
     //public function validateStoreInputs(): array
     //{
     //    return app(MyNewBrickableStoreFormRequest::class)->validated();
@@ -443,7 +443,7 @@ Then, register it in your `config('brickables.registered')` array:
 return [
 
     'registered' => [
-        // other brickables declarations...
+        // Other brickables declarations...
         App\Vendor\LaravelBrickables\Brickables\MyNewBrickable::class,
     ],
 ];
@@ -525,8 +525,11 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class MyNewBrickableBrick extends Brick implements HasMedia
 {
-    // image management example with the spatie/laravel-medialibrary package
+    // Image management example with the spatie/laravel-medialibrary package.
     use InteractsWithMedia;
+    
+    // Optimize query by eager loading media relations.
+    protected $with = ['media'];
     
     // ...
 }
@@ -548,13 +551,13 @@ class MyNewBrickableBricksController extends BricksController
 
     protected function stored(Request $request, Brick $brick): void
     {
-        // image management example with the spatie/laravel-medialibrary package
+        // Image management example with the spatie/laravel-medialibrary package
         $brick->addMediaFromRequest('image')->toMediaCollection('bricks');
     }
 
     protected function updated(Request $request, Brick $brick): void
     {
-        // image management example with the spatie/laravel-medialibrary package
+        // Image management example with the spatie/laravel-medialibrary package
         if ($request->file('image')) {
             $brick->addMediaFromRequest('image')->toMediaCollection('bricks');
         }
@@ -627,7 +630,7 @@ It can be useful to retrieve the Eloquent model from the request, for navigation
 This helper will be able to return the related model when navigating on the brickables form views (bricks creation and edition requests).
 
 ```php
-// you can pass a custom request in the parameters. If none is given, the current request is used.
+// You can pass a custom request in the parameters. If none is given, the current request is used.
 $model = Brickables::getModelFromRequest();
 ```
 

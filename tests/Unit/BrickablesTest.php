@@ -4,12 +4,15 @@ namespace Okipa\LaravelBrickables\Tests\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
 use Okipa\LaravelBrickables\Tests\BrickableTestCase;
 use Okipa\LaravelBrickables\Tests\Models\BrickModel;
+use Okipa\LaravelBrickables\Tests\Models\BrickModelWithCompanyRelationShip;
+use Okipa\LaravelBrickables\Tests\Models\Company;
 use Okipa\LaravelBrickables\Tests\Models\Page;
 
 class BrickablesTest extends BrickableTestCase
@@ -285,6 +288,38 @@ class BrickablesTest extends BrickableTestCase
         );
         $brick = Brickables::castBrick($brick);
         self::assertInstanceOf(BrickModel::class, $brick->where('brickable_type', get_class($brickable))->first());
+    }
+
+    /** @test */
+    public function it_can_cast_bricks_and_eager_load_relationships(): void
+    {
+        $brickable = new class extends Brickable {
+            protected function setBrickModelClass(): string
+            {
+                return BrickModelWithCompanyRelationShip::class;
+            }
+
+            public function validateStoreInputs(): array
+            {
+                return [];
+            }
+
+            public function validateUpdateInputs(): array
+            {
+                return [];
+            }
+        };
+        config()->set('brickables.registered', [get_class($brickable)]);
+        $page = factory(Page::class)->create();
+        $company = factory(Company::class)->create();
+        $brick = $page->addBrick(get_class($brickable));
+        $brick->companies()->sync([$company->id]);
+        $rawBrick = $brick = Brick::first();
+        $castedBrick = Brickables::castBrick($brick);
+        // The relation does not exist on the raw brick.
+        self::assertNull($rawBrick->companies);
+        // Companies relationship is loaded after the brick is casted.
+        self::assertEquals($company->toArray(), Arr::except($castedBrick->toArray()['companies'][0], 'pivot'));
     }
 
     /** @test */
