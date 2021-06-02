@@ -4,7 +4,7 @@
 
 2021-06-02
 
-* Optimizing queries with eager loading is now possible: to do that, just set the relationships you want to load in the `$with` attribute of your custom brick models, the relations will be correctly loaded.
+* Optimizing queries with eager loading is now possible: just set the relationships you want to load in the `$with` attribute of your custom brick models, the relations will be correctly loaded.
 
 ## [2.2.1](https://github.com/Okipa/laravel-brickables/compare/2.2.0...2.2.1)
 
