@@ -4,7 +4,7 @@
 
 2021-06-07
 
-* Handled forgotten URLs on previous #2.2.1 fix.
+* Handled forgotten URLs on previous 2.2.1 fix.
 
 ## [2.3.0](https://github.com/Okipa/laravel-brickables/compare/2.2.1...2.3.0)
 
