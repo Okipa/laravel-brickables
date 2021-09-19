@@ -9,7 +9,7 @@
             <textarea id="left-content"
                       class="form-control @error('text_left') is-invalid @enderror"
                       name="text_left"
-                      placeholder="{{ __('Left content') }}">{{ optional($brick)->data['text_left'] }}</textarea>
+                      placeholder="{{ __('Left content') }}">{{ data_get($brick, 'data.text_left') }}</textarea>
             @error('text_left')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
@@ -24,7 +24,7 @@
             <textarea id="right-content"
                       class="form-control @error('text_right') is-invalid @enderror"
                       name="text_right"
-                      placeholder="{{ __('Right content') }}">{{ $brick ? $brick->data['text_right'] : null }}</textarea>
+                      placeholder="{{ __('Right content') }}">{{ data_get($brick, 'data.text_right) }}</textarea>
             @error('text_right')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
