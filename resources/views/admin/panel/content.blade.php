@@ -20,7 +20,9 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    {{ $brick }}
+                    <div class="brick">
+                        {{ $brick }}
+                    </div>
                 </div>
             </div>
         @endforeach
