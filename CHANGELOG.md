@@ -4,7 +4,7 @@
 
 2021-09-19
 
-* Added ability to give bricks the style they look on the front by loading additional stylesheets on top of the admin panel.
+* Added ability to give bricks the style they have on the front by loading additional stylesheets at the top of the admin panel.
 
 ## [2.3.1](https://github.com/Okipa/laravel-brickables/compare/2.3.0...2.3.1)
 
