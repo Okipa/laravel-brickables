@@ -22,7 +22,7 @@
             </div>
         </div>
         <button class="btn btn-primary" type="submit" title="{{ __('Add') }}">
-            <i class="fa-solid fa-circle-plus"></i> {{ __('Add') }}
+            <i class="fa-solid fa-circle-plus fa-fw"></i> {{ __('Add') }}
         </button>
     </form>
 @endif
