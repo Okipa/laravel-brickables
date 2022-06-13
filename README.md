@@ -1,5 +1,5 @@
 ![Laravel Brickables](/docs/laravel-brickables.png)
-<p align="center">
+<p style="text-align: center;">
     <a href="https://github.com/Okipa/laravel-brickables/releases" title="Latest Stable Version">
         <img src="https://img.shields.io/github/release/Okipa/laravel-brickables.svg" alt="Latest Stable Version">
     </a>
@@ -28,13 +28,15 @@ Found this package helpful? Please consider supporting my work!
 
 ## Compatibility
 
-| Laravel | PHP | Package |
+| Laravel version | PHP version | Package version |
 |---|---|---|
-| ^7.0 | ^7.4 | ^2.0 |
-| ^5.8 | ^7.2 | ^1.0 |
+| ^8.0 &#124; ^9.0 | ^8.0 &#124; ^8.1 | ^3.0 |
+| ^7.0 &#124; ^8.0 | ^7.4 &#124; ^8.0 | ^2.0 |
+| ^5.8 &#124; ^6.0 &#124; ^7.0 | ^7.1 &#124; ^7.2 &#124; ^7.3 &#124; ^7.4 | ^1.0 |
 
 ## Upgrade guide
 
+* [From V2 to V3](/docs/upgrade-guides/from-v2-to-v3.md)
 * [From V1 to V2](/docs/upgrade-guides/from-v1-to-v2.md)
 
 ## Usage
