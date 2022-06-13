@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCompanyBrickTable extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
         Schema::create('company_brick', function (Blueprint $table) {
@@ -19,4 +18,4 @@ class CreateCompanyBrickTable extends Migration
     {
         Schema::dropIfExists('company_brick');
     }
-}
+};

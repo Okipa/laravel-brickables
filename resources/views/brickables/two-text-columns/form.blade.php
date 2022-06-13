@@ -1,33 +1,33 @@
 @extends('laravel-brickables::admin.form.layout')
 @section('inputs')
-    <div class="form-group">
-        <label for="left-content">@lang('Left content')</label>
+    <div class="mb-3">
+        <label class="form-label" for="left-text">{{ __('validation.attributes.text_left') }}</label>
         <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fas fa-font"></i></span>
-            </div>
-            <textarea id="left-content"
-                      class="form-control{{ optional($errors ?? null)->has('text_left') ? ' is-invalid' : null }}"
-                      name="left_content"
-                      placeholder="@lang('Left content')">{{ $brick ? $brick->data['text_left'] : null }}</textarea>
-            @if(optional($errors ?? null)->has('text_left'))
-                <div class="invalid-feedback">{{ $errors->first('text_left') }}</div>
-            @endif
+            <span class="input-group-text">
+                <i class="fa-solid fa-font"></i>
+            </span>
+            <textarea id="left-text"
+                      class="form-control @error('text_left') is-invalid @enderror"
+                      name="text_left"
+                      placeholder="{{ __('validation.attributes.text_left') }}">{{ $brick ? $brick->data['text_left'] : null }}</textarea>
+            @error('text_left')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
     </div>
-    <div class="form-group">
-        <label for="right-content">@lang('Right content')</label>
+    <div class="mb-3">
+        <label class="form-label" for="right-text">{{ __('validation.attributes.text_right') }}</label>
         <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fas fa-font"></i></span>
-            </div>
-            <textarea id="right-content"
-                      class="form-control{{ optional($errors ?? null)->has('text_right') ? ' is-invalid' : null }}"
-                      name="right_content"
-                      placeholder="@lang('Right content')">{{ $brick ? $brick->data['text_right'] : null }}</textarea>
-            @if(optional($errors ?? null)->has('text'))
-                <div class="invalid-feedback">{{ $errors->first('text') }}</div>
-            @endif
+            <span class="input-group-text">
+                <i class="fa-solid fa-font"></i>
+            </span>
+            <textarea id="right-text"
+                      class="form-control @error('text_right') is-invalid @enderror"
+                      name="text_right"
+                      placeholder="{{ __('validation.attributes.text_right') }}">{{ $brick ? $brick->data['text_right'] : null }}</textarea>
+            @error('text_right')
+                <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
         </div>
     </div>
 @endsection

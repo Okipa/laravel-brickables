@@ -4,12 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBricksTable extends Migration
-{
-    /**
-     * Run the migrations.
-     */
-    public function up()
+return new class extends Migration {
+    public function up(): void
     {
         Schema::create('bricks', function (Blueprint $table) {
             $table->bigIncrements('id');
@@ -21,11 +17,8 @@ class CreateBricksTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('bricks');
     }
-}
+};

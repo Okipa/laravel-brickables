@@ -1,6 +1,6 @@
 <?php
 
-namespace Okipa\LaravelBrickables\Tests\Models;
+namespace Tests\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Okipa\LaravelBrickables\Models\Brick;

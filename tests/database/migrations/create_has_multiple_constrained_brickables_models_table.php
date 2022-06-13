@@ -4,19 +4,17 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCompaniesTable extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
-        Schema::create('companies', function (Blueprint $table) {
+        Schema::create('has_multiple_constrained_brickables_models', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
             $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('companies');
+        Schema::dropIfExists('has_multiple_constrained_brickables_models');
     }
-}
+};

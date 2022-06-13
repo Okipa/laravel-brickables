@@ -1,21 +1,22 @@
 <?php
 
-namespace Okipa\LaravelBrickables\Tests\Unit;
+namespace Tests\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Illuminate\Support\ViewErrorBag;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
-use Okipa\LaravelBrickables\Tests\BrickableTestCase;
-use Okipa\LaravelBrickables\Tests\Models\BrickModel;
-use Okipa\LaravelBrickables\Tests\Models\BrickModelWithCompanyRelationShip;
-use Okipa\LaravelBrickables\Tests\Models\Company;
-use Okipa\LaravelBrickables\Tests\Models\Page;
+use Tests\TestCase;
+use Tests\Models\BrickModel;
+use Tests\Models\BrickModelWithCompanyRelationShip;
+use Tests\Models\Company;
+use Tests\Models\Page;
 
-class BrickablesTest extends BrickableTestCase
+class BrickablesTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -66,7 +67,7 @@ class BrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBricks([
             [get_class($brickableOne), ['custom' => 'first-brickable-one']],
             [get_class($brickableTwo), ['custom' => 'first-brickable-two']],
@@ -127,7 +128,7 @@ class BrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBricks([
             [get_class($brickableOne), ['custom' => 'first-brickable-one']],
             [get_class($brickableTwo), ['custom' => 'first-brickable-two']],
@@ -163,10 +164,13 @@ class BrickablesTest extends BrickableTestCase
         };
         config()->set('brickables.registered', [get_class($brickable)]);
         Brickables::routes();
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
         self::assertEquals(
-            view('laravel-brickables::admin.panel.layout', ['model' => $page])->render(),
+            view('laravel-brickables::admin.panel.layout', [
+                'model' => $page,
+                'errors' => new ViewErrorBag(),
+            ])->render(),
             $page->displayAdminPanel()
         );
     }
@@ -202,7 +206,7 @@ class BrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBricks([[get_class($brickableOne)], [get_class($brickableTwo)]]);
         $bricks = Brick::all();
         self::assertEquals(
@@ -250,7 +254,7 @@ class BrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickableOne), get_class($brickableTwo)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBrick(get_class($brickableOne));
         $page->addBrick(get_class($brickableTwo));
         $page->addBrick(get_class($brickableOne));
@@ -279,7 +283,7 @@ class BrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $page->addBricks([[get_class($brickable), []]]);
         $brick = Brick::first();
         self::assertEquals(
@@ -310,8 +314,8 @@ class BrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
-        $company = factory(Company::class)->create();
+        $page = Page::factory()->create();
+        $company = Company::factory()->create();
         $brick = $page->addBrick(get_class($brickable));
         $brick->companies()->sync([$company->id]);
         $rawBrick = $brick = Brick::first();
@@ -325,7 +329,7 @@ class BrickablesTest extends BrickableTestCase
     /** @test */
     public function it_can_get_model_from_create_request(): void
     {
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $request = (new Request())->merge(['model_type' => $page->getMorphClass(), 'model_id' => $page->id]);
         $model = Brickables::getModelFromRequest($request);
         self::assertTrue($page->is($model));
@@ -346,7 +350,7 @@ class BrickablesTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(get_class($brickable), []);
         $request = (new Request())->merge(['brick' => $brick]);
         $model = Brickables::getModelFromRequest($request);

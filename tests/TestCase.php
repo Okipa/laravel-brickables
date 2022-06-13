@@ -1,14 +1,14 @@
 <?php
 
-namespace Okipa\LaravelBrickables\Tests;
+namespace Tests;
 
 use Okipa\LaravelBrickables\BrickablesServiceProvider;
 use Okipa\LaravelBrickables\Facades\Brickables;
-use Orchestra\Testbench\TestCase;
+use Orchestra\Testbench\TestCase as Orchestra;
 
-abstract class BrickableTestCase extends TestCase
+abstract class TestCase extends Orchestra
 {
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         // Setup default database to use sqlite :memory:
         $app['config']->set('database.default', 'testing');
@@ -19,12 +19,12 @@ abstract class BrickableTestCase extends TestCase
         ]);
     }
 
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [BrickablesServiceProvider::class];
     }
 
-    protected function getPackageAliases($app)
+    protected function getPackageAliases($app): array
     {
         return ['Brickables' => Brickables::class];
     }
@@ -33,9 +33,7 @@ abstract class BrickableTestCase extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->withFactories(__DIR__ . '/database/factories');
-        include_once __DIR__ . '/../database/migrations/create_bricks_table.php.stub';
-        (new \CreateBricksTable())->up();
         $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
     }
 }

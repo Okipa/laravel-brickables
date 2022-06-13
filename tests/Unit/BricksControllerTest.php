@@ -1,17 +1,17 @@
 <?php
 
-namespace Okipa\LaravelBrickables\Tests\Unit;
+namespace Tests\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Facades\Brickables;
-use Okipa\LaravelBrickables\Tests\Brickables\Brickable;
-use Okipa\LaravelBrickables\Tests\BrickableTestCase;
-use Okipa\LaravelBrickables\Tests\Models\HasOneConstrainedBrickableModel;
-use Okipa\LaravelBrickables\Tests\Models\Page;
+use Tests\Brickables\Brickable;
+use Tests\TestCase;
+use Tests\Models\HasOneConstrainedBrickableModel;
+use Tests\Models\Page;
 
-class BricksControllerTest extends BrickableTestCase
+class BricksControllerTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -19,7 +19,7 @@ class BricksControllerTest extends BrickableTestCase
     public function create_action_without_brickable_type_returns_validation_error(): void
     {
         Brickables::routes();
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $this->call('GET', 'brick/create', [
             'model_type' => Page::class,
             'model_id' => $page->id,
@@ -33,7 +33,7 @@ class BricksControllerTest extends BrickableTestCase
     public function create_action_displays_brickable_admin_view_with_data(): void
     {
         Brickables::routes();
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $this->call('GET', 'brick/create', [
             'model_type' => Page::class,
             'model_id' => $page->id,
@@ -52,7 +52,7 @@ class BricksControllerTest extends BrickableTestCase
     public function store_action_with_wrong_data_returns_validation_error(): void
     {
         Brickables::routes();
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $this->call('POST', 'brick/store', [
             'model_type' => Page::class,
             'model_id' => $page->id,
@@ -67,7 +67,7 @@ class BricksControllerTest extends BrickableTestCase
     public function store_action_stores_new_brick_and_redirects_to_admin_panel(): void
     {
         Brickables::routes();
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $this->call('POST', 'brick/store', [
             'model_type' => Page::class,
             'model_id' => $page->id,
@@ -84,7 +84,7 @@ class BricksControllerTest extends BrickableTestCase
     public function edit_action_displays_brickable_admin_view_with_data(): void
     {
         Brickables::routes();
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
         $this->call('GET', 'brick/edit/' . $brick->id, ['admin_panel_url' => 'admin-panel'])
             ->assertOk()
@@ -99,7 +99,7 @@ class BricksControllerTest extends BrickableTestCase
     public function update_action_with_wrong_data_returns_validation_error(): void
     {
         Brickables::routes();
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
         $this->call('POST', 'brick/update/' . $brick->id, [
             '_method' => 'PUT',
@@ -113,7 +113,7 @@ class BricksControllerTest extends BrickableTestCase
     public function update_action_updates_brick_and_redirects_back(): void
     {
         Brickables::routes();
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
         $this->from('brick/edit/' . $brick->id)->call('POST', 'brick/update/' . $brick->id, [
             '_method' => 'PUT',
@@ -128,7 +128,7 @@ class BricksControllerTest extends BrickableTestCase
     public function destroy_action_destroys_brick_and_redirects_to_admin_panel(): void
     {
         Brickables::routes();
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
         $this->call('POST', 'brick/destroy/' . $brick->id, [
             '_method' => 'DELETE',
@@ -142,7 +142,7 @@ class BricksControllerTest extends BrickableTestCase
     public function move_up_action_moves_up_brick_and_redirects_to_admin_panel(): void
     {
         Brickables::routes();
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $otherModel = app(HasOneConstrainedBrickableModel::class)->create();
         $brickOne = $page->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
         $otherModel->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
@@ -164,7 +164,7 @@ class BricksControllerTest extends BrickableTestCase
     public function move_down_action_moves_down_brick_and_redirects_to_admin_panel(): void
     {
         Brickables::routes();
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $otherModel = app(HasOneConstrainedBrickableModel::class)->create();
         $brickOne = $page->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
         $otherModel->addBrick(OneTextColumn::class, ['text' => 'Text #1']);
@@ -186,7 +186,7 @@ class BricksControllerTest extends BrickableTestCase
     public function it_uses_brickable_custom_controller(): void
     {
         Brickables::routes();
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         view()->addNamespace('laravel-brickables', 'tests/views');
         $this->call('GET', 'brick/create', [
             'model_type' => Page::class,

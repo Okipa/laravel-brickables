@@ -3,12 +3,11 @@
 
 # Ignore all test and documentation with "export-ignore".
 /.github            export-ignore
-/docs
+/docs               export-ignore
 /tests              export-ignore
 /.editorconfig      export-ignore
 /.gitattributes     export-ignore
 /.gitignore         export-ignore
-/.scrutinizer.yml   export-ignore
 /phpcs.xml          export-ignore
 /phpmd.xml          export-ignore
 /phpstan.neon.dist  export-ignore

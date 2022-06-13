@@ -30,9 +30,9 @@ abstract class Brickable
 
     protected string $moveDownRouteName;
 
-    protected ?string $cssResourcePath;
+    protected string|null $cssResourcePath;
 
-    protected ?string $jsResourcePath;
+    protected string|null $jsResourcePath;
 
     public function __construct()
     {
@@ -121,62 +121,32 @@ abstract class Brickable
         return ucfirst(Str::snake(class_basename($this), ' '));
     }
 
-    /**
-     * @param mixed $parameters
-     *
-     * @return string
-     */
-    public function getStoreRoute($parameters = []): string
+    public function getStoreRoute(mixed $parameters = []): string
     {
         return route($this->storeRouteName, $parameters);
     }
 
-    /**
-     * @param mixed $parameters
-     *
-     * @return string
-     */
-    public function getEditRoute($parameters = []): string
+    public function getEditRoute(mixed $parameters = []): string
     {
         return route($this->editRouteName, $parameters);
     }
 
-    /**
-     * @param mixed $parameters
-     *
-     * @return string
-     */
-    public function getUpdateRoute($parameters = []): string
+    public function getUpdateRoute(mixed $parameters = []): string
     {
         return route($this->updateRouteName, $parameters);
     }
 
-    /**
-     * @param mixed $parameters
-     *
-     * @return string
-     */
-    public function getDestroyRoute($parameters = []): string
+    public function getDestroyRoute(mixed $parameters = []): string
     {
         return route($this->destroyRouteName, $parameters);
     }
 
-    /**
-     * @param mixed $parameters
-     *
-     * @return string
-     */
-    public function getMoveUpRoute($parameters = []): string
+    public function getMoveUpRoute(mixed $parameters = []): string
     {
         return route($this->moveUpRouteName, $parameters);
     }
 
-    /**
-     * @param mixed $parameters
-     *
-     * @return string
-     */
-    public function getMoveDownRoute($parameters = []): string
+    public function getMoveDownRoute(mixed $parameters = []): string
     {
         return route($this->moveDownRouteName, $parameters);
     }
@@ -191,22 +161,22 @@ abstract class Brickable
         return app($this->bricksControllerClass);
     }
 
-    public function getCssResourcePath(): ?string
+    public function getCssResourcePath(): string|null
     {
         return $this->cssResourcePath;
     }
 
-    protected function setCssResourcePath(): ?string
+    protected function setCssResourcePath(): string|null
     {
         return null;
     }
 
-    public function getJsResourcePath(): ?string
+    public function getJsResourcePath(): string|null
     {
         return $this->jsResourcePath;
     }
 
-    protected function setJsResourcePath(): ?string
+    protected function setJsResourcePath(): string|null
     {
         return null;
     }

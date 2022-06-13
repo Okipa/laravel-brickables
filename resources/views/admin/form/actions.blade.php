@@ -1,12 +1,9 @@
 <div class="d-flex pt-4">
-    <a class="btn btn-danger mr-2" href="{{ $adminPanelUrl }}" role="button">
-        <i class="fas fa-ban fa-fw"></i> @lang('Cancel')
+    <a class="btn btn-secondary me-2" href="{{ $adminPanelUrl }}" role="button">
+        <i class="fa-solid fa-ban fa-fw"></i> {{ __('Cancel') }}
     </a>
     <button class="btn btn-primary" type="submit">
-        @if($brick)
-            <i class="fas fa-save fa-fw"></i> @lang('Update')
-        @else
-            <i class="fas fa-plus-circle fa-fw"></i> @lang('Create')
-        @endif
+        <i class="fa-solid fa-floppy-disk fa-fw"></i>
+        {{ __('Save') }}
     </button>
 </div>

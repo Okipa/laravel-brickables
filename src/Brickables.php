@@ -47,7 +47,7 @@ class Brickables
     {
         Route::middleware([
             CRUDBrickable::class,
-            SubstituteBindings::class,
+            'web',
         ])->group(function () use ($additionalRoutes) {
             Route::get('brick/create', [DispatchController::class, 'create'])->name('brick.create');
             Route::post('brick/store', [DispatchController::class, 'store'])->name('brick.store');
@@ -62,7 +62,7 @@ class Brickables
         });
     }
 
-    public function getModelFromRequest(Request $request = null): ?HasBrickables
+    public function getModelFromRequest(Request $request = null): HasBrickables|null
     {
         $request = $request ?: request();
         if ($request->has('model_type') && $request->has('model_id')) {

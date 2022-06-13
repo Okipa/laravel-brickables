@@ -112,7 +112,7 @@ composer require okipa/laravel-brickables
 Then, publish and run the database migrations: 
 
 ```bash
-php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=migrations
+php artisan vendor:publish --tag=laravel-brickables:migrations
 
 php artisan migrate
 ```
@@ -137,7 +137,7 @@ Finally, to benefit from [smart loading of brickables css and js resources](#def
 Publish the package configuration: 
 
 ```bash
-php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=config
+php artisan vendor:publish --tag=laravel-brickables:config
 ```
 
 :warning: You may have to run a `composer dump-autoload` after changing a path in your configuration file.
@@ -147,7 +147,7 @@ php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesService
 Publish the package views: 
 
 ```bash
-php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=views
+php artisan vendor:publish --tag=laravel-brickables:views
 ```
 
 ## Translations
@@ -480,12 +480,12 @@ class MyNewBrickable extends Brickable
 {
     // ...
 
-    protected function setCssResourcePath(): ?string
+    protected function setCssResourcePath(): string|null
     {
         return mix('/css/brickables/my-new-brickable.css');
     }
 
-    protected function setJsResourcePath(): ?string
+    protected function setJsResourcePath(): string|null
     {
         return mix('/js/brickables/my-new-brickable.js');
     }

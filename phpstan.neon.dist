@@ -6,12 +6,14 @@ parameters:
     paths:
         - config
         - src
+        - tests
 
     # The level 8 is the highest level
     level: 5
 
     ignoreErrors:
         - '#Access to an undefined property#'
+        - '#Parameter \#1 \$view of function view expects view-string\|null, string given#'
 
     excludePaths:
         - ./*/*/FileToBeExcluded.php

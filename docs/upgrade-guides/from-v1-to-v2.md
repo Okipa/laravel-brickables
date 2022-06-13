@@ -5,12 +5,12 @@ Follow the steps below to upgrade the package.
 ## API changes
 
 The signature of the following methods have changed. If you use those methods, you should report these changes in your code:
-* `getBricks(?string $brickableClass = null): Collection` has been changed into `getBricks(?array $brickableClasses = []): Collection`.
-* `clearBricks(?string $brickableClass = null): void` has been changed into `clearBricks(?array $brickableClasses = []): void`.
+* `getBricks(string|null $brickableClass = null): Collection` has been changed into `getBricks(array|null $brickableClasses = []): Collection`.
+* `clearBricks(string|null $brickableClass = null): void` has been changed into `clearBricks(array|null $brickableClasses = []): void`.
 * `clearBricksExcept(string $brickableClass, Collection $excludeBricks): void` has been changed into `clearBricksExcept(Collection $excludeBricks): void`.
 
 The following methods have been transferred from the `Brickables` helper to the `HasBrickablesTrait`. As so, you should update your code accordingly:
-* In blade view, `{{ Brickables::displayBricks(HasBrickables $model, ?string $brickableClass = null) }}` should now be called as following: `{!! $model->displayBricks(?array $brickableClasses) !!}`
+* In blade view, `{{ Brickables::displayBricks(HasBrickables $model, string|null $brickableClass = null) }}` should now be called as following: `{!! $model->displayBricks(array|null $brickableClasses) !!}`
 * In blade view, `{{ Brickables::displayAdminPanel(HasBrickables $model) }}` should now be called as following: `{!! $model->displayAdminPanel() !!}`
 * In code, `Brickables::getAdditionableTo(HasBrickables $model)` should now be called as following: `$model->getAdditionableBrickables()`
 * In code, `Brickables::getAll()` should now be called as following: `$model->getRegisteredBrickables()`

@@ -1,19 +1,19 @@
 <?php
 
-use Faker\Generator as Faker;
-use Okipa\LaravelBrickables\Tests\Models\Page;
+namespace Tests\Database\Factories;
 
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| This directory should contain each of the model factory definitions for
-| your application. Factories provide a convenient way to generate new
-| model instances for testing / seeding your application's database.
-|
-*/
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Tests\Models\Page;
 
-$factory->define(Page::class, function (Faker $faker) {
-    return ['slug' => $faker->unique()->slug];
-});
+class PageFactory extends Factory
+{
+    /** @var class-string<\Illuminate\Database\Eloquent\Model> */
+    protected $model = Page::class;
+
+    public function definition(): array
+    {
+        return [
+            'slug' => $this->faker->unique()->slug,
+        ];
+    }
+}

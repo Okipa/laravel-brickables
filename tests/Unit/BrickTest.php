@@ -1,16 +1,13 @@
 <?php
 
-namespace Okipa\LaravelBrickables\Tests\Unit;
+namespace Tests\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
-use Okipa\LaravelBrickables\Brickables\OneTextColumn;
-use Okipa\LaravelBrickables\Models\Brick;
-use Okipa\LaravelBrickables\Tests\BrickableTestCase;
-use Okipa\LaravelBrickables\Tests\Models\HasOneConstrainedBrickableModel;
-use Okipa\LaravelBrickables\Tests\Models\Page;
+use Tests\TestCase;
+use Tests\Models\Page;
 
-class BrickTest extends BrickableTestCase
+class BrickTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -18,7 +15,7 @@ class BrickTest extends BrickableTestCase
     public function it_can_render_html(): void
     {
         view()->addNamespace('laravel-brickables', 'tests/views');
-        $brickable = new Class extends Brickable {
+        $brickable = new class extends Brickable {
             public function setBrickViewPath(): string
             {
                 return 'laravel-brickables::brick-test';
@@ -35,7 +32,7 @@ class BrickTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
         self::assertEquals(view($brick->brickable->getBrickViewPath(), compact('brick')), $brick->toHtml());
     }

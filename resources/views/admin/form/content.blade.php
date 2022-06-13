@@ -5,7 +5,7 @@
             @if(View::hasSection('title'))
                 @yield('title')
             @else
-                @lang('Brick data')
+                {{ __('Brick data') }}
             @endif
         </h2>
     </div>
@@ -14,7 +14,9 @@
               action="{{ $brick ? $brickable->getUpdateRoute($brick) : $brickable->getStoreRoute() }}"
               enctype="multipart/form-data">
             @csrf
-            @if($brick)@method('PUT')@endif
+            @if($brick)
+                @method('PUT')
+            @endif
             <input type="hidden" name="model_id" value="{{ $model->id }}">
             <input type="hidden" name="model_type" value="{{ get_class($model) }}">
             <input type="hidden" name="brickable_type" value="{{ get_class($brickable) }}">
