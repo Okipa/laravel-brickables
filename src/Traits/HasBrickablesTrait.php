@@ -146,7 +146,7 @@ trait HasBrickablesTrait
     public function clearBricksExcept(Collection $excludedBricks): void
     {
         $this->getBricks()
-            ->reject(fn (Brick $brick) => $excludedBricks->where($brick->getKeyName(), $brick->getKey())->count())
+            ->reject(fn (Brick $brick) => $excludedBricks->where($brick->getKeyName(), $brick->getKey())->isNotEmpty())
             ->each(fn (Brick $brick) => $brick->delete());
     }
 
