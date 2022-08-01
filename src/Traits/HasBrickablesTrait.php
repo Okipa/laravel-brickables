@@ -146,8 +146,8 @@ trait HasBrickablesTrait
     public function clearBricksExcept(Collection $excludedBricks): void
     {
         $this->getBricks()
-            ->reject(fn(Brick $brick) => $excludedBricks->where($brick->getKeyName(), $brick->getKey())->count())
-            ->each(fn(Brick $brick) => $brick->delete());
+            ->reject(fn (Brick $brick) => $excludedBricks->where($brick->getKeyName(), $brick->getKey())->count())
+            ->each(fn (Brick $brick) => $brick->delete());
     }
 
     public function clearBricks(array|null $brickableClasses = []): void
@@ -223,7 +223,7 @@ trait HasBrickablesTrait
     {
         return view('laravel-brickables::admin.panel.layout', [
             'model' => $this,
-            'errors' => Session::get('errors') ?: new ViewErrorBag()
+            'errors' => Session::get('errors') ?: new ViewErrorBag(),
         ])->toHtml();
     }
 }

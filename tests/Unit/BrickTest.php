@@ -4,8 +4,8 @@ namespace Tests\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
-use Tests\TestCase;
 use Tests\Models\Page;
+use Tests\TestCase;
 
 class BrickTest extends TestCase
 {
@@ -15,7 +15,8 @@ class BrickTest extends TestCase
     public function it_can_render_html(): void
     {
         view()->addNamespace('laravel-brickables', 'tests/views');
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             public function setBrickViewPath(): string
             {
                 return 'laravel-brickables::brick-test';

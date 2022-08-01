@@ -3,12 +3,6 @@
 namespace Okipa\LaravelBrickables\Contracts;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
-use Okipa\LaravelBrickables\Abstracts\Brickable;
-use Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException;
-use Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException;
-use Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException;
-use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
 
 interface HasBrickables

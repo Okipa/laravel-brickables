@@ -3,7 +3,6 @@
 namespace Okipa\LaravelBrickables;
 
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
@@ -12,7 +11,7 @@ class BrickablesServiceProvider extends ServiceProvider
     /**
      * Bootstrap the application services.
      *
-     * @param \Illuminate\Filesystem\Filesystem $filesystem
+     * @param  \Illuminate\Filesystem\Filesystem  $filesystem
      */
     public function boot(Filesystem $filesystem): void
     {
@@ -24,7 +23,7 @@ class BrickablesServiceProvider extends ServiceProvider
             __DIR__ . '/../resources/views' => resource_path('views/vendor/laravel-brickables'),
         ], 'laravel-brickables:views');
         $this->publishes([
-            __DIR__ . '/../database/migrations/' => database_path('migrations')
+            __DIR__ . '/../database/migrations/' => database_path('migrations'),
         ], 'laravel-brickables:migrations');
         $this->declareBladeDirectives();
     }

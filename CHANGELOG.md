@@ -10,6 +10,7 @@
 * Dropped support for PHP 7.4 and earlier versions
 * Package is now using Fontawesome 6 icons
 * Views have upgraded to Bootstrap 5
+* Replaced `phpcs/phpcbf` by `laravel/pint`
 
 ## [2.3.1](https://github.com/Okipa/laravel-brickables/compare/2.3.0...2.3.1)
 

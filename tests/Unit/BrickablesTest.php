@@ -10,11 +10,11 @@ use Illuminate\Support\ViewErrorBag;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
-use Tests\TestCase;
 use Tests\Models\BrickModel;
 use Tests\Models\BrickModelWithCompanyRelationShip;
 use Tests\Models\Company;
 use Tests\Models\Page;
+use Tests\TestCase;
 
 class BrickablesTest extends TestCase
 {
@@ -24,7 +24,8 @@ class BrickablesTest extends TestCase
     public function it_only_displays_once_css_resources(): void
     {
         view()->addNamespace('laravel-brickables', 'tests/views');
-        $brickableOne = new class extends Brickable {
+        $brickableOne = new class extends Brickable
+        {
             public function setBrickViewPath(): string
             {
                 return 'laravel-brickables::brick-test';
@@ -45,7 +46,8 @@ class BrickablesTest extends TestCase
                 return [];
             }
         };
-        $brickableTwo = new class extends Brickable {
+        $brickableTwo = new class extends Brickable
+        {
             public function setBrickViewPath(): string
             {
                 return 'laravel-brickables::brick-test';
@@ -85,7 +87,8 @@ class BrickablesTest extends TestCase
     public function it_only_displays_once_js_resources(): void
     {
         view()->addNamespace('laravel-brickables', 'tests/views');
-        $brickableOne = new class extends Brickable {
+        $brickableOne = new class extends Brickable
+        {
             public function setBrickViewPath(): string
             {
                 return 'laravel-brickables::brick-test';
@@ -106,7 +109,8 @@ class BrickablesTest extends TestCase
                 return [];
             }
         };
-        $brickableTwo = new class extends Brickable {
+        $brickableTwo = new class extends Brickable
+        {
             public function setBrickViewPath(): string
             {
                 return 'laravel-brickables::brick-test';
@@ -146,7 +150,8 @@ class BrickablesTest extends TestCase
     public function it_can_display_model_bricks_admin_panel_html(): void
     {
         view()->addNamespace('laravel-brickables', 'tests/views');
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             public function setBrickViewPath(): string
             {
                 return 'laravel-brickables::brick-test';
@@ -178,7 +183,8 @@ class BrickablesTest extends TestCase
     /** @test */
     public function it_can_cast_bricks_to_their_brickable_related_brick_model(): void
     {
-        $brickableOne = new class extends Brickable {
+        $brickableOne = new class extends Brickable
+        {
             public function validateStoreInputs(): array
             {
                 return [];
@@ -189,7 +195,8 @@ class BrickablesTest extends TestCase
                 return [];
             }
         };
-        $brickableTwo = new class extends Brickable {
+        $brickableTwo = new class extends Brickable
+        {
             protected function setBrickModelClass(): string
             {
                 return BrickModel::class;
@@ -226,7 +233,8 @@ class BrickablesTest extends TestCase
     /** @test */
     public function it_can_cast_bricks_and_return_them_in_correct_order(): void
     {
-        $brickableOne = new class extends Brickable {
+        $brickableOne = new class extends Brickable
+        {
             public function validateStoreInputs(): array
             {
                 return [];
@@ -237,7 +245,8 @@ class BrickablesTest extends TestCase
                 return [];
             }
         };
-        $brickableTwo = new class extends Brickable {
+        $brickableTwo = new class extends Brickable
+        {
             protected function setBrickModelClass(): string
             {
                 return BrickModel::class;
@@ -266,7 +275,8 @@ class BrickablesTest extends TestCase
     /** @test */
     public function it_can_cast_brick_to_its_brickable_related_brick_model(): void
     {
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             protected function setBrickModelClass(): string
             {
                 return BrickModel::class;
@@ -297,7 +307,8 @@ class BrickablesTest extends TestCase
     /** @test */
     public function it_can_cast_bricks_and_eager_load_relationships(): void
     {
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             protected function setBrickModelClass(): string
             {
                 return BrickModelWithCompanyRelationShip::class;
@@ -338,7 +349,8 @@ class BrickablesTest extends TestCase
     /** @test */
     public function it_can_get_model_from_edit_request(): void
     {
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             public function validateStoreInputs(): array
             {
                 return [];

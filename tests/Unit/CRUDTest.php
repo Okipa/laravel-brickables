@@ -10,10 +10,10 @@ use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Brickables\TwoTextColumns;
 use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Middleware\CRUDBrickable;
-use Tests\TestCase;
 use Tests\Models\HasOneConstrainedBrickableModel;
 use Tests\Models\ModelWithoutBrickables;
 use Tests\Models\Page;
+use Tests\TestCase;
 
 class CRUDTest extends TestCase
 {

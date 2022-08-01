@@ -7,9 +7,9 @@ use Illuminate\Support\Arr;
 use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Facades\Brickables;
 use Tests\Brickables\Brickable;
-use Tests\TestCase;
 use Tests\Models\HasOneConstrainedBrickableModel;
 use Tests\Models\Page;
+use Tests\TestCase;
 
 class BricksControllerTest extends TestCase
 {
