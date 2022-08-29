@@ -2,20 +2,17 @@
 
 namespace Tests\Unit;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\ViewErrorBag;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Brickables\TwoTextColumns;
-use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException;
 use Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException;
 use Okipa\LaravelBrickables\Exceptions\ModelHasReachedMaxNumberOfBricksException;
 use Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException;
 use Okipa\LaravelBrickables\Facades\Brickables;
 use Okipa\LaravelBrickables\Models\Brick;
-use Okipa\LaravelBrickables\Traits\HasBrickablesTrait;
 use Tests\Models\HasMultipleConstrainedBrickablesModel;
 use Tests\Models\HasOneConstrainedBrickableModel;
 use Tests\Models\Page;
@@ -57,6 +54,7 @@ class HasBrickablesTest extends TestCase
         $page->addBrick(get_class($brickable), []);
     }
 
+    /** @test */
     public function it_cannot_add_not_handlable_brickable(): void
     {
         $brickable = new class extends Brickable
@@ -71,22 +69,17 @@ class HasBrickablesTest extends TestCase
                 return [];
             }
         };
+        config()->set('brickables.registered', [get_class($brickable)]);
+        $this->expectException(BrickableCannotBeHandledException::class);
         $model = app(HasOneConstrainedBrickableModel::class)->create();
         $model->addBrick(get_class($brickable));
-        $this->expectException(BrickableCannotBeHandledException::class);
     }
 
+    /** @test */
     /** @SuppressWarnings(PHPMD.UnusedLocalVariable) */
     public function it_can_check_if_model_can_handle_brickable(): void
     {
-        $model = new class extends Model implements HasBrickables
-        {
-            use HasBrickablesTrait;
-
-            public array $brickables = [
-                'can_only_handle' => [OneTextColumn::class],
-            ];
-        };
+        $model = app(HasOneConstrainedBrickableModel::class);
         self::assertTrue($model->canHandle(OneTextColumn::class));
         self::assertFalse($model->canHandle(TwoTextColumns::class));
     }
