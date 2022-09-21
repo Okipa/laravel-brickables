@@ -59,10 +59,10 @@ $page->addBricks([
 Display bricks in your views:
 
 ```blade
-{{-- all at once --}}
+{{-- All at once --}}
 {!! $page->displayBricks() !!}
 
-{{-- or one by one --}}
+{{-- Or one by one --}}
 {{ $page->getFirstBrick(OneTextColumn::class) }}
 ```
 

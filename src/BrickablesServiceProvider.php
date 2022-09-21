@@ -45,6 +45,6 @@ class BrickablesServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/brickables.php', 'brickables');
-        $this->app->bind('Brickables', Brickables::class);
+        $this->app->bind('brickables', Brickables::class);
     }
 }

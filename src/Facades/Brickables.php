@@ -8,6 +8,6 @@ class Brickables extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return 'Brickables';
+        return 'brickables';
     }
 }
