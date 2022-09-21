@@ -4,7 +4,6 @@ namespace Okipa\LaravelBrickables;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
@@ -25,7 +24,7 @@ class Brickables
     public function getCssResourcesToLoad(): Collection
     {
         return $this->getDisplayedOnPage()
-            ->map(fn(Brickable $brickable) => $brickable->getCssResourcePath())
+            ->map(fn (Brickable $brickable) => $brickable->getCssResourcePath())
             ->unique()
             ->filter();
     }
@@ -38,7 +37,7 @@ class Brickables
     public function getJsResourcesToLoad(): Collection
     {
         return $this->getDisplayedOnPage()
-            ->map(fn(Brickable $brickable) => $brickable->getJsResourcePath())
+            ->map(fn (Brickable $brickable) => $brickable->getJsResourcePath())
             ->unique()
             ->filter();
     }
@@ -47,7 +46,7 @@ class Brickables
     {
         Route::middleware([
             CRUDBrickable::class,
-            SubstituteBindings::class,
+            'web',
         ])->group(function () use ($additionalRoutes) {
             Route::get('brick/create', [DispatchController::class, 'create'])->name('brick.create');
             Route::post('brick/store', [DispatchController::class, 'store'])->name('brick.store');
@@ -62,7 +61,7 @@ class Brickables
         });
     }
 
-    public function getModelFromRequest(Request $request = null): ?HasBrickables
+    public function getModelFromRequest(Request $request = null): HasBrickables|null
     {
         $request = $request ?: request();
         if ($request->has('model_type') && $request->has('model_id')) {
@@ -96,10 +95,10 @@ class Brickables
             $brickable = app($brickableClass);
             $model = $brickable->getBrickModel();
             $brickableRawBricks = $bricks->where('brickable_type', $brickableClass)
-                ->map(fn(Brick $brick) => $brick->getAttributes());
+                ->map(fn (Brick $brick) => $brick->getAttributes());
             $modelEagerLoadedRelations = array_keys($model->newQuery()->getEagerLoads());
             $brickableCastedBricks = $model->hydrate($brickableRawBricks->toArray())
-                ->map(fn(Brick $brick) => $brick->loadMissing($modelEagerLoadedRelations));
+                ->map(fn (Brick $brick) => $brick->loadMissing($modelEagerLoadedRelations));
             $castedBricks->push($brickableCastedBricks);
         }
         /** @var \Okipa\LaravelBrickables\Models\Brick $brickModel */

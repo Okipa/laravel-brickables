@@ -1,22 +1,23 @@
 <?php
 
-namespace Okipa\LaravelBrickables\Tests\Unit;
+namespace Tests\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Route;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
-use Okipa\LaravelBrickables\Tests\BrickableTestCase;
-use Okipa\LaravelBrickables\Tests\Models\BrickModel;
-use Okipa\LaravelBrickables\Tests\Models\Page;
+use Tests\Models\BrickModel;
+use Tests\Models\Page;
+use Tests\TestCase;
 
-class BrickableTest extends BrickableTestCase
+class Test extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
     public function it_can_set_and_return_model(): void
     {
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             public function setBrickModelClass(): string
             {
                 return BrickModel::class;
@@ -38,7 +39,8 @@ class BrickableTest extends BrickableTestCase
     /** @test */
     public function it_can_set_and_return_label(): void
     {
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             public function setLabel(): string
             {
                 return 'Dummy label';
@@ -60,7 +62,8 @@ class BrickableTest extends BrickableTestCase
     /** @test */
     public function it_can_set_and_return_brick_view_path(): void
     {
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             public function setBrickViewPath(): string
             {
                 return 'dummy.brick.view.path';
@@ -82,7 +85,8 @@ class BrickableTest extends BrickableTestCase
     /** @test */
     public function it_can_set_and_return_form_view_path(): void
     {
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             public function setFormViewPath(): string
             {
                 return 'dummy.form.view.path';
@@ -106,7 +110,8 @@ class BrickableTest extends BrickableTestCase
     {
         Route::post('dummy/store', function () {
         })->name('dummy.store');
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             public function setStoreRouteName(): string
             {
                 return 'dummy.store';
@@ -130,7 +135,8 @@ class BrickableTest extends BrickableTestCase
     {
         Route::get('dummy/edit/{brick}', function () {
         })->name('dummy.edit');
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             public function setEditRouteName(): string
             {
                 return 'dummy.edit';
@@ -147,7 +153,7 @@ class BrickableTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(get_class($brickable), []);
         self::assertEquals('http://localhost/dummy/edit/' . $brick->id, $brickable->getEditRoute($brick));
     }
@@ -157,7 +163,8 @@ class BrickableTest extends BrickableTestCase
     {
         Route::put('dummy/update/{brick}', static function () {
         })->name('dummy.update');
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             public function setUpdateRouteName(): string
             {
                 return 'dummy.update';
@@ -174,7 +181,7 @@ class BrickableTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(get_class($brickable), []);
         self::assertEquals('http://localhost/dummy/update/' . $brick->id, $brickable->getUpdateRoute($brick));
     }
@@ -184,7 +191,8 @@ class BrickableTest extends BrickableTestCase
     {
         Route::delete('dummy/destroy/{brick}', function () {
         })->name('dummy.destroy');
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             public function setDestroyRouteName(): string
             {
                 return 'dummy.destroy';
@@ -201,7 +209,7 @@ class BrickableTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(get_class($brickable), []);
         self::assertEquals('http://localhost/dummy/destroy/' . $brick->id, $brickable->getDestroyRoute($brick));
     }
@@ -212,7 +220,8 @@ class BrickableTest extends BrickableTestCase
         Route::post('dummy/move/up/{brick}', function () {
             //
         })->name('dummy.move.up');
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             public function setMoveUpRouteName(): string
             {
                 return 'dummy.move.up';
@@ -229,7 +238,7 @@ class BrickableTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(get_class($brickable), []);
         self::assertEquals('http://localhost/dummy/move/up/' . $brick->id, $brickable->getMoveUpRoute($brick));
     }
@@ -240,7 +249,8 @@ class BrickableTest extends BrickableTestCase
         Route::post('dummy/move/down/{brick}', function () {
             //
         })->name('dummy.move.down');
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             public function setMoveDownRouteName(): string
             {
                 return 'dummy.move.down';
@@ -257,7 +267,7 @@ class BrickableTest extends BrickableTestCase
             }
         };
         config()->set('brickables.registered', [get_class($brickable)]);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(get_class($brickable), []);
         self::assertEquals('http://localhost/dummy/move/down/' . $brick->id, $brickable->getMoveDownRoute($brick));
     }
@@ -266,7 +276,8 @@ class BrickableTest extends BrickableTestCase
     public function it_can_validate_inputs_and_return_validated_fields(): void
     {
         request()->merge(['text' => 'test']);
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             public function validateStoreInputs(): array
             {
                 return request()->validate(['text' => ['required', 'string']]);
@@ -284,7 +295,8 @@ class BrickableTest extends BrickableTestCase
     /** @test */
     public function it_can_set_and_return_css_path(): void
     {
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             protected function setCssResourcePath(): string
             {
                 return 'my/test/css/path.css';
@@ -306,7 +318,8 @@ class BrickableTest extends BrickableTestCase
     /** @test */
     public function it_can_set_and_return_javascript_path(): void
     {
-        $brickable = new class extends Brickable {
+        $brickable = new class extends Brickable
+        {
             protected function setJsResourcePath(): string
             {
                 return 'my/test/javascript/path.css';

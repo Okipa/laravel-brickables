@@ -1,8 +1,8 @@
 <?php
 
-namespace Okipa\LaravelBrickables\Tests\Brickables;
+namespace Tests\Brickables;
 
-use Okipa\LaravelBrickables\Tests\Controllers\BricksController;
+use Tests\Controllers\BricksController;
 
 class Brickable extends \Okipa\LaravelBrickables\Abstracts\Brickable
 {

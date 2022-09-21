@@ -3,7 +3,9 @@
 namespace Okipa\LaravelBrickables\Traits;
 
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
+use Illuminate\Support\ViewErrorBag;
 use Okipa\LaravelBrickables\Abstracts\Brickable;
 use Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException;
 use Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException;
@@ -15,9 +17,6 @@ use Okipa\LaravelBrickables\Models\Brick;
 trait HasBrickablesTrait
 {
     /**
-     * @param array $bricksData
-     *
-     * @return \Illuminate\Support\Collection
      * @throws \Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException
      * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
@@ -36,10 +35,6 @@ trait HasBrickablesTrait
     }
 
     /**
-     * @param string $brickableClass
-     * @param array $data
-     *
-     * @return \Okipa\LaravelBrickables\Models\Brick
      * @throws \Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException
      * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
      * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
@@ -55,24 +50,18 @@ trait HasBrickablesTrait
         return $this->createBrick($brickableClass, $data);
     }
 
-    /**
-     * @param string $brickableClass
-     *
-     * @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException
-     */
+    /** @throws \Okipa\LaravelBrickables\Exceptions\InvalidBrickableClassException */
     public function checkBrickableTypeIsInstanceOfBrickable(string $brickableClass): void
     {
-        if (! app($brickableClass) instanceof Brickable) {
+        /** @var mixed $instance $instance */
+        $instance = app($brickableClass);
+        if (! $instance instanceof Brickable) {
             throw new InvalidBrickableClassException('The given ' . $brickableClass
                 . ' brickable class should extend ' . Brickable::class . '.');
         }
     }
 
-    /**
-     * @param string $brickableClass
-     *
-     * @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException
-     */
+    /** @throws \Okipa\LaravelBrickables\Exceptions\NotRegisteredBrickableClassException */
     protected function checkBrickableIsRegistered(string $brickableClass): void
     {
         if (! in_array($brickableClass, config('brickables.registered'), true)) {
@@ -81,11 +70,7 @@ trait HasBrickablesTrait
         }
     }
 
-    /**
-     * @param string $brickableClass
-     *
-     * @throws \Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException
-     */
+    /** @throws \Okipa\LaravelBrickables\Exceptions\BrickableCannotBeHandledException */
     public function checkBrickableCanBeHandled(string $brickableClass): void
     {
         if (! $this->canHandle($brickableClass)) {
@@ -105,11 +90,7 @@ trait HasBrickablesTrait
         return in_array($brickableClass, $authorizedBrickables, true);
     }
 
-    /**
-     * @param string $brickableClass
-     *
-     * @throws \Exception
-     */
+    /** @throws \Exception */
     protected function checkModelHasNotReachedMaxNumberOfBricks(string $brickableClass): void
     {
         $maxNumberOfBricks = $this->getMaxNumberOfBricksFor($brickableClass);
@@ -124,7 +105,7 @@ trait HasBrickablesTrait
         }
     }
 
-    protected function getMaxNumberOfBricksFor(string $brickableClass): ?int
+    protected function getMaxNumberOfBricksFor(string $brickableClass): int|null
     {
         $maxNumberOfBricks = data_get($this, 'brickables.number_of_bricks.' . $brickableClass . '.max');
         if (! isset($maxNumberOfBricks)) {
@@ -134,7 +115,7 @@ trait HasBrickablesTrait
         return (int) $maxNumberOfBricks;
     }
 
-    public function getBricks(?array $brickableClasses = []): Collection
+    public function getBricks(array|null $brickableClasses = []): Collection
     {
         /** @var \Okipa\LaravelBrickables\Models\Brick $bricksBaseModel */
         $bricksBaseModel = app(config('brickables.bricks.model'));
@@ -161,24 +142,20 @@ trait HasBrickablesTrait
         return $brickModel;
     }
 
-    /**
-     * @param \Illuminate\Support\Collection $excludedBricks
-     *
-     * @throws \Exception
-     */
+    /** @throws \Exception */
     public function clearBricksExcept(Collection $excludedBricks): void
     {
         $this->getBricks()
-            ->reject(fn(Brick $brick) => $excludedBricks->where($brick->getKeyName(), $brick->getKey())->count())
-            ->each(fn(Brick $brick) => $brick->delete());
+            ->reject(fn (Brick $brick) => $excludedBricks->where($brick->getKeyName(), $brick->getKey())->isNotEmpty())
+            ->each(fn (Brick $brick) => $brick->delete());
     }
 
-    public function clearBricks(?array $brickableClasses = []): void
+    public function clearBricks(array|null $brickableClasses = []): void
     {
         $this->getBricks($brickableClasses)->each->delete();
     }
 
-    public function getFirstBrick(?string $brickableClass = null): ?Brick
+    public function getFirstBrick(string|null $brickableClass = null): ?Brick
     {
         return $this->getBricks(array_filter([$brickableClass]))->first();
     }
@@ -208,8 +185,7 @@ trait HasBrickablesTrait
         return $this->getRegisteredBrickables()->filter(function (Brickable $brickable) {
             $brickableClass = get_class($brickable);
 
-            return $this->canHandle($brickableClass)
-                && $this->canAddBricksFrom($brickableClass);
+            return $this->canHandle($brickableClass) && $this->canAddBricksFrom($brickableClass);
         });
     }
 
@@ -237,7 +213,7 @@ trait HasBrickablesTrait
 
     public function displayBricks(array $brickableClasses = []): string
     {
-        return (string) view('laravel-brickables::bricks', [
+        return view('laravel-brickables::bricks', [
             'model' => $this,
             'brickableClasses' => $brickableClasses,
         ])->toHtml();
@@ -245,6 +221,9 @@ trait HasBrickablesTrait
 
     public function displayAdminPanel(): string
     {
-        return (string) view('laravel-brickables::admin.panel.layout', ['model' => $this])->toHtml();
+        return view('laravel-brickables::admin.panel.layout', [
+            'model' => $this,
+            'errors' => Session::get('errors') ?: new ViewErrorBag(),
+        ])->toHtml();
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHasMultipleConstrainedBrickablesModelsTable extends Migration
+return new class extends Migration
 {
     public function up(): void
     {
@@ -18,4 +18,4 @@ class CreateHasMultipleConstrainedBrickablesModelsTable extends Migration
     {
         Schema::dropIfExists('has_multiple_constrained_brickables_models');
     }
-}
+};

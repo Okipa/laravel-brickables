@@ -1,5 +1,5 @@
 ![Laravel Brickables](/docs/laravel-brickables.png)
-<p align="center">
+<p style="text-align: center;">
     <a href="https://github.com/Okipa/laravel-brickables/releases" title="Latest Stable Version">
         <img src="https://img.shields.io/github/release/Okipa/laravel-brickables.svg" alt="Latest Stable Version">
     </a>
@@ -28,13 +28,15 @@ Found this package helpful? Please consider supporting my work!
 
 ## Compatibility
 
-| Laravel | PHP | Package |
+| Laravel version | PHP version | Package version |
 |---|---|---|
-| ^7.0 | ^7.4 | ^2.0 |
-| ^5.8 | ^7.2 | ^1.0 |
+| ^8.0 &#124; ^9.0 | ^8.0 &#124; ^8.1 | ^3.0 |
+| ^7.0 &#124; ^8.0 | ^7.4 &#124; ^8.0 | ^2.0 |
+| ^5.8 &#124; ^6.0 &#124; ^7.0 | ^7.1 &#124; ^7.2 &#124; ^7.3 &#124; ^7.4 | ^1.0 |
 
 ## Upgrade guide
 
+* [From V2 to V3](/docs/upgrade-guides/from-v2-to-v3.md)
 * [From V1 to V2](/docs/upgrade-guides/from-v1-to-v2.md)
 
 ## Usage
@@ -57,10 +59,10 @@ $page->addBricks([
 Display bricks in your views:
 
 ```blade
-{{-- all at once --}}
+{{-- All at once --}}
 {!! $page->displayBricks() !!}
 
-{{-- or one by one --}}
+{{-- Or one by one --}}
 {{ $page->getFirstBrick(OneTextColumn::class) }}
 ```
 
@@ -112,7 +114,7 @@ composer require okipa/laravel-brickables
 Then, publish and run the database migrations: 
 
 ```bash
-php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=migrations
+php artisan vendor:publish --tag=laravel-brickables:migrations
 
 php artisan migrate
 ```
@@ -137,7 +139,7 @@ Finally, to benefit from [smart loading of brickables css and js resources](#def
 Publish the package configuration: 
 
 ```bash
-php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=config
+php artisan vendor:publish --tag=laravel-brickables:config
 ```
 
 :warning: You may have to run a `composer dump-autoload` after changing a path in your configuration file.
@@ -147,7 +149,7 @@ php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesService
 Publish the package views: 
 
 ```bash
-php artisan vendor:publish --provider="Okipa\LaravelBrickables\BrickablesServiceProvider" --tag=views
+php artisan vendor:publish --tag=laravel-brickables:views
 ```
 
 ## Translations
@@ -480,12 +482,12 @@ class MyNewBrickable extends Brickable
 {
     // ...
 
-    protected function setCssResourcePath(): ?string
+    protected function setCssResourcePath(): string|null
     {
         return mix('/css/brickables/my-new-brickable.css');
     }
 
-    protected function setJsResourcePath(): ?string
+    protected function setJsResourcePath(): string|null
     {
         return mix('/js/brickables/my-new-brickable.js');
     }

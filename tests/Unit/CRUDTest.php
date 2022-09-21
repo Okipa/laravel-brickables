@@ -1,6 +1,6 @@
 <?php
 
-namespace Okipa\LaravelBrickables\Tests\Unit;
+namespace Tests\Unit;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Routing\Middleware\SubstituteBindings;
@@ -10,12 +10,12 @@ use Okipa\LaravelBrickables\Brickables\OneTextColumn;
 use Okipa\LaravelBrickables\Brickables\TwoTextColumns;
 use Okipa\LaravelBrickables\Contracts\HasBrickables;
 use Okipa\LaravelBrickables\Middleware\CRUDBrickable;
-use Okipa\LaravelBrickables\Tests\BrickableTestCase;
-use Okipa\LaravelBrickables\Tests\Models\HasOneConstrainedBrickableModel;
-use Okipa\LaravelBrickables\Tests\Models\ModelWithoutBrickables;
-use Okipa\LaravelBrickables\Tests\Models\Page;
+use Tests\Models\HasOneConstrainedBrickableModel;
+use Tests\Models\ModelWithoutBrickables;
+use Tests\Models\Page;
+use Tests\TestCase;
 
-class CRUDBrickableTest extends BrickableTestCase
+class CRUDTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -125,7 +125,7 @@ class CRUDBrickableTest extends BrickableTestCase
         Route::get('/{brick}', function () {
             //
         })->middleware(SubstituteBindings::class, CRUDBrickable::class);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
         $response = $this->call('GET', '/' . $brick->id)->assertForbidden();
         self::assertEquals(
@@ -140,7 +140,7 @@ class CRUDBrickableTest extends BrickableTestCase
         Route::get('/{brick}', function () {
             //
         })->middleware(SubstituteBindings::class, CRUDBrickable::class);
-        $page = factory(Page::class)->create();
+        $page = Page::factory()->create();
         $brick = $page->addBrick(OneTextColumn::class, ['text' => 'Text']);
         $this->call('GET', '/' . $brick->id, ['admin_panel_url' => 'url'])->assertOk();
     }
