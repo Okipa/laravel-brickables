@@ -2,7 +2,7 @@
 
 ## [3.0.0](https://github.com/Okipa/laravel-brickables/compare/3.0.0...2.3.1)
 
-2022-XX-XX
+2022-09-21
 
 * Added support for Laravel 9
 * Dropped support for Laravel 7
@@ -11,6 +11,8 @@
 * Package is now using Fontawesome 6 icons
 * Views have upgraded to Bootstrap 5
 * Replaced `phpcs/phpcbf` by `laravel/pint`
+
+:point_right: [See the upgrade guide](/docs/upgrade-guides/from-v2-to-v3.md)
 
 ## [2.3.1](https://github.com/Okipa/laravel-brickables/compare/2.3.0...2.3.1)
 

@@ -8,7 +8,7 @@ This package is now compatible with Laravel 9 and Laravel 8.
 
 Support for PHP 8.1 has also been added, in addition of PHP 8.0.
 
-Support for Laravel 7 and PHP 7.4 have been dropped.
+Support has been droppend for Laravel 7 and PHP 7.4.
 
 ## Fronted dependencies upgrade
 
@@ -16,7 +16,7 @@ The views are now using Bootstrap 5 and Fontawesome 6.
 
 You'll have to upgrade these frontend dependencies to benefit from this upgrade.
 
-If you published the views, you'll have to adjust them or to republish them.
+If you previously published the package views, you'll have to adjust them or to republish them.
 
 ## See all changes
 
