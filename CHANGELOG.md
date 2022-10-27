@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.1](https://github.com/Okipa/laravel-brickables/compare/3.0.0...3.0.)
+
+2022-10-27
+
+* Improved CI
+
 ## [3.0.0](https://github.com/Okipa/laravel-brickables/compare/3.0.0...2.3.1)
 
 2022-09-21
