@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.0.1](https://github.com/Okipa/laravel-brickables/compare/3.0.0...3.0.)
+## [3.0.1](https://github.com/Okipa/laravel-brickables/compare/3.0.0...3.0.1)
 
 2022-10-27
 
