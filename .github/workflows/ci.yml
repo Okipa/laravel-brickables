@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: ['8.1', '8.0']
+        php: ['8.2', '8.1']
         laravel: ['9.*', '8.*']
         include:
           - laravel: '9.*'
@@ -53,13 +53,13 @@ jobs:
       # Lower PHP and laravel versions.
 
       - name: PHPUnit without code coverage
-        if: matrix.php != '8.1' || matrix.laravel != '9.*'
+        if: matrix.php != '8.2' || matrix.laravel != '9.*'
         run: vendor/bin/testbench package:test --parallel --no-coverage
 
       # Last PHP and laravel versions.
 
       - name: Code analysis
-        if: matrix.php == '8.1' && matrix.laravel == '9.*'
+        if: matrix.php == '8.2' && matrix.laravel == '9.*'
         run: |
           # Remove this line once Larastan and Livewire are working well together
           sed -i -e 's#.*protected \$enablesPackageDiscoveries.*#&\nprotected function overrideApplicationBindings($app){return["brickables"=>"Okipa\\\\LaravelBrickables\\\\Brickables"];}#' vendor/nunomaduro/larastan/src/ApplicationResolver.php
@@ -68,13 +68,13 @@ jobs:
           vendor/bin/phpstan analyse
 
       - name: PHPUnit with code coverage
-        if: matrix.php == '8.1' && matrix.laravel == '9.*'
+        if: matrix.php == '8.2' && matrix.laravel == '9.*'
         run: |
           mkdir -p build/logs
           vendor/bin/testbench package:test --parallel --coverage-text --coverage-clover build/logs/clover.xml
 
       - name: Code coverage upload to Coveralls
-        if: env.COVERALLS_REPO_TOKEN && matrix.php == '8.1' && matrix.laravel == '9.*'
+        if: env.COVERALLS_REPO_TOKEN && matrix.php == '8.2' && matrix.laravel == '9.*'
         env:
           COVERALLS_RUN_LOCALLY: 1
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
