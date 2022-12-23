@@ -76,7 +76,7 @@ class BrickablesTest extends TestCase
             [get_class($brickableOne), ['custom' => 'second-brickable-one']],
             [get_class($brickableTwo), ['custom' => 'second-brickable-two']],
         ]);
-        $html = view('laravel-brickables::page-test', compact('page', 'brickableOne', 'brickableTwo'))->toHtml();
+        $html = view('laravel-brickables::page-test', compact('page', 'brickableOne', 'brickableTwo'))->render();
         self::assertStringNotContainsString($html, 'javascript');
         $headHtmlContent = Str::beforeLast(Str::after($html, '<head>'), '</head>');
         self::assertEquals(1, substr_count($headHtmlContent, 'my/test/css/path/brickable-one.css'));
@@ -139,7 +139,7 @@ class BrickablesTest extends TestCase
             [get_class($brickableOne), ['custom' => 'second-brickable-one']],
             [get_class($brickableTwo), ['custom' => 'second-brickable-two']],
         ]);
-        $html = view('laravel-brickables::page-test', compact('page', 'brickableOne', 'brickableTwo'))->toHtml();
+        $html = view('laravel-brickables::page-test', compact('page', 'brickableOne', 'brickableTwo'))->render();
         $bodyHtmlContent = Str::beforeLast(Str::after($html, '<body>'), '</body>');
         self::assertStringNotContainsString($html, 'css');
         self::assertEquals(1, substr_count($bodyHtmlContent, 'my/test/js/path/brickable-one.js'));

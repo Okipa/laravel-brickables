@@ -30,7 +30,7 @@ class Brick extends Model implements Htmlable, Sortable
     {
         Brickables::isDisplayedOnPage($this->brickable);
 
-        return view($this->brickable->getBrickViewPath(), ['brick' => $this])->toHtml();
+        return view($this->brickable->getBrickViewPath(), ['brick' => $this])->render();
     }
 
     public function getBrickableAttribute(): Brickable

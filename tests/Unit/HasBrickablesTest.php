@@ -581,6 +581,7 @@ class HasBrickablesTest extends TestCase
 
     /**
      * @test
+     *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function it_can_return_brickables_that_can_be_added_to_model_with_one_disabled(): void
@@ -602,6 +603,7 @@ class HasBrickablesTest extends TestCase
 
     /**
      * @test
+     *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function it_can_return_brickables_that_can_be_added_to_model_with_one_at_reached_max_number(): void
@@ -650,14 +652,14 @@ class HasBrickablesTest extends TestCase
             view('laravel-brickables::bricks', [
                 'model' => $page,
                 'brickableClasses' => [get_class($brickable)],
-            ])->toHtml(),
+            ])->render(),
             $page->displayBricks([get_class($brickable)])
         );
         self::assertEquals(
             view('laravel-brickables::bricks', [
                 'model' => $page,
                 'brickableClasses' => [],
-            ])->toHtml(),
+            ])->render(),
             $page->displayBricks()
         );
     }
@@ -691,7 +693,7 @@ class HasBrickablesTest extends TestCase
             view('laravel-brickables::admin.panel.layout', [
                 'model' => $page,
                 'errors' => new ViewErrorBag(),
-            ])->toHtml(),
+            ])->render(),
             $page->displayAdminPanel()
         );
     }

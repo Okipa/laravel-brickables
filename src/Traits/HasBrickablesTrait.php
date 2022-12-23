@@ -216,7 +216,7 @@ trait HasBrickablesTrait
         return view('laravel-brickables::bricks', [
             'model' => $this,
             'brickableClasses' => $brickableClasses,
-        ])->toHtml();
+        ])->render();
     }
 
     public function displayAdminPanel(): string
@@ -224,6 +224,6 @@ trait HasBrickablesTrait
         return view('laravel-brickables::admin.panel.layout', [
             'model' => $this,
             'errors' => Session::get('errors') ?: new ViewErrorBag(),
-        ])->toHtml();
+        ])->render();
     }
 }

@@ -34,6 +34,7 @@ class BrickTest extends TestCase
         };
         config()->set('brickables.registered', [get_class($brickable)]);
         $page = Page::factory()->create();
+        /** @var \Okipa\LaravelBrickables\Models\Brick $brick */
         $brick = $page->addBrick(get_class($brickable), ['custom' => 'dummy']);
         self::assertEquals(view($brick->brickable->getBrickViewPath(), compact('brick')), $brick->toHtml());
     }
