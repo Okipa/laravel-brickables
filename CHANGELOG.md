@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/Okipa/laravel-brickables/compare/3.0.1...3.1.0)
+
+2022-12-23
+
+* Added PHP 8.2 support
+* Dropped PHP 8.0 support
+
 ## [3.0.1](https://github.com/Okipa/laravel-brickables/compare/3.0.0...3.0.1)
 
 2022-10-27
