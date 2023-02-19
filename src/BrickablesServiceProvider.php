@@ -8,11 +8,6 @@ use Illuminate\Support\ServiceProvider;
 
 class BrickablesServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap the application services.
-     *
-     * @param  \Illuminate\Filesystem\Filesystem  $filesystem
-     */
     public function boot(Filesystem $filesystem): void
     {
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'laravel-brickables');
@@ -41,7 +36,6 @@ class BrickablesServiceProvider extends ServiceProvider
         });
     }
 
-    /** Register the application services. */
     public function register(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/brickables.php', 'brickables');
