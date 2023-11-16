@@ -1,6 +1,6 @@
 ## Package abandoned
 
-To use with caution if you still need it.  
+This package has been abandoned, use with caution if you still need it.  
 Please fork this package and give it new life if you're interested!
 
 ------
