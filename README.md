@@ -1,3 +1,10 @@
+# Package abandoned
+
+To use with caution if you still need it.  
+Please fork this package and give it new life if you're interested!
+
+------
+
 ![Laravel Brickables](/docs/laravel-brickables.png)
 <p style="text-align: center;">
     <a href="https://github.com/Okipa/laravel-brickables/releases" title="Latest Stable Version">
